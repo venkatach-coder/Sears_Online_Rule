@@ -37,7 +37,7 @@ def run_all():
             'static_table': {'table_name': 'runtime_temp_tables.spark_test_static_table',
                              'storage_url': 'gs://dp_spark_source_bk/static__table-*.json',
                              'key': ['div_no', 'itm_no']},
-            'all_comp_all': {'table_name': 'jx_spark_temp.all_comp_all',
+            'all_comp_all': {'table_name': 'dp_spark_test.all_comp_all',
                              'key': ['div_no', 'itm_no', 'comp_name']},
             'uplift_table': {'table_name': 'static_tables.uplift_table_{}'.format(datetoday.strftime('%Y%m%d')),
                              'key': ['div_no', 'itm_no']},
