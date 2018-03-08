@@ -2,8 +2,7 @@ from typing import Dict
 from pyspark.sql import DataFrame
 import dp_rules
 import math
-from rule_templates import *
-import numpy as np
+from rule_templates import default_rules, sporting_goods_uplift
 
 
 def merge_func(df_dict: Dict[str, DataFrame], filtering_sql):
