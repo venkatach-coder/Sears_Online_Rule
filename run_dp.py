@@ -1,5 +1,5 @@
 import harlem125
-from Sears_Online_Rule import \
+import \
     static_table_mm, \
     min_comp_all, \
     min_comp_all_temp, \
