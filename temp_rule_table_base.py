@@ -15,11 +15,13 @@ def merge_func(df_dict: Dict[str, DataFrame]):
     return df1
 
 
-def construct_rule() -> dp_rules.DP_Rule_base:
+def construct_rule(*args, **kwargs) -> dp_rules.DP_Rule_base:
     thisrule = dp_rules.DP_Rule_base(
         target_tbl_name='temp_rule_table_base',
         rule_name='rule_table_base',
-        if_exists='append'
+        if_exists='append',
+        *args,
+        **kwargs
     )
     thisrule.add_rule_layer(
         dp_rules.DP_func(

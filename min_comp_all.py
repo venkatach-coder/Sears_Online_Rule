@@ -38,11 +38,13 @@ def select_min_price(df: DataFrame):
     return min_comp_df.join(avg_median_df, on=['div_no', 'itm_no'], how='left')
 
 
-def construct_rule() -> dp_rules.DP_Rule_base:
+def construct_rule(*args, **kwargs) -> dp_rules.DP_Rule_base:
     thisrule = dp_rules.DP_Rule_base(
         target_tbl_name='min_comp_all',
         rule_name='min_comp_all',
-        desc='Minimum comp price (in list) in Div,item level'
+        desc='Minimum comp price (in list) in Div,item level',
+        *args,
+        **kwargs
     )
     thisrule.add_rule_layer(dp_rules.DP_func(
         merge_func,

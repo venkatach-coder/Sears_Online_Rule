@@ -29,13 +29,15 @@ def core_rule(row):
     return None, 'No rule applied'
 
 
-def construct_rule(rule_target_sql_str, rule_level) -> dp_rules.DP_Rule:
+def construct_rule(rule_target_sql_str, rule_level, *args, **kwargs) -> dp_rules.DP_Rule:
     thisrule = dp_rules.DP_Rule(
         target_tbl_name='rule_table',
         rule_level=rule_level,
         rule_name='min_comp_MM_min_margin_rule',
         if_exists='append',
-        desc='Matched at min_comp_MM otherwise min_margin'
+        desc='Matched at min_comp_MM otherwise min_margin',
+        *args,
+        **kwargs
     )
     thisrule.add_rule_layer(
         dp_rules.DP_func(

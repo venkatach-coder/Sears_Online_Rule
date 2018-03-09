@@ -23,11 +23,13 @@ def select_min_price(df: DataFrame):
     return df
 
 
-def construct_rule() -> dp_rules.DP_Rule_base:
+def construct_rule(*args, **kwargs) -> dp_rules.DP_Rule_base:
     thisrule = dp_rules.DP_Rule_base(
         target_tbl_name='collision_FTP',
         rule_name='collision_FTP',
-        desc=''
+        desc='',
+        *args,
+        **kwargs
     )
     thisrule.add_rule_layer(dp_rules.DP_func(
         merge_func,

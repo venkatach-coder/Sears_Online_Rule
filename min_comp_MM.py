@@ -32,11 +32,13 @@ def select_min_price(df: DataFrame):
         .drop('rn')
 
 
-def construct_rule() -> dp_rules.DP_Rule_base:
+def construct_rule(*args, **kwargs) -> dp_rules.DP_Rule_base:
     thisrule = dp_rules.DP_Rule_base(
         target_tbl_name='min_comp_MM',
         rule_name='min_comp_MM',
-        desc='Filter out matches we are not interested in. Div,item,comp level'
+        desc='Filter out matches we are not interested in. Div,item,comp level',
+        *args,
+        **kwargs
     )
     thisrule.add_rule_layer(dp_rules.DP_func(
         merge_func,

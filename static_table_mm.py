@@ -98,11 +98,13 @@ def flatten_output(df: DataFrame):
     ).withColumnRenamed('min_margin_value', 'min_margin')
 
 
-def construct_rule() -> dp_rules.DP_Rule_base:
+def construct_rule(*args, **kwargs) -> dp_rules.DP_Rule_base:
     static_table_mm_rule = dp_rules.DP_Rule_base(
         'static_table_mm',
         rule_name='static_table min margin',
-        desc='Building static table min_margin'
+        desc='Building static table min_margin',
+        *args,
+        **kwargs
     )
     static_table_mm_rule.add_rule_layer(dp_rules.DP_func(
         merge_func,

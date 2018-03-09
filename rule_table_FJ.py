@@ -29,13 +29,15 @@ def uplift(row):
     return row['PMI'], 'No uplift'
 
 
-def construct_rule(rule_target_sql_str, rule_level) -> dp_rules.DP_Rule:
+def construct_rule(rule_target_sql_str, rule_level, *args, **kwargs) -> dp_rules.DP_Rule:
     thisrule = dp_rules.DP_Rule(
         target_tbl_name='rule_table',
         rule_level=rule_level,
         rule_name='Apparel rule',
         if_exists='append',
-        desc=rule_target_sql_str
+        desc=rule_target_sql_str,
+        *args,
+        **kwargs
     )
     thisrule.add_rule_layer(
         dp_rules.DP_func(

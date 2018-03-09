@@ -109,11 +109,13 @@ def clean_output(df: DataFrame):
     return df.drop('min_comp_all_rule_name', 'min_margin_all')
 
 
-def construct_rule() -> dp_rules.DP_Rule_base:
+def construct_rule(*args, **kwargs) -> dp_rules.DP_Rule_base:
     thisrule = dp_rules.DP_Rule_base(
         target_tbl_name='min_comp_all_temp',
         rule_name='min_comp_all_temp',
-        desc='Filter out matches we are not interested in. Div,item,comp level'
+        desc='Filter out matches we are not interested in. Div,item,comp level',
+        *args,
+        **kwargs
     )
     thisrule.add_rule_layer(dp_rules.DP_func(
         merge_func,
