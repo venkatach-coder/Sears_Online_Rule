@@ -24,12 +24,13 @@ import \
     rule_table_FJ, \
     rule_table_Apparel_Uplift, \
     rule_table_HA, \
+    add_run_id, \
     collision_FTP
 
 import datetime as dt
 
 
-def run_all():
+def run_all(run_id):
     datetoday = dt.datetime(2018, 3, 2)
     Sears_DP = harlem125.Harlem125()
     Sears_DP.load_souce_table(
@@ -149,7 +150,9 @@ def run_all():
         rule_target_sql_str='div_no in (2, 4, 7, 16, 17, 18, 25, 29, 31, 33,  38, 40, 41, 43, 45,  74, 75,  77, 88)',
         rule_level=2600
     ))
-
+    Sears_DP.add_rule(add_run_id.construct_rule(
+        run_id = run_id, if_exists = 'replace'
+    ))
     Sears_DP.add_rule(collision_FTP.construct_rule())
 
     Sears_DP.run_all_rules()  # Dry run all the rules
