@@ -9,7 +9,7 @@ def merge_func(work_df: Dict[str, DataFrame]):
 
 
 def add_run_id(df: DataFrame, rule_level: int):
-    return df.withColumn("rule_level", lit(rule_level))
+    return df.withColumn("Run_id", lit(rule_level))
 
 
 def construct_rule(run_id: int, *args, **kwargs) -> dp_rules.DP_Rule_base:
