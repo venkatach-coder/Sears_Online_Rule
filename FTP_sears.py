@@ -6,10 +6,10 @@ import dp_rules
 from typing import Dict
 
 def merge_func(work_df: Dict[str, DataFrame]):
-    return work_df['rule_table']
+    return work_df['collision_FTP']
 
 
-def select_price(df: DataFrame):
+def select_min_price(df: DataFrame):
     price_rule_window = (Window
                     .partitionBy(df['div_no'], df['itm_no'])
                     .orderBy(df['rule_level'].desc()))
@@ -18,8 +18,7 @@ def select_price(df: DataFrame):
         .filter('post_rule_value is not Null and post_rule_value > 0') \
         .select('*', row_number().over(price_rule_window).alias('rn')) \
         .filter('rn == 1') \
-        .drop('rn') \
-        .filter('post_rule_value > 0') \
+        .drop('rn')
 
     return df
 
@@ -38,7 +37,7 @@ def construct_rule(*args, **kwargs) -> dp_rules.DP_Rule_base:
         func_desc='Table Selection'
     ))
     thisrule.add_rule_layer(dp_rules.DP_func(
-        select_price,
+        select_min_price,
         func_desc='Collision FTP',
     ))
     return thisrule
