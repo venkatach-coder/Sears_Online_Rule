@@ -92,7 +92,8 @@ def run_all():
     ))
     Sears_DP.add_rule(rule_table_div24.construct_rule(
         rule_target_sql_str='div_no in (24)',
-        rule_level=1000
+        rule_level=1000,
+        checkpoint=True
     ))
     Sears_DP.add_rule(rule_table_div24_kitchenaid.construct_rule(
         rule_target_sql_str= \
