@@ -4,7 +4,7 @@ import dp_rules
 from rule_templates import default_rules, home_uplift
 import numpy as np
 import math
-
+from rule_templates import tools_uplift
 def merge_func(df_dict: Dict[str, DataFrame], filtering_sql):
     df1 = df_dict['temp_rule_table_base'] \
         .filter(filtering_sql)
@@ -60,7 +60,7 @@ def construct_rule(rule_target_sql_str, rule_level, *args, **kwargs) -> dp_rules
         thisrule.core_rule_wrapper(core_rule, 'min_comp_MM, min_margin, pmi high, pmi low')
     )
     thisrule.add_rule_layer(
-        thisrule.uplift_wrapper(home_uplift.uplift0305, 'Home uplift')
+        thisrule.uplift_wrapper(tools_uplift.uplift, 'Tool uplift')
     )
     thisrule.add_rule_layer(
         thisrule.post_rule_wrapper(post_rule, 'VD MAP post_rule')

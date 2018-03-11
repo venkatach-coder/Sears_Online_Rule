@@ -1,7 +1,7 @@
 from typing import Dict
 from pyspark.sql import DataFrame
 import dp_rules
-from rule_templates import default_rules, home_uplift
+from rule_templates import default_rules, tools_uplift
 import numpy as np
 import math
 
@@ -65,7 +65,7 @@ def construct_rule(rule_target_sql_str, rule_level, *args, **kwargs) -> dp_rules
         thisrule.core_rule_wrapper(core_rule, 'min_comp_MM, PMI, reg')
     )
     thisrule.add_rule_layer(
-        thisrule.uplift_wrapper(default_rules.default_uplift, 'Default uplift')
+        thisrule.uplift_wrapper(tools_uplift.uplift, 'Default uplift')
     )
     thisrule.add_rule_layer(
         thisrule.post_rule_wrapper(post_rule, 'VD Postrule')

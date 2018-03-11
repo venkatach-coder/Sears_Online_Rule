@@ -51,7 +51,7 @@ def construct_rule(rule_target_sql_str, rule_level, *args, **kwargs) -> dp_rules
         thisrule.core_rule_wrapper(core_rule, 'MAP, PMI')
     )
     thisrule.add_rule_layer(
-        thisrule.uplift_wrapper(home_uplift.uplift0305, 'additional uplift')
+        thisrule.uplift_wrapper(home_uplift.uplift0310, 'additional uplift')
     )
     thisrule.add_rule_layer(
         thisrule.post_rule_wrapper(default_rules.default_postrule, 'Default post_rule')

@@ -20,9 +20,10 @@ def core_rule(row):
 
 def uplift(row):
     if row['core_rule_value'] <= 10: return math.ceil(row['PMI'] * 1.3), '1.30PMI'
+    if row['core_rule_value'] <= 19: return math.ceil(row['PMI'] * 1.25), '1.25PMI'
     if row['core_rule_value'] <= 40: return math.ceil(row['PMI'] * 1.2), '1.20PMI'
-    if row['core_rule_value'] <= 43: return math.ceil(row['PMI'] * 1.12), '1.12PMI'
-    if row['core_rule_value'] > 50: return math.ceil(row['PMI'] * 1.05), '1.05PMI'
+    if row['core_rule_value'] <= 43: return math.ceil(row['PMI'] * 1.15), '1.15PMI'
+    if row['core_rule_value'] > 50: return math.ceil(row['PMI'] * 1.1), '1.1PMI'
     return row['PMI'], 'No uplift'
 
 

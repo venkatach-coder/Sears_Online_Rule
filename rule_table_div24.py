@@ -54,7 +54,7 @@ def construct_rule(rule_target_sql_str, rule_level, *args, **kwargs) -> dp_rules
         thisrule.core_rule_wrapper(core_rule, 'min_comp_MM, min_margin')
     )
     thisrule.add_rule_layer(
-        thisrule.uplift_wrapper(home_uplift.uplift0305, 'additional uplift')
+        thisrule.uplift_wrapper(home_uplift.uplift0310, 'additional uplift')
     )
     thisrule.add_rule_layer(
         thisrule.post_rule_wrapper(post_rule, 'VD MAP post_rule')
