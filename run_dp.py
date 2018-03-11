@@ -47,12 +47,10 @@ def run_all(run_id):
                 'key': ['div_no', 'itm_no']},
             'electrical_whitelist': {
                 'table_name': 'dp_spark_test.Electrical_Whitelist',
-                'key': ['div_no', 'itm_no']
-            },
+                'key': ['div_no', 'itm_no']},
             'electrical_multipliers': {
                 'table_name': 'dp_spark_test.electrical_multipliers',
-                'key': ['div_no', 'itm_no']
-            }
+                'key': ['div_no', 'itm_no']}
         }
     )  # Reading Source Table
     Sears_DP.add_rule(static_table_mm.construct_rule())
