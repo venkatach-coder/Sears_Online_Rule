@@ -47,10 +47,12 @@ def run_all(run_id):
                 'key': ['div_no', 'itm_no']},
             'electrical_whitelist': {
                 'table_name': 'dp_spark_test.Electrical_Whitelist',
-                'key': ['div_no', 'itm_no']},
+                'key': ['div_no', 'itm_no']
+            },
             'electrical_multipliers': {
                 'table_name': 'dp_spark_test.electrical_multipliers',
-                'key': ['div_no', 'itm_no']}
+                'key': ['div_no', 'itm_no']
+            }
         }
     )  # Reading Source Table
     Sears_DP.add_rule(static_table_mm.construct_rule())
@@ -69,7 +71,7 @@ def run_all(run_id):
         rule_target_sql_str='div_no in (8) and ln_no in (1,21,41,55)',
         rule_level=2000))
     Sears_DP.add_rule(rule_table_div8_kitchenaid.construct_rule(
-        rule_target_sql_str=\
+        rule_target_sql_str= \
             'div_no in (8) and (lower(brand) like "%kitchenaid%" or lower(Product_Brand) like "%kitchenaid%")',
         rule_level=2500
     ))
@@ -83,7 +85,6 @@ def run_all(run_id):
         rule_target_sql_str= \
             'div_no in (14) and (lower(brand) like "%kitchenaid%" or lower(Product_Brand) like "%kitchenaid%")',
         rule_level=2500))
-
 
     Sears_DP.add_rule(rule_table_HA.construct_rule(
         rule_target_sql_str='div_no in (22)',
@@ -128,7 +129,7 @@ def run_all(run_id):
         rule_target_sql_str='div_no in (52)',
         rule_level=1000
     ))
-    Sears_DP.add_rule(rule_table_div67.construct_rule (
+    Sears_DP.add_rule(rule_table_div67.construct_rule(
         rule_target_sql_str='div_no in (67)',
         rule_level=1000
     ))
@@ -148,8 +149,12 @@ def run_all(run_id):
         rule_target_sql_str='div_no in (2, 4, 7, 16, 17, 18, 25, 29, 31, 33,  38, 40, 41, 43, 45,  74, 75,  77, 88)',
         rule_level=2600
     ))
+    Sears_DP.add_rule(rule_table_FJ.construct_rule(
+        rule_target_sql_str='div_no in (44)',
+        rule_level=1000,
+    ))
     Sears_DP.add_rule(add_run_id.construct_rule(
-        run_id = run_id, if_exists = 'replace'
+        run_id=run_id, if_exists='replace'
     ))
     Sears_DP.add_rule(collision_FTP.construct_rule())
 
@@ -162,6 +167,6 @@ def run_all(run_id):
             # 'min_comp_all': {'destination': 'jx_spark_temp.min_comp_all', 'if_exists': 'replace'},
             # 'min_comp_MM': {'destination': 'jx_spark_temp.min_comp_MM', 'if_exists': 'replace'},
             'rule_table': {'destination': 'jx_spark_temp.rule_table', 'if_exists': 'replace'},
-            'collision_FTP':{'destination':'jx_spark_temp.collision_FTP', 'if_exists': 'replace'},
+            'collision_FTP': {'destination': 'jx_spark_temp.collision_FTP', 'if_exists': 'replace'},
         }
     )
