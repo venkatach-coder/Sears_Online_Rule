@@ -1,6 +1,6 @@
 from typing import Dict
 from pyspark.sql import DataFrame
-import dp_rules
+import harlem125.dp_rules as dp_rules
 from pyspark.sql.functions import lit
 
 

@@ -1,7 +1,6 @@
 from typing import Dict
 from pyspark.sql import DataFrame
-import dp_rules
-from rule_templates import default_rules
+import harlem125.dp_rules as dp_rules
 
 
 def merge_func(df_dict: Dict[str, DataFrame]):

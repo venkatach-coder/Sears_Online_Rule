@@ -1,4 +1,4 @@
-from dp_rules import Working_func
+from harlem125.dp_rules import Working_func
 
 
 def _Match_to_Min_comp_MM(row):

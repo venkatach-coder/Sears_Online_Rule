@@ -1,7 +1,7 @@
 from typing import Dict
 from pyspark.sql import DataFrame
-import dp_rules
-from rule_templates import pre_rule, post_rule, core_rule, uplift_rule
+import harlem125.dp_rules as dp_rules
+from Sears_Online_Rule.rule_templates import pre_rule, post_rule, core_rule, uplift_rule
 
 
 class DP_Rule_div6(dp_rules.DP_Rule_Constructor):
@@ -17,7 +17,7 @@ class DP_Rule_div6(dp_rules.DP_Rule_Constructor):
         return dp_rules.DP_func(
             merge_func,
             input_type='Dict',
-            func_desc='Table Selection'),
+            func_desc='Table Selection')
 
     def get_pre_rule(self):
         pre_rule_list = [
@@ -41,7 +41,7 @@ class DP_Rule_div6(dp_rules.DP_Rule_Constructor):
         uplift_rule_list =[
             uplift_rule.uplift_by_uplift_table
         ]
-        return self.thisrule.core_rule_wrapper(uplift_rule_list)
+        return self.thisrule.uplift_wrapper(uplift_rule_list)
 
     def get_post_rule(self):
         post_rule_list = [

@@ -1,21 +1,22 @@
-import harlem125
+from harlem125 import harlem125
 import \
-    static_table_mm, \
-    min_comp_all, \
-    min_comp_all_temp, \
-    min_comp_MM
-from DP_Rules import rule_table_div6
+    Sears_Online_Rule.static_table_mm as static_table_mm, \
+    Sears_Online_Rule.min_comp_all as min_comp_all, \
+    Sears_Online_Rule.min_comp_all_temp as min_comp_all_temp, \
+    Sears_Online_Rule.min_comp_MM as min_comp_MM
+from Sears_Online_Rule.DP_Rules import rule_table_div6
 
 import datetime as dt
 
 
+
 def run_all(run_id):
-    datetoday = dt.datetime(2018, 3, 2)
+    datetoday = dt.datetime(2018, 7, 3)
     Sears_DP = harlem125.Harlem125()
     Sears_DP.load_souce_table(
         {
             'static_table': {'table_name': 'runtime_temp_tables.spark_test_static_table',
-                             'storage_url': 'gs://dp_spark_source_bk/static__table-*.json',
+                             'storage_url': 'gs://dp_spark_source/static__table-*.json',
                              'key': ['div_no', 'itm_no']},
             'all_comp_all': {'table_name': 'dp_spark_test.all_comp_all',
                              'key': ['div_no', 'itm_no', 'comp_name']},
@@ -39,7 +40,7 @@ def run_all(run_id):
 
     #### This is the base Table ######
 
-    import temp_rule_table_base
+    import Sears_Online_Rule.temp_rule_table_base as temp_rule_table_base
     Sears_DP.add_rule(temp_rule_table_base.construct_rule())
 
     #### ----- Regular DP Rule Start Here #######################
@@ -47,10 +48,27 @@ def run_all(run_id):
     Sears_DP.add_rule(rule_table_div6.DP_Rule_div6().construct_rule())
 
 
-
     #### ----- Collision
 
     ####
 
     Sears_DP.run_all_rules()
+    Sears_DP.output_working_table(
+            {
+                # 'static_table_mm': {'destination': 'jx_spark_temp.static_table_mm', 'if_exists': 'replace'},
+                # 'min_comp_all': {'destination': 'jx_spark_temp.min_comp_all', 'if_exists': 'replace'},
+                # 'min_comp_MM': {'destination': 'jx_spark_temp.min_comp_MM', 'if_exists': 'replace'},
+                'rule_table': {'destination': 'jx_spark_temp.rule_table', 'if_exists': 'replace'},
+                #'collision_FTP': {'destination': 'jx_spark_temp.collision_FTP', 'if_exists': 'replace'},
+            }
+        )
+
+if __name__ == '__main__':
+    import sys
+    run_id = int(sys.argv[1])
+    print(run_id)
+    run_all(1000)
+
+
+
 

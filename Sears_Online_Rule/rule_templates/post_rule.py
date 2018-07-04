@@ -1,4 +1,4 @@
-from dp_rules import Working_func
+from harlem125.dp_rules import Working_func
 
 def _Min_Reg_PMI_Upliftted_Prcie_D_flag(row):
     if row['ad_plan'] == 'D':
