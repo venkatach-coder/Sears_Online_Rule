@@ -4,7 +4,7 @@ from harlem125.dp_rules import Working_func
 # lift_min, lift_max, uplift
 
 def _DO_NOT_APPLY_UPLIFT(row):
-    return row['core_rule_value'], 'No Uplift, Uplift_Table Ignored'
+    return row.core_rule.value, 'No Uplift, Uplift_Table Ignored'
 
 do_not_apply_uplift = Working_func(_DO_NOT_APPLY_UPLIFT, 'No Uplift, Uplift_Table Ignored')
 
@@ -18,6 +18,6 @@ def _uplift_by_uplift_table(row):
     #         row['core_rule_value'] + uplift_max),
     #     'Uplift_Table: {} uplift min: {} max: {}'.format(uplift, uplift_min, uplift_max)
     # )
-    return row['core_rule_value'] * (1 + uplift)
+    return row.core_rule.value * (1 + uplift)
 
 uplift_by_uplift_table = Working_func(_uplift_by_uplift_table, 'Refer to Uplift Table')

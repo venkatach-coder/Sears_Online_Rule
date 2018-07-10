@@ -3,7 +3,7 @@ from harlem125.dp_rules import Working_func
 
 def _clearance_check(row):
     if row['reg'] is None:
-        return True, None
+        return None, None
     temp = row['PMI'] if row['PMI'] is not None else row['reg']
     if str(round(temp, 2))[-2:] in ('87', '88', '93', '97'):
         return False, 'Clearance Block'
