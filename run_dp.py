@@ -5,6 +5,11 @@ import \
     Sears_Online_Rule.min_comp_all_temp as min_comp_all_temp, \
     Sears_Online_Rule.min_comp_MM as min_comp_MM
 from Sears_Online_Rule.DP_Rules import rule_table_div6, rule_table_div8, rule_table_div9
+from Sears_Online_Rule.DP_Rules import rule_table_div8_kitchenaid
+from Sears_Online_Rule.DP_Rules import rule_table_div14
+from Sears_Online_Rule.DP_Rules import rule_table_div22
+from Sears_Online_Rule.DP_Rules import rule_table_div26
+from Sears_Online_Rule.DP_Rules import rule_table_div46
 
 import datetime as dt
 
@@ -45,9 +50,14 @@ def run_all(run_id):
 
     #### ----- Regular DP Rule Start Here #######################
 
-    Sears_DP.add_rule(rule_table_div6.DP_Rule_div6().construct_rule())
-    Sears_DP.add_rule(rule_table_div8.DP_Rule_div8().construct_rule())
-    Sears_DP.add_rule(rule_table_div9.DP_Rule_div9().construct_rule())
+    Sears_DP.add_rule(rule_table_div6.Construct_DP_Rule().construct_rule())
+    Sears_DP.add_rule(rule_table_div8.Construct_DP_Rule().construct_rule())
+    Sears_DP.add_rule(rule_table_div8_kitchenaid.Construct_DP_Rule().construct_rule())
+    Sears_DP.add_rule(rule_table_div9.Construct_DP_Rule().construct_rule())
+    Sears_DP.add_rule(rule_table_div14.Construct_DP_Rule().construct_rule())
+    Sears_DP.add_rule(rule_table_div22.Construct_DP_Rule().construct_rule())
+    Sears_DP.add_rule(rule_table_div26.Construct_DP_Rule().construct_rule())
+    Sears_DP.add_rule(rule_table_div46.Construct_DP_Rule().construct_rule())
 
 
     #### ----- Collision

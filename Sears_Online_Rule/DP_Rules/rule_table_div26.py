@@ -6,7 +6,8 @@ from Sears_Online_Rule.rule_templates import pre_rule, post_rule, core_rule, upl
 
 class Construct_DP_Rule(dp_rules.DP_Rule_Constructor):
     def __init__(self):
-        super().__init__(target_tbl_name='rule_table', rule_level=1000, rule_name='div_no = 9', if_exists='append')
+        super().__init__(target_tbl_name='rule_table', rule_level=1000,
+                         rule_name='div_no = 26 and ln_no in (1,2,4)', if_exists='append')
 
     def get_merge_func(self):
         def merge_func(df_dict: Dict[str, DataFrame]):
@@ -27,15 +28,14 @@ class Construct_DP_Rule(dp_rules.DP_Rule_Constructor):
             pre_rule.cost_check,
             pre_rule.min_margin_check,
             pre_rule.reg_check,
-            pre_rule.no_craftsman
+            pre_rule.no_kenmore
         ]
 
 
     def get_core_rule(self):
         return [
-            core_rule.Match_to_Min_comp_MM,
-            core_rule.Match_to_Min_margin_when_Min_comp_Exists,
-            core_rule.PMI_high_low_margin
+            core_rule.HA_389_399_rounding_Match_to_Min_comp_MM,
+            core_rule.HA_389_399_rounding_Set_to_Min_margin_when_Min_comp_Exists
         ]
 
 
@@ -46,10 +46,9 @@ class Construct_DP_Rule(dp_rules.DP_Rule_Constructor):
 
     def get_post_rule(self):
         return [
-            post_rule.VD_Min_Reg_PMI_Upliftted_Prcie,
-            post_rule.Min_Reg_PMI_Upliftted_Prcie_D_flag,
-            post_rule.Reg_Bound_check_Null_when_reg_not_Exists
+            post_rule.Round_to_MAP_HA_reg_bound_D_flag,
+            post_rule.Round_to_MAP_HA_reg_bound
         ]
+
     def get_deal_flag_rule(self):
         return []
-

@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 from pyspark.sql import DataFrame
 import harlem125.dp_rules as dp_rules
 from Sears_Online_Rule.rule_templates import pre_rule, post_rule, core_rule, uplift_rule
@@ -6,7 +6,9 @@ from Sears_Online_Rule.rule_templates import pre_rule, post_rule, core_rule, upl
 
 class Construct_DP_Rule(dp_rules.DP_Rule_Constructor):
     def __init__(self):
-        super().__init__(target_tbl_name='rule_table', rule_level=2000, rule_name='div_no = 8 and ln_no in (1,21,41,55)', if_exists='append')
+        super().__init__(target_tbl_name='rule_table', rule_level=3000,
+                         rule_name="div_no = 8 and ln_no in (1,21,41,55) and (lower(brand) like '%kitchenaid%' or lower(Product_Brand) like '%kitchenaid%')",
+                         if_exists='append')
 
     def get_merge_func(self):
         def merge_func(df_dict: Dict[str, DataFrame]):
@@ -22,34 +24,31 @@ class Construct_DP_Rule(dp_rules.DP_Rule_Constructor):
             input_type='Dict',
             func_desc='Table Selection')
 
-    def get_pre_rule(self):
+    def get_pre_rule(self) -> List[dp_rules.DP_func]:
         return [
             pre_rule.ad_plan_check,
             pre_rule.dp_block,
             pre_rule.cost_check,
-            pre_rule.min_margin_check,
-            pre_rule.reg_check
+            pre_rule.reg_check,
+            pre_rule.map_price_check
         ]
 
 
-    def get_core_rule(self):
+    def get_core_rule(self)-> List[dp_rules.DP_func]:
         return [
-            core_rule.Mailable_rule,
-            core_rule.Median_min_cmop_MM_min_margin_rule
+            core_rule.Price_at_MAP
         ]
 
 
-    def get_uplift_rule(self):
+    def get_uplift_rule(self)-> List[dp_rules.DP_func]:
         return [
             uplift_rule.uplift_by_uplift_table
         ]
 
-    def get_post_rule(self):
+    def get_post_rule(self)-> List[dp_rules.DP_func]:
         return [
-            post_rule.Round_to_MAP_VD_Min_Reg_PMI_Upliftted_Prcie,
-            post_rule.Round_to_MAP_Min_Reg_PMI_Upliftted_Prcie_D_flag,
-            post_rule.Round_to_MAP_Reg_Bound_check_Null_when_reg_not_Exists
+            post_rule.Reg_Bound_check_Null_when_reg_not_Exists,
         ]
 
-    def get_deal_flag_rule(self):
+    def get_deal_flag_rule(self)-> List[dp_rules.DP_func]:
         return []

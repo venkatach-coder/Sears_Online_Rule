@@ -3,7 +3,7 @@ from harlem125.dp_rules import Working_func
 
 def _Match_to_Min_comp_MM(row):
     if row['min_comp_MM'] is not None:
-        return row['min_comp_MM']
+        return row['min_comp_MM'], 'Match to Min_comp_MM'
 
 
 Match_to_Min_comp_MM = Working_func(_Match_to_Min_comp_MM, 'Match at Min_Comp_MM')
@@ -11,7 +11,7 @@ Match_to_Min_comp_MM = Working_func(_Match_to_Min_comp_MM, 'Match at Min_Comp_MM
 
 def _Set_to_Min_margin_when_Min_comp_Exists(row):
     if row['min_comp'] is not None:
-        return row['min_margin']
+        return row['min_margin'], 'Set to Min_Margin'
 
 
 Match_to_Min_margin_when_Min_comp_Exists = Working_func(_Set_to_Min_margin_when_Min_comp_Exists,
@@ -20,7 +20,7 @@ Match_to_Min_margin_when_Min_comp_Exists = Working_func(_Set_to_Min_margin_when_
 
 def _Set_to_PMI_when_PMI_exists(row):
     if row['PMI'] is not None:
-        return row['PMI']
+        return row['PMI'], 'Set to PMI'
 
 
 Set_to_PMI_when_PMI_exists = Working_func(_Set_to_PMI_when_PMI_exists,
@@ -44,7 +44,10 @@ Median_min_cmop_MM_min_margin_rule = Working_func(
 
 def _Mailable_rule(row):
     if row['ismailable'] is not None and row['avg_shipcost'] is not None:
-        price, rule_name = _Median_min_comp_MM_min_margin_rule(row)
+        ret_tpl = _Median_min_comp_MM_min_margin_rule(row)
+        if ret_tpl is None:
+            return None
+        price, rule_name = ret_tpl
         if price < row['cost_with_subsidy']+row['avg_shipcost']:
             price = row['cost_with_subsidy']+row['avg_shipcost']
             rule_name = 'Price at cost + avg_shipcost'
@@ -69,3 +72,43 @@ PMI_high_low_margin = Working_func(
     '0.99 PMI when pmi_margin > 0.3 else 1.02 PMI'
 )
 
+def _HA_389_399_rounding_Match_to_Min_comp_MM(row):
+    try:
+        price, rule = _Match_to_Min_comp_MM(row)
+    except TypeError:
+        return None
+    if 389 <= price <= 399:
+        price = 399
+        rule += ' Round to 399'
+    return price, rule
+
+HA_389_399_rounding_Match_to_Min_comp_MM = Working_func(
+    _HA_389_399_rounding_Match_to_Min_comp_MM,
+    '_Match_to_Min_comp_MM, 389-399 Rounding'
+)
+
+
+def _HA_389_399_rounding_Set_to_Min_margin_when_Min_comp_Exists(row):
+    try:
+        price, rule = _Set_to_Min_margin_when_Min_comp_Exists(row)
+    except TypeError:
+        return None
+    if 389 <= price <= 399:
+        price = 399
+        rule += ' Round to 399'
+    return price, rule
+
+HA_389_399_rounding_Set_to_Min_margin_when_Min_comp_Exists = Working_func(
+    _HA_389_399_rounding_Set_to_Min_margin_when_Min_comp_Exists,
+    'Set_to_Min_margin_when_Min_comp_Exists, 389-399 Rounding'
+)
+
+
+def _Price_at_MAP(row):
+    if row['MAP_price'] is not None:
+        return row['MAP_price'], 'Price at MAP'
+
+Price_at_MAP = Working_func(
+    _Price_at_MAP,
+    'Price at MAP'
+)

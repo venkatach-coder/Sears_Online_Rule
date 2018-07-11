@@ -44,6 +44,14 @@ def _ad_plan_check(row):
 ad_plan_check = Working_func(_ad_plan_check, 'Ad_plan Block')
 
 
+def _map_price_check(row):
+    if row['MAP_price'] is None:
+        return False, 'No MAP Price'
+
+
+map_price_check = Working_func(_map_price_check, 'MAP Price check')
+
+
 def _dp_block(row):
     if row['blocked'] is not None:
         return False, 'DP Blocked'
@@ -60,7 +68,17 @@ def _no_craftsman(row):
     if product_brand == '' and brand == '':
         return False, 'No Craftsman'
 
+
 no_craftsman = Working_func(_no_craftsman, 'No Craftsman')
 
+
 def _no_kenmore(row):
-    pass
+    product_brand = row['Product_Brand'] if row['Product_Brand'] is not None else ''
+    brand = row['brand'] if row['brand'] is not None else ''
+    if 'kenmore' in brand.lower():
+        return False, 'No Kenmore'
+    if 'kenmore' in product_brand.lower() and brand == '':
+        return False, 'No Kenmore'
+
+
+no_kenmore = Working_func(_no_kenmore, 'No Kenmore')

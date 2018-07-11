@@ -13,6 +13,6 @@ def _uplift_by_uplift_table(row):
     #         row['core_rule_value'] + uplift_max),
     #     'Uplift_Table: {} uplift min: {} max: {}'.format(uplift, uplift_min, uplift_max)
     # )
-    return row['core_rule_value'] * (1 + uplift)
+    return row['core_rule_value'] * (1. + uplift)
 
 uplift_by_uplift_table = Working_func(_uplift_by_uplift_table, 'Refer to Uplift Table')
