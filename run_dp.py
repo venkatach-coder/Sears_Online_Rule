@@ -4,14 +4,14 @@ import \
     Sears_Online_Rule.min_comp_all as min_comp_all, \
     Sears_Online_Rule.min_comp_all_temp as min_comp_all_temp, \
     Sears_Online_Rule.min_comp_MM as min_comp_MM
-from Sears_Online_Rule.DP_Rules import rule_table_div6
+from Sears_Online_Rule.DP_Rules import rule_table_div6, rule_table_div8, rule_table_div9
 
 import datetime as dt
 
 
 
 def run_all(run_id):
-    datetoday = dt.datetime(2018, 7, 3)
+    datetoday = dt.datetime(2018, 7, 10)
     Sears_DP = harlem125.Harlem125()
     Sears_DP.load_souce_table(
         {
@@ -46,6 +46,8 @@ def run_all(run_id):
     #### ----- Regular DP Rule Start Here #######################
 
     Sears_DP.add_rule(rule_table_div6.DP_Rule_div6().construct_rule())
+    Sears_DP.add_rule(rule_table_div8.DP_Rule_div8().construct_rule())
+    Sears_DP.add_rule(rule_table_div9.DP_Rule_div9().construct_rule())
 
 
     #### ----- Collision

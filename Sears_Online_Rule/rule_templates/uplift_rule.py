@@ -3,11 +3,6 @@ from harlem125.dp_rules import Working_func
 
 # lift_min, lift_max, uplift
 
-def _DO_NOT_APPLY_UPLIFT(row):
-    return row['core_rule_value'], 'No Uplift, Uplift_Table Ignored'
-
-do_not_apply_uplift = Working_func(_DO_NOT_APPLY_UPLIFT, 'No Uplift, Uplift_Table Ignored')
-
 def _uplift_by_uplift_table(row):
     # Will take lift_max if lift_min > lift_max
     uplift = row['uplift'] if row['uplift'] is not None else 0

@@ -50,3 +50,17 @@ def _dp_block(row):
 
 
 dp_block = Working_func(_dp_block, 'DP Block_Check')
+
+
+def _no_craftsman(row):
+    product_brand = row['Product_Brand'] if row['Product_Brand'] is not None else ''
+    brand = row['brand'] if row['brand'] is not None else ''
+    if 'craftsman' in product_brand.lower() or 'craftsman' in brand.lower():
+        return False, 'No Craftsman'
+    if product_brand == '' and brand == '':
+        return False, 'No Craftsman'
+
+no_craftsman = Working_func(_no_craftsman, 'No Craftsman')
+
+def _no_kenmore(row):
+    pass
