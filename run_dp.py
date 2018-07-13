@@ -35,7 +35,11 @@ def run_all(run_id):
                 'key': ['div_no', 'itm_no']},
             'electrical_multipliers': {
                 'table_name': 'dp_spark_test.electrical_multipliers',
-                'key': ['div_no', 'itm_no']}
+                'key': ['div_no', 'itm_no']},
+            'mailable_table': {
+                'table_name': 'dp_spark_test.mailable_table',
+                'key': ['div_no', 'itm_no']
+            }
         }
     )  # Reading Source Table
     Sears_DP.add_rule(static_table_mm.construct_rule())

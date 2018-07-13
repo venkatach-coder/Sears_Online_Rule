@@ -12,6 +12,12 @@ def _clearance_check(row):
 clearance_check = Working_func(_clearance_check, 'Clearance Check')
 
 
+def _pmi_check(row):
+    if row['PMI'] is None:
+        return False, 'PMI does not exsit'
+
+pmi_check = Working_func(_pmi_check, 'PMI Check')
+
 def _reg_check(row):
     if row['reg'] is None or row['reg'] <= 0.01:
         return False, 'Invalid reg'
