@@ -7,7 +7,7 @@ from Sears_Online_Rule.rule_templates import pre_rule, post_rule, core_rule, upl
 class Construct_DP_Rule(dp_rules.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(target_tbl_name='rule_table', rule_level=3000,
-                         rule_name='''((div_no = 8 and ln_no in (1,21,41,55)) or div in (14, 24,96))                                   
+                         rule_name='''((div_no = 8 and ln_no in (1,21,41,55)) or div_no in (14, 24,96))                                   
                                    and (lower(brand) like '%kitchenaid%' or lower(Product_Brand) like '%kitchenaid%')''',
                          if_exists='append')
 

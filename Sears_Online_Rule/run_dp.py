@@ -5,17 +5,24 @@ import \
     Sears_Online_Rule.min_comp_all_temp as min_comp_all_temp, \
     Sears_Online_Rule.min_comp_MM as min_comp_MM
 from Sears_Online_Rule.DP_Rules import rule_table_div6, rule_table_div8, rule_table_div9
-from Sears_Online_Rule.DP_Rules import rule_table_div8_kitchenaid
+from Sears_Online_Rule.DP_Rules import rule_table_HOME_kitchenaid
 from Sears_Online_Rule.DP_Rules import rule_table_div14
 from Sears_Online_Rule.DP_Rules import rule_table_div22
 from Sears_Online_Rule.DP_Rules import rule_table_div26
 from Sears_Online_Rule.DP_Rules import rule_table_div46
+from Sears_Online_Rule.DP_Rules import rule_table_div31
+from Sears_Online_Rule.DP_Rules import rule_table_div34
+from Sears_Online_Rule.DP_Rules import rule_table_div49
+from Sears_Online_Rule.DP_Rules import rule_table_div52
+from Sears_Online_Rule.DP_Rules import rule_table_div67
+from Sears_Online_Rule.DP_Rules import rule_table_div71
+from Sears_Online_Rule.DP_Rules import rule_table_div71_ODL
 
 import datetime as dt
 
 
 
-def run_all(run_id):
+def run_all(run_id, target_prefix):
     datetoday = dt.datetime(2018, 7, 10)
     Sears_DP = harlem125.Harlem125()
     Sears_DP.load_souce_table(
@@ -56,14 +63,19 @@ def run_all(run_id):
 
     Sears_DP.add_rule(rule_table_div6.Construct_DP_Rule().construct_rule())
     Sears_DP.add_rule(rule_table_div8.Construct_DP_Rule().construct_rule())
-    Sears_DP.add_rule(rule_table_div8_kitchenaid.Construct_DP_Rule().construct_rule())
+    Sears_DP.add_rule(rule_table_HOME_kitchenaid.Construct_DP_Rule().construct_rule())
     Sears_DP.add_rule(rule_table_div9.Construct_DP_Rule().construct_rule())
     Sears_DP.add_rule(rule_table_div14.Construct_DP_Rule().construct_rule())
     Sears_DP.add_rule(rule_table_div22.Construct_DP_Rule().construct_rule())
     Sears_DP.add_rule(rule_table_div26.Construct_DP_Rule().construct_rule())
     Sears_DP.add_rule(rule_table_div46.Construct_DP_Rule().construct_rule())
-
-
+    Sears_DP.add_rule(rule_table_div31.Construct_DP_Rule().construct_rule())
+    Sears_DP.add_rule(rule_table_div34.Construct_DP_Rule().construct_rule())
+    Sears_DP.add_rule(rule_table_div49.Construct_DP_Rule().construct_rule())
+    Sears_DP.add_rule(rule_table_div52.Construct_DP_Rule().construct_rule())
+    Sears_DP.add_rule(rule_table_div67.Construct_DP_Rule().construct_rule())
+    Sears_DP.add_rule(rule_table_div71.Construct_DP_Rule().construct_rule())
+    Sears_DP.add_rule(rule_table_div71_ODL.Construct_DP_Rule().construct_rule())
     #### ----- Collision
 
     ####
@@ -74,16 +86,13 @@ def run_all(run_id):
                 # 'static_table_mm': {'destination': 'jx_spark_temp.static_table_mm', 'if_exists': 'replace'},
                 # 'min_comp_all': {'destination': 'jx_spark_temp.min_comp_all', 'if_exists': 'replace'},
                 # 'min_comp_MM': {'destination': 'jx_spark_temp.min_comp_MM', 'if_exists': 'replace'},
-                'rule_table': {'destination': 'jx_spark_temp.rule_table', 'if_exists': 'replace'},
+                'rule_table': {'destination': 'jx_spark_temp.{}_rule_table'.format(target_prefix),
+                               'if_exists': 'replace'},
                 #'collision_FTP': {'destination': 'jx_spark_temp.collision_FTP', 'if_exists': 'replace'},
             }
         )
 
-if __name__ == '__main__':
-    import sys
-    run_id = int(sys.argv[1])
-    print(run_id)
-    run_all(1000)
+
 
 
 
