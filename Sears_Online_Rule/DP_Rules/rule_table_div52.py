@@ -34,7 +34,7 @@ class Construct_DP_Rule(dp_rules.DP_Rule_Constructor):
 
         def _div52_PMI_rule(row):
             if row['PMI'] is not None:
-                if 1 - row['cost_with_subsit']/row['PMI'] >= 0.25:
+                if 1 - row['cost_with_subsidy']/row['PMI'] >= 0.25:
                     return row['PMI'] * 0.99, '0.99 PMI'
                 else:
                     return row['PMI'], 'PMI'
