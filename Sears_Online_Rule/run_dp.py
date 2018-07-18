@@ -23,7 +23,6 @@ import datetime as dt
 
 
 def run_all(run_id, target_prefix):
-    #datetoday = dt.datetime(2018, 7, 10)
     Sears_DP = harlem125.Harlem125()
     Sears_DP.load_souce_table(
         {
@@ -31,7 +30,7 @@ def run_all(run_id, target_prefix):
                              'key': ['div_no', 'itm_no']},
             'all_comp_all': {'table_name': 'dp_spark_source_tbl.all_comp_all',
                              'key': ['div_no', 'itm_no', 'comp_name']},
-            'uplift_table': {'table_name': 'shc-pricing-dev:dp_spark_source_tbl.uplift_table',
+            'uplift_table': {'table_name': 'dp_spark_source_tbl.uplift_table',
                              'key': ['div_no', 'itm_no']},
             'explore_exploit': {
                 'table_name': 'dp_spark_source_tbl.UCB_Sears',
