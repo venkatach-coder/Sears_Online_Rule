@@ -23,28 +23,27 @@ import datetime as dt
 
 
 def run_all(run_id, target_prefix):
-    datetoday = dt.datetime(2018, 7, 10)
+    #datetoday = dt.datetime(2018, 7, 10)
     Sears_DP = harlem125.Harlem125()
     Sears_DP.load_souce_table(
         {
-            'static_table': {'table_name': 'runtime_temp_tables.spark_test_static_table',
-                             'storage_url': 'gs://dp_spark_source/static__table-*.json',
+            'static_table': {'table_name': 'dp_spark_source_tbl.static_table',
                              'key': ['div_no', 'itm_no']},
-            'all_comp_all': {'table_name': 'dp_spark_test.all_comp_all',
+            'all_comp_all': {'table_name': 'dp_spark_source_tbl.all_comp_all',
                              'key': ['div_no', 'itm_no', 'comp_name']},
-            'uplift_table': {'table_name': 'static_tables.uplift_table_{}'.format(datetoday.strftime('%Y%m%d')),
+            'uplift_table': {'table_name': 'shc-pricing-dev:dp_spark_source_tbl.uplift_table',
                              'key': ['div_no', 'itm_no']},
             'explore_exploit': {
-                'table_name': 'shared_source.UCB_Sears_{}'.format(datetoday.strftime('%Y%m%d')),
+                'table_name': 'dp_spark_source_tbl.UCB_Sears',
                 'key': ['div_no', 'itm_no']},
             'electrical_whitelist': {
-                'table_name': 'dp_spark_test.Electrical_Whitelist',
+                'table_name': 'dp_spark_source_tbl.Electrical_Whitelist',
                 'key': ['div_no', 'itm_no']},
             'electrical_multipliers': {
-                'table_name': 'dp_spark_test.electrical_multipliers',
+                'table_name': 'dp_spark_source_tbl.electrical_multipliers',
                 'key': ['div_no', 'itm_no']},
             'mailable_table': {
-                'table_name': 'dp_spark_test.mailable_table',
+                'table_name': 'dp_spark_source_tbl.mailable_table',
                 'key': ['div_no', 'itm_no']
             }
         }
@@ -86,7 +85,7 @@ def run_all(run_id, target_prefix):
                 # 'static_table_mm': {'destination': 'jx_spark_temp.static_table_mm', 'if_exists': 'replace'},
                 # 'min_comp_all': {'destination': 'jx_spark_temp.min_comp_all', 'if_exists': 'replace'},
                 # 'min_comp_MM': {'destination': 'jx_spark_temp.min_comp_MM', 'if_exists': 'replace'},
-                'rule_table': {'destination': 'jx_spark_temp.{}_rule_table'.format(target_prefix),
+                'rule_table': {'destination': 'dp_spark.{}_rule_table'.format(target_prefix),
                                'if_exists': 'replace'},
                 #'collision_FTP': {'destination': 'jx_spark_temp.collision_FTP', 'if_exists': 'replace'},
             }
