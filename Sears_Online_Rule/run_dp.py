@@ -19,10 +19,12 @@ from Sears_Online_Rule.DP_Rules import rule_table_div71
 from Sears_Online_Rule.DP_Rules import rule_table_div71_ODL
 
 import datetime as dt
-
+import pytz
 
 
 def run_all(run_id, target_prefix):
+    time_now = dt.datetime.now(pytz.timezone('America/Chicago')).replace(tzinfo=None)
+    datetoday = time_now.strftime('%Y%m%d')
     Sears_DP = harlem125.Harlem125()
     Sears_DP.load_souce_table(
         {
@@ -79,18 +81,17 @@ def run_all(run_id, target_prefix):
     ####
 
     Sears_DP.run_all_rules()
+
     Sears_DP.output_working_table(
-            {
-                # 'static_table_mm': {'destination': 'jx_spark_temp.static_table_mm', 'if_exists': 'replace'},
-                # 'min_comp_all': {'destination': 'jx_spark_temp.min_comp_all', 'if_exists': 'replace'},
-                # 'min_comp_MM': {'destination': 'jx_spark_temp.min_comp_MM', 'if_exists': 'replace'},
-                'rule_table': {'destination': 'dp_spark.{}_rule_table'.format(target_prefix),
-                               'if_exists': 'replace'},
-                #'collision_FTP': {'destination': 'jx_spark_temp.collision_FTP', 'if_exists': 'replace'},
-            }
-        )
-
-
+        {
+            # 'static_table_mm': {'destination': 'dp_spark.{}_static_table_mm_{}'.format(target_prefix, datetoday), 'if_exists': 'replace'},
+            # 'min_comp_all': {'destination': 'dp_spark.{}_min_comp_all_{}'.format(target_prefix, datetoday), 'if_exists': 'replace'},
+            # 'min_comp_MM': {'destination': 'dp_spark.{}_min_comp_MM_{}'.format(target_prefix, datetoday), 'if_exists': 'replace'},
+            # 'temp_rule_table_base': {'destination': 'dp_spark.{}_rule_table_base_{}'.format(target_prefix, datetoday), 'if_exists': 'replace'},
+            'rule_table': {'destination': 'dp_spark.{}_rule_table_{}'.format(target_prefix, datetoday), 'if_exists': 'replace'},
+            #'collision_FTP': {'destination': 'dp_spark.{}_collision_FTP_{}'.format(target_prefix, datetoday), 'if_exists': 'replace'},
+        }
+    )
 
 
 

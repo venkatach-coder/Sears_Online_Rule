@@ -23,19 +23,18 @@ class Construct_DP_Rule(dp_rules.DP_Rule_Constructor):
         return [
             pre_rule.ad_plan_check,
             pre_rule.dp_block,
-            pre_rule.clearance_check,
+            # pre_rule.clearance_check,
             pre_rule.cost_check,
             pre_rule.min_margin_check,
             pre_rule.reg_check
         ]
 
-
     def get_core_rule(self):
         return [
             core_rule.Match_to_Min_comp_MM,
-            core_rule.Match_to_Min_margin_when_Min_comp_Exists
+            core_rule.Match_to_Min_margin_when_Min_comp_Exists,
+            core_rule.Set_to_PMI_when_PMI_exists
         ]
-
 
     def get_uplift_rule(self):
         return [
@@ -50,4 +49,10 @@ class Construct_DP_Rule(dp_rules.DP_Rule_Constructor):
         ]
 
     def get_deal_flag_rule(self):
+        return []
+
+    def get_day_range_rule(self):
+        return []
+
+    def get_priority_rule(self):
         return []

@@ -12,39 +12,39 @@ def min_comp_mapping(row):
                     row['comp_name'].strip() in (
                     'Amazon', 'Kohls', 'Walmart', 'Bed Bath and Beyond', 'JC Penney',
                     'Target', 'Home Depot', 'Macys', 'Wayfair', 'Lowes', 'BestBuy',
-                    'hhgregg', 'Nebraska Furniture Mart', 'Office Depot', 'Staples', 'ToysRUs', 'Meijer'):
+                    'hhgregg', 'Nebraska Furniture Mart', 'Office Depot', 'Staples', 'ToysRUs', 'Meijer', 'Jet'):
         return True, None
     if row['div_no'] in (34,) and \
-                    row['comp_name'].strip() in ('Home Depot', 'Lowes'):
+                    row['comp_name'].strip() in ('Home Depot', 'Lowes', 'Jet'):
         return True, None
     if row['div_no'] in (9,) and \
-                    row['comp_name'].strip() in ('Home Depot', 'Lowes', 'Amazon'):
+                    row['comp_name'].strip() in ('Home Depot', 'Lowes', 'Amazon', 'Jet'):
         return True, None
     if row['div_no'] in (26, 46, 22) and row['comp_name'].strip() in ('Home Depot', 'Lowes', 'BestBuy'):
         return True, None
     if row['div_no'] == 6 and row['comp_name'].strip() in (
-            'Dick s Sporting Goods', 'ProForm', 'NordicTrack', 'Amazon', 'Walmart', 'Target'):
+            'JC Penney', 'Dick s Sporting Goods', 'ProForm', 'NordicTrack', 'Amazon', 'Walmart', 'Target', 'Jet'):
         return True, None
-    if row['div_no'] == 52 and row['comp_name'].strip() in ('Amazon', 'ToysRUs', 'Walmart', 'Target'):
+    if row['div_no'] == 52 and row['comp_name'].strip() in ('JC Penney', 'Amazon', 'ToysRUs', 'Walmart', 'Target', 'Jet'):
         return True, None
     if row['div_no'] == 71 and row['ln_no'] == 22 and row['comp_name'].strip() in (
-            'Home Depot', 'Lowes', 'Amazon', 'Walmart', 'Target', 'Wayfair'):
+            'Home Depot', 'Lowes', 'Amazon', 'Walmart', 'Target', 'Wayfair', 'Jet'):
         return True, None
     if row['div_no'] == 71 and row['ln_no'] != 22 and row['comp_name'].strip() in (
-            'Home Depot', 'Lowes', 'Amazon'):
+            'Home Depot', 'Lowes', 'Amazon', 'Jet'):
         return True, None
     if row['div_no'] == 95 and row['comp_name'].strip() in (
             'COSTCO', 'DISCOUNT_TIRE', 'FIRESTONE', 'MAVISTIRE', 'MRTIRE',
             'NATIONALTIREBATTERY', 'PEPBOYSTIRE', 'SAMS CLUB',
-            'WALMART'):
+            'WALMART', 'Jet'):
         return True, None
     if row['div_no'] == 28 and row['comp_name'].strip() not in ('WALMART',):
         return True, None
     if row['div_no'] == 49 and row['comp_name'].strip() in (
-            'Home Depot', 'Lowes', 'Target', 'Walmart', 'ToysRUs', 'ToysRUs', 'Amazon', 'Nebraska Furniture Mart'):
+            'Home Depot', 'Lowes', 'Target', 'Walmart', 'ToysRUs', 'ToysRUs', 'Amazon', 'Nebraska Furniture Mart', 'Jet'):
         return True, None
     if row['div_no'] == 67 and row['comp_name'].strip().lower() in (
-            'wolverine', 'amazon', 'workbootsusa.com', 'cat footwear', 'timberland', 'workboots.com'):
+            'JC Penney', 'wolverine', 'amazon', 'workbootsusa.com', 'cat footwear', 'timberland', 'workboots.com', 'Jet'):
         return True, None
     if row['div_no'] == 76:
         return True, None

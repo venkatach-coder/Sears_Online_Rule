@@ -61,3 +61,9 @@ class Construct_DP_Rule(dp_rules.DP_Rule_Constructor):
 
     def get_deal_flag_rule(self):
         return []
+
+    def get_day_range_rule(self):
+        return []
+
+    def get_priority_rule(self):
+        return []

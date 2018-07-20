@@ -6,7 +6,8 @@ from Sears_Online_Rule.rule_templates import pre_rule, post_rule, core_rule, upl
 
 class Construct_DP_Rule(dp_rules.DP_Rule_Constructor):
     def __init__(self):
-        super().__init__(target_tbl_name='rule_table', rule_level=2000, rule_name='div_no = 8 and ln_no in (1,21,41,55)', if_exists='append')
+        super().__init__(target_tbl_name='rule_table', rule_level=2000,
+                         rule_name='div_no = 8 and ln_no in (1,21,41,55)', if_exists='append')
 
     def get_merge_func(self):
         def merge_func(df_dict: Dict[str, DataFrame]):
@@ -31,13 +32,11 @@ class Construct_DP_Rule(dp_rules.DP_Rule_Constructor):
             pre_rule.reg_check
         ]
 
-
     def get_core_rule(self):
         return [
             core_rule.Mailable_rule,
             core_rule.Median_min_cmop_MM_min_margin_rule
         ]
-
 
     def get_uplift_rule(self):
         return [
@@ -52,4 +51,10 @@ class Construct_DP_Rule(dp_rules.DP_Rule_Constructor):
         ]
 
     def get_deal_flag_rule(self):
+        return []
+
+    def get_day_range_rule(self):
+        return []
+
+    def get_priority_rule(self):
         return []
