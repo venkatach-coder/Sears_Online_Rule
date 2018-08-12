@@ -1,11 +1,19 @@
 from harlem125.dp_rules import Working_func
+import re
+
+
+def _min_comp_check(row):
+    if row['min_comp'] is None:
+        return False, 'min_comp does not exist'
+
+min_comp_check = Working_func(_min_comp_check, 'min comp check')
 
 
 def _clearance_check(row):
     if row['reg'] is None:
         return None, None
     temp = row['PMI'] if row['PMI'] is not None else row['reg']
-    if str(round(temp, 2))[-2:] in ('87', '88', '93', '97'):
+    if '{:.2f}'.format(temp)[-2:] in ('87', '88', '93', '97'):
         return False, 'Clearance Block'
 
 
@@ -14,7 +22,7 @@ clearance_check = Working_func(_clearance_check, 'Clearance Check')
 
 def _pmi_check(row):
     if row['PMI'] is None:
-        return False, 'PMI does not exsit'
+        return False, 'PMI does not exist'
 
 pmi_check = Working_func(_pmi_check, 'PMI Check')
 
@@ -88,3 +96,25 @@ def _no_kenmore(row):
 
 
 no_kenmore = Working_func(_no_kenmore, 'No Kenmore')
+
+def _ee_check(row):
+    if row['ee_price'] is None:
+        return False, 'No EE price'
+
+
+ee_check=Working_func(_ee_check, 'No EE price')
+
+def _apparel_brand_check(row):
+    product_brand = row['Product_Brand'] if row['Product_Brand'] is not None else ''
+    brand = row['brand'] if row['brand'] is not None else ''
+
+    if row['div_no'] in (77,29) and \
+        ('american princess' in product_brand.lower() or 'american princess' in brand.lower()):
+        return False, 'apparel pmi brand ban'
+    if row['div_no'] in (41,43) and \
+            (('levi' in product_brand.lower() or 'levi' in brand.lower()) or \
+             ('docker' in product_brand.lower() or 'docker' in brand.lower())):
+        return False, 'apparel pmi brand ban'
+
+
+apparel_brand_check = Working_func(_apparel_brand_check, 'apparel pmi pricing no touch brand')

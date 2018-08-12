@@ -36,7 +36,7 @@ def _Median_min_comp_MM_min_margin_rule(row):
         else:
             return row['min_margin'], 'Match at Min_margin'
 
-Median_min_cmop_MM_min_margin_rule = Working_func(
+Median_min_comp_MM_min_margin_rule = Working_func(
     _Median_min_comp_MM_min_margin_rule,
     'Min_comp_MM, Min_margin rule, Set to Min_margin if median_comp < Min_margin'
 )
@@ -78,7 +78,7 @@ def _HA_389_399_rounding_Match_to_Min_comp_MM(row):
     except TypeError:
         return None
     if 389 <= price <= 399:
-        price = 399
+        price = 399.0
         rule += ' Round to 399'
     return price, rule
 
@@ -112,3 +112,54 @@ Price_at_MAP = Working_func(
     _Price_at_MAP,
     'Price at MAP'
 )
+
+
+def _max_min_comp_mm_map(row):
+    if row['min_comp_MM'] is not None:
+        if row['MAP_price'] is not None:
+            map = row['MAP_price']
+        else:
+            map = -1.0
+        return max(row['min_comp_MM'], map), 'Price at min_comp_MM MAP bounded'
+
+
+
+max_min_comp_mm_map = Working_func(_max_min_comp_mm_map, 'price at max of map and min_comp_mm when min_comp_mm exist')
+
+
+def _Match_to_Min_comp_MM_HA_instore(row):
+    if row['min_comp_MM'] is not None:
+        return row['min_comp_MM'], 'Branded, HA Online Min Comp'
+
+
+Match_to_Min_comp_MM_HA_instore = Working_func(_Match_to_Min_comp_MM_HA_instore, 'Branded, HA Online Min Comp')
+
+def _Match_to_ee(row):
+    return row['ee_price'], 'explore_exploit price'
+
+Match_to_ee=Working_func(_Match_to_ee,'explore_exploit price')
+
+
+def _PMI_uplift_2_max_5(row):
+    import math
+    pmi = row['PMI']
+    if math.floor( round(min((1.02*pmi), pmi + 5),2) / 100.0) > math.floor(round(pmi,2) / 100.0):
+        return pmi, 'PMI|uplift:0.02 max 5'
+    else:
+        return round(min((1.02*pmi), pmi + 5),2), 'PMI|uplift:0.02 max 5'
+
+
+
+PMI_uplift_2_max_5 = Working_func(_PMI_uplift_2_max_5,  'PMI|uplift:0.02 max 5')
+
+def _PMI_uplift_1_max_5(row):
+    import math
+    pmi = row['PMI']
+    if math.floor( round(min((1.01*pmi), pmi + 5),2) / 100.0) > math.floor(round(pmi,2) / 100.0):
+        return pmi, 'PMI|uplift:0.01 max 5'
+    else:
+        return round(min((1.01*pmi), pmi + 5),2), 'PMI|uplift:0.01 max 5'
+
+
+
+PMI_uplift_1_max_5 = Working_func(_PMI_uplift_1_max_5,  'PMI|uplift:0.01 max 5')

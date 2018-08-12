@@ -1,7 +1,9 @@
 from Sears_Online_Rule import run_dp
-import sys
-
+import argparse
 if __name__ == '__main__':
-    run_id = sys.argv[1]
-    prefix = sys.argv[2]
-    run_dp.run_all(run_id, prefix)
+    parser = argparse.ArgumentParser(description='FTP Server Parameters')
+    parser.add_argument('--prefix', required=True, help='prefix of output table')
+    parser.add_argument('--run_id', default=None, help='run ID of a batch')
+    args = parser.parse_args()
+    run_id, prefix = args.run_id, args.prefix
+    run_dp.run_all(prefix, run_id)

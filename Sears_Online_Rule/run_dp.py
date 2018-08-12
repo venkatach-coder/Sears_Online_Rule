@@ -1,98 +1,63 @@
 from harlem125 import harlem125
-import \
-    Sears_Online_Rule.static_table_mm as static_table_mm, \
-    Sears_Online_Rule.min_comp_all as min_comp_all, \
-    Sears_Online_Rule.min_comp_all_temp as min_comp_all_temp, \
-    Sears_Online_Rule.min_comp_MM as min_comp_MM
-from Sears_Online_Rule.DP_Rules import rule_table_div6, rule_table_div8, rule_table_div9
-from Sears_Online_Rule.DP_Rules import rule_table_HOME_kitchenaid
-from Sears_Online_Rule.DP_Rules import rule_table_div14
-from Sears_Online_Rule.DP_Rules import rule_table_div22
-from Sears_Online_Rule.DP_Rules import rule_table_div26
-from Sears_Online_Rule.DP_Rules import rule_table_div46
-from Sears_Online_Rule.DP_Rules import rule_table_div31
-from Sears_Online_Rule.DP_Rules import rule_table_div34
-from Sears_Online_Rule.DP_Rules import rule_table_div49
-from Sears_Online_Rule.DP_Rules import rule_table_div52
-from Sears_Online_Rule.DP_Rules import rule_table_div67
-from Sears_Online_Rule.DP_Rules import rule_table_div71
-from Sears_Online_Rule.DP_Rules import rule_table_div71_ODL
-
+from Sears_Online_Rule.DP_Rules import *
+from Sears_Online_Rule import *
+import sys
 import datetime as dt
 import pytz
 
 
-def run_all(run_id, target_prefix):
+def run_all(target_prefix, run_id = None):
+    dp_rule_lst = [x for x in sys.modules.keys() if x.startswith('Sears_Online_Rule.DP_Rules.')]
+    print('------------------------------------------------')
+    print(' [*] imported rules:')
+    for eachmodule in dp_rule_lst:
+        print(' [*] {}'.format(eachmodule))
+    print('------------------------------------------------')
+
     time_now = dt.datetime.now(pytz.timezone('America/Chicago')).replace(tzinfo=None)
+    if run_id is None:
+        run_id = time_now.hour * 3600 + time_now.minute * 60 + time_now.second
+    print(run_id)
     datetoday = time_now.strftime('%Y%m%d')
     Sears_DP = harlem125.Harlem125()
-    Sears_DP.load_souce_table(
+    Sears_DP.add_rule(add_run_id.construct_rule(run_id))
+    Sears_DP.add_rule(uplit_table.construct_rule(time_now))
+    for each_rule in dp_rule_lst:
+        Sears_DP.add_rule(sys.modules[each_rule].Construct_DP_Rule().construct_rule())
+    Sears_DP.add_rule(price_decimal_rounding_up.construct_rule())
+    Sears_DP.add_rule(final_price_selection.construct_rule())
+    Sears_DP.add_rule(dp_rule_collision.construct_rule())
+    Sears_DP.add_rule(default_sales_priority_push.construct_rule())
+    Sears_DP.add_rule(FTP_formatting.construct_rule())  # <------- Price Push
+
+    # Reporting Table Generating
+    # Rule_Table
+    Sears_DP.add_rule(rules_FTP.construct_rule())
+
+
+    # Source table loading....
+    Sears_DP.load_source_table(
         {
             'static_table': {'table_name': 'dp_spark_source_tbl.static_table',
                              'key': ['div_no', 'itm_no']},
             'all_comp_all': {'table_name': 'dp_spark_source_tbl.all_comp_all',
                              'key': ['div_no', 'itm_no', 'comp_name']},
-            'uplift_table': {'table_name': 'dp_spark_source_tbl.uplift_table',
-                             'key': ['div_no', 'itm_no']},
-            'explore_exploit': {
-                'table_name': 'dp_spark_source_tbl.UCB_Sears',
-                'key': ['div_no', 'itm_no']},
-            'electrical_whitelist': {
-                'table_name': 'dp_spark_source_tbl.Electrical_Whitelist',
-                'key': ['div_no', 'itm_no']},
-            'electrical_multipliers': {
-                'table_name': 'dp_spark_source_tbl.electrical_multipliers',
-                'key': ['div_no', 'itm_no']},
-            'mailable_table': {
-                'table_name': 'dp_spark_source_tbl.mailable_table',
-                'key': ['div_no', 'itm_no']
-            }
+            'uplift_input': {'table_name': 'dp_spark_source_tbl.uplift_input',
+                             'key': ['ID']},
         }
-    )  # Reading Source Table
-    Sears_DP.add_rule(static_table_mm.construct_rule())
-    Sears_DP.add_rule(min_comp_all_temp.construct_rule())
-    Sears_DP.add_rule(min_comp_MM.construct_rule())
-    Sears_DP.add_rule(min_comp_all.construct_rule())
-
-    #### This is the base Table ######
-
-    import Sears_Online_Rule.temp_rule_table_base as temp_rule_table_base
-    Sears_DP.add_rule(temp_rule_table_base.construct_rule())
-
-    #### ----- Regular DP Rule Start Here #######################
-
-    Sears_DP.add_rule(rule_table_div6.Construct_DP_Rule().construct_rule())
-    Sears_DP.add_rule(rule_table_div8.Construct_DP_Rule().construct_rule())
-    Sears_DP.add_rule(rule_table_HOME_kitchenaid.Construct_DP_Rule().construct_rule())
-    Sears_DP.add_rule(rule_table_div9.Construct_DP_Rule().construct_rule())
-    Sears_DP.add_rule(rule_table_div14.Construct_DP_Rule().construct_rule())
-    Sears_DP.add_rule(rule_table_div22.Construct_DP_Rule().construct_rule())
-    Sears_DP.add_rule(rule_table_div26.Construct_DP_Rule().construct_rule())
-    Sears_DP.add_rule(rule_table_div46.Construct_DP_Rule().construct_rule())
-    Sears_DP.add_rule(rule_table_div31.Construct_DP_Rule().construct_rule())
-    Sears_DP.add_rule(rule_table_div34.Construct_DP_Rule().construct_rule())
-    Sears_DP.add_rule(rule_table_div49.Construct_DP_Rule().construct_rule())
-    Sears_DP.add_rule(rule_table_div52.Construct_DP_Rule().construct_rule())
-    Sears_DP.add_rule(rule_table_div67.Construct_DP_Rule().construct_rule())
-    Sears_DP.add_rule(rule_table_div71.Construct_DP_Rule().construct_rule())
-    Sears_DP.add_rule(rule_table_div71_ODL.Construct_DP_Rule().construct_rule())
-    #### ----- Collision
-
-    ####
-
+    )
     Sears_DP.run_all_rules()
+    Sears_DP.working_table['uplift_table'] = Sears_DP.working_table['uplift_table'].cache()  # Cache rule table
+    Sears_DP.working_table['rule_table'] = Sears_DP.working_table['rule_table'].cache()  # Cache rule table
+    Sears_DP.working_table['rule_table_collision'] = Sears_DP.working_table['rule_table_collision'].cache()
 
     Sears_DP.output_working_table(
         {
-            # 'static_table_mm': {'destination': 'dp_spark.{}_static_table_mm_{}'.format(target_prefix, datetoday), 'if_exists': 'replace'},
-            # 'min_comp_all': {'destination': 'dp_spark.{}_min_comp_all_{}'.format(target_prefix, datetoday), 'if_exists': 'replace'},
-            # 'min_comp_MM': {'destination': 'dp_spark.{}_min_comp_MM_{}'.format(target_prefix, datetoday), 'if_exists': 'replace'},
-            # 'temp_rule_table_base': {'destination': 'dp_spark.{}_rule_table_base_{}'.format(target_prefix, datetoday), 'if_exists': 'replace'},
-            'rule_table': {'destination': 'dp_spark.{}_rule_table_{}'.format(target_prefix, datetoday), 'if_exists': 'replace'},
-            #'collision_FTP': {'destination': 'dp_spark.{}_collision_FTP_{}'.format(target_prefix, datetoday), 'if_exists': 'replace'},
+            'rule_table': {'destination': 'dp_spark.{}_rule_table_{}_{:05d}'.format(target_prefix, datetoday, run_id),
+                           'if_exists': 'replace'},
+            'collision_FTP': {'destination': 'dp_spark.{}_collision_FTP_{}_{:05d}'.format(target_prefix, datetoday, run_id),
+                              'if_exists': 'replace'},
+            'rules_FTP':{'destination': 'dp_spark.{}_rules_FTP_{}_{:05d}'.format(target_prefix, datetoday, run_id),
+                           'if_exists': 'replace'},
         }
     )
-
-
-
-

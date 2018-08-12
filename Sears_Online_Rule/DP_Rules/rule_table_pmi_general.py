@@ -1,12 +1,14 @@
-from typing import Dict
 from Sears_Online_Rule import harlem125_interface as harlem
 from Sears_Online_Rule.rule_templates import pre_rule, post_rule, core_rule, uplift_rule
+from harlem125.dp_rules import Working_func
+from functools import partial
 
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
-        super().__init__(rule_level=1000,
-                         scope='div_no = 6',
-                         rule_name='div6 SG Regular DP Rule')
+        super().__init__(rule_level=500,
+                         scope='div_no in (8,24,14,96)',
+                         rule_name='HOME PMI UPLIFT')
+#8,24,14,96, #HOME
 
     def get_merge_func(self):
         def merge_func(df_dict, scope):
@@ -20,47 +22,41 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
     def get_min_margin_func(self):
         def min_margin_rule(row):
-            return round(row['cost_with_subsidy'] / 0.85, 2), '0.15'
+            return None, None
+
         return min_margin_rule
 
     def get_min_comp_func(self):
         def min_comp_rule(row):
-            if row['comp_name'].strip() in (
-                    'JC Penney', 'Dick s Sporting Goods', 'ProForm',
-                    'NordicTrack', 'Amazon', 'Walmart', 'Target', 'Jet'):
-                return True, None
-            elif row['comp_name'].strip().startswith('mkpl_'):
-                return True, None
-            return False, None
+            return None, None
         return min_comp_rule
 
     def get_pre_rule(self):
         return [
             pre_rule.ad_plan_check,
             pre_rule.dp_block,
-            # pre_rule.clearance_check,
             pre_rule.cost_check,
-            pre_rule.min_margin_check,
+            pre_rule.pmi_check,
             pre_rule.reg_check
         ]
 
+
     def get_core_rule(self):
         return [
-            core_rule.Match_to_Min_comp_MM,
-            core_rule.Match_to_Min_margin_when_Min_comp_Exists,
+            #core_rule.PMI_uplift_1_max_5
             core_rule.Set_to_PMI_when_PMI_exists
         ]
 
+
     def get_uplift_rule(self):
+        func_handle = partial(uplift_rule._PMI_uplift_with_max, uplift=1.01, max_val=5)
         return [
-            uplift_rule.uplift_by_uplift_table
+            Working_func(func_handle, '1.01 uplift max 5')
         ]
 
     def get_post_rule(self):
         return [
-            post_rule.VD_Min_Reg_PMI_Upliftted_Prcie,
-            post_rule.Min_Reg_PMI_Upliftted_Prcie_D_flag,
-            post_rule.Reg_Bound_check_Null_when_reg_not_Exists
+            post_rule.reg_bound
         ]
 
     def get_deal_flag_rule(self):

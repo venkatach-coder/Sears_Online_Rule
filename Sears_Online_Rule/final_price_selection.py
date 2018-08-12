@@ -1,20 +1,20 @@
 from typing import Dict
 import pyspark.sql.functions as F
-import pyspark.sql.types as T
 from pyspark.sql import DataFrame
 import harlem125.dp_rules as dp_rules
 
 def merge_func(work_df: Dict[str, DataFrame]):
-    return work_df['static_table']
+    return work_df['rule_table']
 
-def add_run_id(df: DataFrame, run_id):
-    return df.withColumn('run_id', F.lit(run_id).cast(T.LongType()))
+def final_price_selection(df: DataFrame):
+    return df.withColumn('final_price', F.col('round_up_price'))
 
-def construct_rule(run_id, *args, **kwargs) -> dp_rules.DP_Rule_base:
+def construct_rule(*args, **kwargs) -> dp_rules.DP_Rule_base:
     thisrule = dp_rules.DP_Rule_base(
-        target_tbl_name='static_table_run_id',
-        rule_name='add_run_id',
-        desc='Add run ID for jobs',
+        target_tbl_name='rule_table',
+        rule_name='select final price',
+        if_exists='replace',
+        desc='Choose which column should be the final price',
         *args,
         **kwargs
     )
@@ -24,7 +24,7 @@ def construct_rule(run_id, *args, **kwargs) -> dp_rules.DP_Rule_base:
         func_desc='Table Selection'
     ))
     thisrule.add_rule_layer(dp_rules.DP_func(
-        add_run_id,
-        func_desc='add run_id',
-    ),(run_id,))
+        final_price_selection,
+        func_desc='select final price',
+    ))
     return thisrule

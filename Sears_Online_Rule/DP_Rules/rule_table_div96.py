@@ -1,10 +1,9 @@
 from Sears_Online_Rule import harlem125_interface as harlem
 from Sears_Online_Rule.rule_templates import pre_rule, post_rule, core_rule, uplift_rule
-from harlem125.dp_rules import Working_func
 
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
-        super().__init__( rule_level=1000, scope='div_no = 52', rule_name='div52')
+        super().__init__(rule_level=1000, scope='div_no = 96', rule_name='div96 AUTO')
 
     def get_merge_func(self):
         def merge_func(df_dict, scope):
@@ -22,8 +21,9 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
     def get_min_comp_func(self):
         def min_comp_rule(row):
-            if row['comp_name'].strip() in (
-                    'JC Penney', 'Amazon', 'ToysRUs', 'Walmart', 'Target', 'Jet'):
+            if row['comp_name'].strip() in ('Amazon', 'Kohls', 'Walmart', 'Bed Bath and Beyond', 'JC Penney',
+                    'Target', 'Home Depot', 'Macys', 'Wayfair', 'Lowes', 'BestBuy',
+                    'hhgregg', 'Nebraska Furniture Mart', 'Office Depot', 'Staples', 'ToysRUs', 'Meijer', 'Jet'):
                 return True, None
             elif row['comp_name'].strip().startswith('mkpl_'):
                 return True, None
@@ -35,27 +35,14 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
             pre_rule.ad_plan_check,
             pre_rule.dp_block,
             pre_rule.cost_check,
-            pre_rule.min_margin_check,
-            pre_rule.reg_check,
-
+            pre_rule.reg_check
         ]
 
 
     def get_core_rule(self):
-
-        def _div52_PMI_rule(row):
-            if row['PMI'] is not None:
-                if 1 - row['cost_with_subsidy']/row['PMI'] >= 0.25:
-                    return row['PMI'] * 0.99, '0.99 PMI'
-                else:
-                    return row['PMI'], 'PMI'
-
-        div52_PMI_rule = Working_func(_div52_PMI_rule, 'Div52 PMI rule')
-
         return [
             core_rule.Match_to_Min_comp_MM,
-            core_rule.Match_to_Min_margin_when_Min_comp_Exists,
-            div52_PMI_rule
+            core_rule.Match_to_Min_margin_when_Min_comp_Exists
         ]
 
 
@@ -66,8 +53,9 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
     def get_post_rule(self):
         return [
-            post_rule.Reg_Bound_check_Null_when_reg_not_Exists
+            post_rule.Round_to_MAP_Reg_Bound_check_Null_when_reg_not_Exists
         ]
+
     def get_deal_flag_rule(self):
         return []
 
@@ -76,4 +64,3 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
     def get_priority_rule(self):
         return []
-

@@ -1,34 +1,35 @@
-import re
 from pyspark.sql.functions import udf, struct, row_number, col
 from pyspark.sql.window import Window
+from typing import Dict
+import pyspark.sql.types as T
+from pyspark.sql.functions import lit, concat, lpad, when, abs, col, date_add, udf, round
+import datetime as dt
+import pytz
 from pyspark.sql import DataFrame
 import harlem125.dp_rules as dp_rules
-from typing import Dict
 
 def merge_func(work_df: Dict[str, DataFrame]):
     return work_df['rule_table']
 
 
-def select_price(df: DataFrame):
+def dp_rule_collision(df: DataFrame):
     price_rule_window = (Window
-                    .partitionBy(df['div_no'], df['itm_no'])
-                    .orderBy(df['rule_level'].desc()))
-
-    df = df \
-        .filter('post_rule_value is not Null and post_rule_value > 0') \
+                         .partitionBy('div_no', 'itm_no')
+                         .orderBy(col('rule_level').desc()))
+    return df \
+        .filter('final_price > 0') \
+        .filter('reg is not null') \
+        .filter('round((final_price - cost_with_subsidy)/final_price,2) > 0.0') \
         .select('*', row_number().over(price_rule_window).alias('rn')) \
         .filter('rn == 1') \
-        .drop('rn') \
-        .filter('post_rule_value > 0') \
-
-    return df
+        .drop('rn')
 
 
 def construct_rule(*args, **kwargs) -> dp_rules.DP_Rule_base:
     thisrule = dp_rules.DP_Rule_base(
-        target_tbl_name='collision_FTP',
-        rule_name='collision_FTP',
-        desc='',
+        target_tbl_name='rule_table_collision',
+        rule_name='dp rule collision',
+        desc='Collide the DP Rules based on Rule_Level',
         *args,
         **kwargs
     )
@@ -38,7 +39,7 @@ def construct_rule(*args, **kwargs) -> dp_rules.DP_Rule_base:
         func_desc='Table Selection'
     ))
     thisrule.add_rule_layer(dp_rules.DP_func(
-        select_price,
-        func_desc='Collision FTP',
+        dp_rule_collision,
+        func_desc='Collision DP Rules',
     ))
     return thisrule
