@@ -1,7 +1,7 @@
 from Sears_Online_Rule import harlem125_interface as harlem
 from Sears_Online_Rule.rule_templates import pre_rule, post_rule, core_rule, uplift_rule
-
-
+import datetime as dt
+import pytz
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         div_lst = [
@@ -39,12 +39,13 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
             [2, ''],
         ]
         explore_exploit = " or ".join(["(div_no = " + str(x[0]) + " " + str(x[1]) + ")" for x in div_lst])
+        time_now = dt.datetime.now(pytz.timezone('America/Chicago')).replace(tzinfo=None)
         super().__init__(rule_level=6000,
                          additional_source={'explore_exploit': {
-                             'table_name': 'dp_spark_source_tbl.UCB_Sears',
+                             'table_name': 'shared_source.UCB_Sears_{}'.format(time_now.strftime('%Y%m%d')),
                              'key': ['div_no', 'itm_no']}
                          },
-                         scope=explore_exploit, rule_name='explore_exploit')
+                         scope=explore_exploit, is_active=True, rule_name='explore_exploit')
 
     def get_merge_func(self):
         def merge_func(df_dict, scope):

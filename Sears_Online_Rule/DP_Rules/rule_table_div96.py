@@ -3,7 +3,7 @@ from Sears_Online_Rule.rule_templates import pre_rule, post_rule, core_rule, upl
 
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
-        super().__init__(rule_level=1000, scope='div_no = 96', rule_name='div96 AUTO')
+        super().__init__(rule_level=1000, scope='div_no = 96', rule_name='div96 HOME')
 
     def get_merge_func(self):
         def merge_func(df_dict, scope):

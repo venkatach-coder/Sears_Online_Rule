@@ -1,13 +1,11 @@
-from pyspark.sql.functions import udf, struct, row_number, col
-from pyspark.sql.window import Window
 from typing import Dict
 import pyspark.sql.types as T
-from pyspark.sql.functions import lit, concat, lpad, when, abs, col, date_add, udf, round
+import pyspark.sql.functions as F
 import datetime as dt
 import pytz
-
 from pyspark.sql import DataFrame
 import harlem125.dp_rules as dp_rules
+import math
 
 
 def end_date(day_range, current_date):
@@ -24,28 +22,53 @@ def select_price(ftp: DataFrame, find_end_date_udf):
     time_now = dt.datetime.now(pytz.timezone('America/Chicago')).replace(tzinfo=None)
     current_date = time_now.strftime('%Y-%m-%d')
 
-    ftp = ftp.withColumn('Format', lit('Sears.com'))
-    ftp = ftp.withColumn('Store', lit("9300"))
-    ftp = ftp.withColumn('Div_item', concat(lpad(ftp.div_no, 3, '0'), lit('-'), ftp.itm_no))
-    ftp = ftp.withColumn('Start_Date', lit(current_date))
+    ftp = ftp.withColumn('Format', F.lit('Sears.com'))
+    ftp = ftp.withColumn('Store', F.lit("9300"))
+    ftp = ftp.withColumn('Div_item', F.concat(F.lpad(ftp.div_no, 3, '0'), F.lit('-'), ftp.itm_no))
+    ftp = ftp.withColumn('Start_Date', F.lit(current_date))
 
-    ftp = ftp.withColumn("ftp_delete_flag",
-                         when(col('reg') - col('final_price') < 0.01,
-                              lit('Y')).otherwise(lit(None)).cast(T.StringType()))
+    # ftp = ftp.withColumn("ftp_delete_flag",
+    #                      F.when(F.col('reg') - F.col('final_price') < 0.0099,
+    #                             F.lit('Y')).otherwise(F.lit(None)).cast(T.StringType()))
 
-    ftp = ftp.withColumn('End_Date', find_end_date_udf(col('day_range'), col('Start_Date')))
+    ftp = ftp.withColumn("ftp_price",
+                         F.when(F.col('sending_delete'),
+                                F.lit(None)).otherwise(F.col('final_price')).cast(T.DoubleType()))
 
-    ftp = ftp.withColumn('Member_Flag', lit(None).cast(T.StringType()))
-    ftp = ftp.withColumn('Record_Type', lit(None).cast(T.StringType()))
-    ftp = ftp.withColumn('Region', lit(None).cast(T.StringType()))
-    ftp = ftp.withColumn("Online_Only_Flag", lit(None).cast(T.StringType()))
-    ftp = ftp.withColumn("DP_Block_Flag", lit(None).cast(T.StringType()))
+    ftp = ftp.withColumn("delete_flag",
+                         F.when(F.col('sending_delete'),
+                                F.lit('Y')).otherwise(F.lit('N')).cast(T.StringType()))
 
-    ftp = ftp.select('Format', 'Div_item', 'div_no', 'itm_no', round(col('final_price'), 2).alias('price'),
+    ftp = ftp.withColumn('End_Date', find_end_date_udf(F.col('day_range'), F.col('Start_Date')))
+
+    ftp = ftp.withColumn('Member_Flag', F.lit(None).cast(T.StringType()))
+    ftp = ftp.withColumn('Record_Type', F.lit(None).cast(T.StringType()))
+    ftp = ftp.withColumn('Region', F.lit(None).cast(T.StringType()))
+    ftp = ftp.withColumn("Online_Only_Flag", F.lit('Y').cast(T.StringType()))
+    ftp = ftp.withColumn("DP_Block_Flag", F.lit('N').cast(T.StringType()))
+    ftp = ftp.withColumn("Apply_Deal_Flag",
+                         F.when(F.col('deal_flag_value') == 'Y', F.lit(2)).otherwise(F.lit(1)).cast(T.IntegerType()))
+
+    ftp = ftp.select('Format', 'Div_item',
+                     F.round(F.col('ftp_price'), 2).alias('price'),
                      'Start_Date', 'End_date', 'Member_Flag', 'Record_Type', 'Region', 'Online_Only_Flag',
-                     'DP_Block_Flag', 'deal_flag_value', col('ftp_delete_flag').alias('delete_flag'), 'priority')
-
+                     'DP_Block_Flag', 'Apply_Deal_Flag', 'delete_flag', 'priority')
     return ftp
+
+
+def float_to_string(price):
+    if price is None:
+        return None
+    if math.isnan(price):
+        return None
+    return '{:.2f}'.format(price)
+
+
+def print_out_price(df: DataFrame, float_to_string_udf: F.udf):
+    return df.withColumn('price_str', float_to_string_udf(F.col('price'))) \
+        .select('Format', 'Div_item', F.col('price_str').cast(T.StringType()).alias('price'),
+                'Start_Date', 'End_date', 'Member_Flag', 'Record_Type', 'Region', 'Online_Only_Flag',
+                'DP_Block_Flag', 'Apply_Deal_Flag', 'delete_flag', 'priority')
 
 
 def construct_rule(*args, **kwargs) -> dp_rules.DP_Rule_base:
@@ -64,6 +87,11 @@ def construct_rule(*args, **kwargs) -> dp_rules.DP_Rule_base:
     thisrule.add_rule_layer(dp_rules.DP_func(
         select_price,
         func_desc='Collision FTP',
-        pyudf=udf(end_date, T.StringType())
+        pyudf=F.udf(end_date, T.StringType())
     ))
+    # thisrule.add_rule_layer(dp_rules.DP_func(
+    #     print_out_price,
+    #     func_desc='Collision FTP price change to string type',
+    #     pyudf=F.udf(float_to_string, T.StringType())
+    # ))
     return thisrule

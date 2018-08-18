@@ -6,9 +6,21 @@ from functools import partial
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=500,
-                         scope='div_no in (8,24,14,96)',
-                         rule_name='HOME PMI UPLIFT')
-#8,24,14,96, #HOME
+                         is_active=False,
+                         scope='div_no in (8,24,14,96,6,9,71,52,34,49,95,22,26,46)',
+                         rule_name='general PMI UPLIFT')
+# div_lst = [6, # SPG
+#            8,24,14,96, #HOME
+#            9, #TOOLS
+#            71, # ODL
+#            52, # TOYS
+#            34, # tools
+#            49, # apparel
+#            95, # automotive
+#            22,26,46 # HA
+#            #FOOTWEAR INCLUDED
+#            #APPAREL INCLUDED
+#            ]
 
     def get_merge_func(self):
         def merge_func(df_dict, scope):
@@ -49,9 +61,8 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
 
     def get_uplift_rule(self):
-        func_handle = partial(uplift_rule._PMI_uplift_with_max, uplift=1.01, max_val=5)
         return [
-            Working_func(func_handle, '1.01 uplift max 5')
+            uplift_rule.uplift_by_uplift_table
         ]
 
     def get_post_rule(self):

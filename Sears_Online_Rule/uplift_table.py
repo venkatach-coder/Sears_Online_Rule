@@ -14,7 +14,7 @@ def merge_func(work_df: Dict[str, DataFrame], timenow: dt.datetime):
               .filter("'{}' between start_dt and end_dt".format(datestr)) \
               .filter("itm_ksn is not null") \
               .select(F.col('div_dvsn').alias('div_no'), F.col('itm_ksn').alias('itm_no'),
-                      'uplift', 'ID', 'start_dt', 'end_dt'),
+                      'uplift', 'ID','lift_min', 'lift_max', 'start_dt', 'end_dt'),
               on=['div_no', 'itm_no'],
               how='left'
               )
@@ -23,19 +23,21 @@ def merge_func(work_df: Dict[str, DataFrame], timenow: dt.datetime):
                    .filter("format = 'sears'") \
                     .filter("'{}' between start_dt and end_dt".format(datestr)) \
                    .filter("itm_ksn is null") \
-                   .select('div_dvsn', 'ln_dept', 'sbl_catg', 'cls', 'BU','uplift','start_dt', 'end_dt', 'ID' )) \
+                   .select('div_dvsn', 'ln_dept', 'sbl_catg', 'cls', 'BU','uplift','lift_min', 'lift_max','start_dt',
+                           'end_dt', 'ID' )) \
         .filter('div_dvsn is null or div_dvsn = div_no') \
         .filter('ln_dept is null or ln_dept = ln_no') \
         .filter('sbl_catg is null or sbl_catg = sub_ln_no') \
         .filter('cls is null or cls = cls_no') \
         .filter('BU is null or BU = BU_no') \
-        .select('div_no', 'itm_no', 'uplift', 'ID', 'start_dt', 'end_dt')
+        .select('div_no', 'itm_no', 'uplift', 'ID', 'lift_min', 'lift_max', 'start_dt', 'end_dt')
 
     uplift_window = Window.partitionBy('div_no','itm_no').orderBy(F.col('ID').desc())
 
 
-    df = df1.union(df2).select('*', F.row_number().over(uplift_window).alias('rn')).filter('rn == 1').drop('rn')
-
+    df = df1.union(df2).select('*', F.row_number().over(uplift_window).alias('rn')).filter('rn == 1').drop('rn', 'ID')\
+        .withColumnRenamed('start_dt', 'uplift_start_dt') \
+        .withColumnRenamed('end_dt', 'uplift_end_dt')
     return df
 
 

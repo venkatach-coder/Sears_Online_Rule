@@ -7,6 +7,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=500,
                          scope='div_no in (2,4, 7, 16, 17, 18, 25, 29, 31, 33,  38, 40, 41, 43, 45,  74, 75,  77, 88)',
+                         is_active = False,
                          rule_name='apparel rule')
 
     def get_merge_func(self):
@@ -48,9 +49,9 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
 
     def get_uplift_rule(self):
-        func_handle = partial(uplift_rule._PMI_uplift_with_max, uplift=1.02, max_val = 5)
+        func_handle = partial(uplift_rule._uplift_by_percentage_max, uplift=1.06, max_val = float('inf'))
         return [
-            Working_func(func_handle, '1.02 uplift max 5')
+            Working_func(func_handle, '1.06 apparel')
         ]
 
     def get_post_rule(self):

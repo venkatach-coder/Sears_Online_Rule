@@ -6,6 +6,7 @@ from functools import partial
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=500, scope='(div_no in (36,54,76)) or (div_no = 67 and ln_no != 88)',
+                         is_active=False,
                          rule_name='footwear rule')
 
     def get_merge_func(self):
@@ -48,9 +49,9 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
 
     def get_uplift_rule(self):
-        func_handle = partial(uplift_rule._PMI_uplift_with_max, uplift=1.01, max_val=5)
+        func_handle = partial(uplift_rule._uplift_by_percentage_max, uplift=1.06, max_val=float('inf'))
         return [
-            Working_func(func_handle, '1.01 uplift max 5')
+            Working_func(func_handle, '1.06 uplift footwear')
         ]
 
     def get_post_rule(self):

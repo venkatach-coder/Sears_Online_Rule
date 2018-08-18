@@ -21,17 +21,17 @@ def run_all(target_prefix, run_id = None):
     datetoday = time_now.strftime('%Y%m%d')
     Sears_DP = harlem125.Harlem125()
     Sears_DP.add_rule(add_run_id.construct_rule(run_id))
-    Sears_DP.add_rule(uplit_table.construct_rule(time_now))
+    Sears_DP.add_rule(uplift_table.construct_rule(time_now))
     for each_rule in dp_rule_lst:
         Sears_DP.add_rule(sys.modules[each_rule].Construct_DP_Rule().construct_rule())
-    Sears_DP.add_rule(price_decimal_rounding_up.construct_rule())
-    Sears_DP.add_rule(final_price_selection.construct_rule())
+    Sears_DP.add_rule(price_decimal_rounding_up.construct_rule(0.96))
+    Sears_DP.add_rule(final_price_selection.construct_rule(0.96))
     Sears_DP.add_rule(dp_rule_collision.construct_rule())
     Sears_DP.add_rule(default_sales_priority_push.construct_rule())
     Sears_DP.add_rule(FTP_formatting.construct_rule())  # <------- Price Push
-
+    Sears_DP.add_rule(full_rule_summary.construct_rule())
     # Reporting Table Generating
-    # Rule_Table
+    # Rule_Table    
     Sears_DP.add_rule(rules_FTP.construct_rule())
 
 
@@ -53,11 +53,13 @@ def run_all(target_prefix, run_id = None):
 
     Sears_DP.output_working_table(
         {
-            'rule_table': {'destination': 'dp_spark.{}_rule_table_{}_{:05d}'.format(target_prefix, datetoday, run_id),
+            'rule_table_collision':{'destination': 'dp_spark.{}_sears_online_rule_table_collision_{}_{:05d}'.format(target_prefix, datetoday, run_id),
                            'if_exists': 'replace'},
-            'collision_FTP': {'destination': 'dp_spark.{}_collision_FTP_{}_{:05d}'.format(target_prefix, datetoday, run_id),
+            'full_rule_table': {'destination': 'dp_spark.{}_sears_online_rule_table_{}_{:05d}'.format(target_prefix, datetoday, run_id),
+                           'if_exists': 'replace'},
+            'collision_FTP': {'destination': 'dp_spark.{}_sears_online_collision_FTP_{}_{:05d}'.format(target_prefix, datetoday, run_id),
                               'if_exists': 'replace'},
-            'rules_FTP':{'destination': 'dp_spark.{}_rules_FTP_{}_{:05d}'.format(target_prefix, datetoday, run_id),
+            'rules_FTP':{'destination': 'dp_spark.{}_sears_online_rules_FTP_{}_{:05d}'.format(target_prefix, datetoday, run_id),
                            'if_exists': 'replace'},
         }
     )

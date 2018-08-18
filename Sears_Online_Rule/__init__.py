@@ -5,6 +5,7 @@ __all__ = [
     'final_price_selection',
     'FTP_formatting',
     'price_decimal_rounding_up',
+    'uplift_table',
     'rules_FTP',
-    'uplit_table'
+    'full_rule_summary'
 ]

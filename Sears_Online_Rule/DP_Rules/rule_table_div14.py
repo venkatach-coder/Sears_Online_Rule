@@ -37,7 +37,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         return [
             pre_rule.ad_plan_check,
             pre_rule.dp_block,
-            pre_rule.clearance_check,
+            #pre_rule.clearance_check,
             pre_rule.cost_check,
             pre_rule.min_margin_check,
             pre_rule.reg_check,
