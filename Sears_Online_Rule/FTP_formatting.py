@@ -18,8 +18,8 @@ def merge_func(work_df: Dict[str, DataFrame]):
     return work_df['rule_table_collision']
 
 
-def select_price(ftp: DataFrame, find_end_date_udf):
-    time_now = dt.datetime.now(pytz.timezone('America/Chicago')).replace(tzinfo=None)
+def select_price(ftp: DataFrame, find_end_date_udf, time_now):
+    #time_now = dt.datetime.now(pytz.timezone('America/Chicago')).replace(tzinfo=None)
     current_date = time_now.strftime('%Y-%m-%d')
 
     ftp = ftp.withColumn('Format', F.lit('Sears.com'))
@@ -71,7 +71,7 @@ def print_out_price(df: DataFrame, float_to_string_udf: F.udf):
                 'DP_Block_Flag', 'Apply_Deal_Flag', 'delete_flag', 'priority')
 
 
-def construct_rule(*args, **kwargs) -> dp_rules.DP_Rule_base:
+def construct_rule(time_now, *args, **kwargs) -> dp_rules.DP_Rule_base:
     thisrule = dp_rules.DP_Rule_base(
         target_tbl_name='collision_FTP',
         rule_name='collision_FTP',
@@ -88,7 +88,7 @@ def construct_rule(*args, **kwargs) -> dp_rules.DP_Rule_base:
         select_price,
         func_desc='Collision FTP',
         pyudf=F.udf(end_date, T.StringType())
-    ))
+    ), args = (time_now,))
     # thisrule.add_rule_layer(dp_rules.DP_func(
     #     print_out_price,
     #     func_desc='Collision FTP price change to string type',
