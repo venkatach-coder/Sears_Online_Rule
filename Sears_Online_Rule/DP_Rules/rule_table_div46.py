@@ -1,7 +1,8 @@
 from Sears_Online_Rule import harlem125_interface as harlem
 from harlem125.dp_rules import Working_func
-from Sears_Online_Rule.rule_templates import pre_rule, post_rule, core_rule, uplift_rule
+from Sears_Online_Rule.rule_templates import pre_rule, post_rule, core_rule, uplift_rule, priority_rule
 import re
+from functools import partial
 
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
@@ -76,6 +77,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         return []
 
     def get_priority_rule(self):
+        uplift_func = partial(priority_rule._priority_w_run_id, priority=500)
         return [
-            Working_func(lambda x: 500, 'div26 500')
+            Working_func(uplift_func, 'div46 500')
         ]

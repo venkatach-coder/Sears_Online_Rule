@@ -3,7 +3,6 @@ import math
 
 
 def _uplift_by_uplift_table(row):
-    # TODO: Ignore uplifts when ending in 60*60*2 seconds
     rule_name_lst = []
     if row['uplift'] is not None or row['lift_min'] is not None:
         uplift = 0.0 if row['uplift'] is None else row['uplift']
