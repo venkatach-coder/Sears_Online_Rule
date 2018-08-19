@@ -156,6 +156,7 @@ class DP_Rule_Constructor:
         rule_active = True if is_active is None else is_active
         inactive_reason = '' if is_active is None else 'Preset: OFF'
         time_now = (dt.datetime.now(pytz.timezone('America/Chicago'))).replace(tzinfo=None)
+        self.time_now = time_now
         self.rule_start_dt = dt.datetime(*tuple(time.gmtime(0)[:6])) if rule_start_dt is None else rule_start_dt
         rule_end_dt = dt.datetime(9999, 12, 31, 23, 59, 59) if rule_end_dt is None else rule_end_dt
         self.rule_end_dt = rule_end_dt.replace(hour=23, minute=59, second=59)  # Extend enddate to oneday
@@ -250,7 +251,7 @@ class DP_Rule_Constructor:
         return 'N', 'Default Deal Flag 1'
 
     @staticmethod
-    def default_price_day(row):
+    def default_price_day(row, batch_date_str):
         if row['reg'] - row['post_rule_value'] < 0.01:
             return 0, 'Default 1-day delete_flag'
         else:
@@ -258,14 +259,12 @@ class DP_Rule_Constructor:
                 day_range = 0, 'Morning run, 1 day'
             else:
                 day_range = 1, 'Default 2-day pricing'
-
-        batch_dt = dt.datetime.strptime(row['date'][:10], '%Y-%m-%d')
+        batch_dt = dt.datetime.strptime(batch_date_str, '%Y-%m-%d')
         daydiff = (dt.datetime.strptime(row['rule_end_date'], '%Y-%m-%d') - batch_dt).days
         if daydiff < day_range[0]:
             day_range = daydiff, 'bound by incoming dp rule ending'
         if row['uplift_end_dt'] is not None:
-            daydiff = (dt.datetime.strptime(row['uplift_end_dt'], '%Y-%m-%d') - batch_dt).days
-            # TODO: ignore uplift_end_dt when it will end in 2*60*60 seconds
+            daydiff = (dt.datetime.strptime(row['uplift_end_dt'], '%Y-%m-%d') - batch_dt).days            
             if daydiff < day_range[0]:
                 day_range = daydiff, 'bound by incoming uplift ending'
         return day_range
@@ -352,7 +351,9 @@ class DP_Rule_Constructor:
         deal_flag_rule_lst.append(dpr.Working_func(self.defalut_deal_flag_rule, 'Deal_flag N'))
 
         day_range_rule_lst = self.get_day_range_rule()
-        day_range_rule_lst.append(dpr.Working_func(self.default_price_day, 'Default 2-day pricing, 1-day Delete flag'))
+        day_range_rule_lst.append(dpr.Working_func(partial(self.default_price_day,
+                                                           batch_date_str=self.time_now.strftime('%Y-%m-%d')),
+                                                   'Default 2-day pricing, 1-day Delete flag'))
 
         priority_rule_lst = self.get_priority_rule()
         priority_rule_lst.append(dpr.Working_func(self.default_priority, 'Default priority: 0 (minimum)'))

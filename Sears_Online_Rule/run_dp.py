@@ -6,18 +6,20 @@ import datetime as dt
 import pytz
 
 
-def run_all(target_prefix, run_id = None):
+def run_all(target_prefix, run_id = None, date_time = None):
     dp_rule_lst = [x for x in sys.modules.keys() if x.startswith('Sears_Online_Rule.DP_Rules.')]
     print('------------------------------------------------')
     print(' [*] imported rules:')
     for eachmodule in dp_rule_lst:
         print(' [*] {}'.format(eachmodule))
     print('------------------------------------------------')
-
-    time_now = dt.datetime.now(pytz.timezone('America/Chicago')).replace(tzinfo=None)
+    if date_time is None:
+        time_now = dt.datetime.now(pytz.timezone('America/Chicago')).replace(tzinfo=None)
+    else:
+        time_now = dt.datetime.strptime(date_time, '%Y-%m-%dT%H:%M:%S')
     if run_id is None:
         run_id = time_now.hour * 3600 + time_now.minute * 60 + time_now.second
-    print(run_id)
+    print(time_now.strftime('%Y-%m-%d %H:%M:%S'), run_id)
     datetoday = time_now.strftime('%Y%m%d')
     Sears_DP = harlem125.Harlem125()
     Sears_DP.add_rule(add_run_id.construct_rule(run_id))
