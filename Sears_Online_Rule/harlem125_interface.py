@@ -255,7 +255,7 @@ class DP_Rule_Constructor:
         if row['reg'] - row['post_rule_value'] < 0.01:
             return 0, 'Default 1-day delete_flag'
         else:
-            if 10800 <= row['run_id'] < 43200:  # Morning run, push 1 day:
+            if 0 <= row['run_id'] < 43200:  # Morning run, push 1 day:
                 day_range = 0, 'Morning run, 1 day'
             else:
                 day_range = 1, 'Default 2-day pricing'

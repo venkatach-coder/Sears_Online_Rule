@@ -30,7 +30,7 @@ def run_all(target_prefix, run_id = None, date_time = None):
     Sears_DP.add_rule(final_price_selection.construct_rule(0.96))
     Sears_DP.add_rule(dp_rule_collision.construct_rule())
     Sears_DP.add_rule(default_sales_priority_push.construct_rule())
-    Sears_DP.add_rule(FTP_formatting.construct_rule())  # <------- Price Push
+    Sears_DP.add_rule(FTP_formatting.construct_rule(time_now))  # <------- Price Push
     Sears_DP.add_rule(full_rule_summary.construct_rule())
     # Reporting Table Generating
     # Rule_Table    
