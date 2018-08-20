@@ -19,13 +19,15 @@ def rule_name_udf(core_name, uplift_name, post_name):
 
 def merge_func(work_df: Dict[str, DataFrame]):
     return work_df['rule_table_collision'] \
-        .select('div_no', 'itm_no', 'final_price', 'core_rule_name', 'uplift_rule_name', 'post_rule_name')
+        .select('div_no', 'itm_no', F.col('final_price').alias('Price'), 'core_rule_name', 'uplift_rule_name', 'post_rule_name')
 
 
 def formatting(df: DataFrame, rule_name_func: F.udf):
     return df.withColumn('Rule_name',
                          rule_name_func(F.col('core_rule_name'), F.col('uplift_rule_name'), F.col('post_rule_name'))
                          ).drop('core_rule_name', 'uplift_rule_name', 'post_rule_name')
+
+
 
 
 def construct_rule(*args, **kwargs) -> dp_rules.DP_Rule_base:
