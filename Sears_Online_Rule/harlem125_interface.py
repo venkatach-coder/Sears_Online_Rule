@@ -108,11 +108,14 @@ class min_comp_template:
             .agg(udf_median(F.collect_list(F.col('price'))).alias('median_comp'))
         avg_df = min_comp_all_raw.groupby(['div_no', 'itm_no']) \
             .agg(F.avg(F.col('price')).alias('avg_comp'))
+        max_df = min_comp_all_raw.groupby(['div_no', 'itm_no']) \
+            .agg(F.max(F.col('price')).alias('max_comp'))
 
         return base_raw \
             .join(min_comp_all, on=['div_no', 'itm_no'], how='left') \
             .join(min_comp_mm, on=['div_no', 'itm_no'], how='left') \
             .join(avg_df, on=['div_no', 'itm_no'], how='left') \
+            .join(max_df, on=['div_no', 'itm_no'], how='left') \
             .join(median_df, on=['div_no', 'itm_no'], how='left')
 
     @staticmethod
@@ -202,6 +205,7 @@ class DP_Rule_Constructor:
                 'min_comp',
                 'min_comp_NM',
                 'avg_comp',
+                'max_comp',
                 'median_comp',
                 'uplift',
                 'dp_rule.pre_rule_value as pre_rule_value',
