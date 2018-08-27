@@ -12,6 +12,14 @@ import time, datetime as dt
 import pytz
 import math
 
+class Working_func_ext(dpr.Working_func):
+    def __init__(self, pyfunc, desc = None):
+        if desc is None:
+            if type(pyfunc) == partial:
+                desc = ' ----> '.join([x.desc for x in pyfunc.keywords['func_lst']])
+            else:
+                raise ValueError('Working_func desc cannot be empty')
+        super().__init__(pyfunc, desc)
 
 class min_margin_template:
     @staticmethod
@@ -149,10 +157,8 @@ class min_comp_template:
 class DP_Rule_Constructor:
     def __init__(self, rule_level, scope, rule_name, additional_source: dict = None, critical=False,
                  rule_start_dt=None, rule_end_dt=None, is_active=None,
-                 reg_bound_name='delete',  # delete: 0, drop: 1, round_down:2
+
                  desc='', *args, **kwargs):
-        self.reg_bound_code = {'delete': 0, 'drop': 1, 'round_down': 2}[reg_bound_name]
-        self.reg_bound_name = reg_bound_name
         target_tbl_name = 'rule_table'
         if_exists = 'append'
         self.scope = scope
@@ -195,8 +201,6 @@ class DP_Rule_Constructor:
                 'div_no',
                 'itm_no',
                 'reg',                          # redundant
-                'reg_bound_name',
-                'reg_bound_code',
                 'cost_with_subsidy',            # redundant
                 'min_margin',
                 'min_margin_rule_name',
@@ -248,7 +252,7 @@ class DP_Rule_Constructor:
 
     @staticmethod
     def default_post_rule(row):
-        return row['uplift_rule_value'], 'No post_rule'
+        return round(row['uplift_rule_value'], 2), 'No post_rule'
 
     @staticmethod
     def defalut_deal_flag_rule(row):
@@ -308,13 +312,6 @@ class DP_Rule_Constructor:
 
         return add_script_end_date
 
-    def add_reg_bound_behavior(self):
-        def reg_bound_behavior(df: DataFrame, reg_bound_name, reg_bound_code):
-            return df.withColumn('reg_bound_name', F.lit(reg_bound_name).cast(T.StringType())) \
-                .withColumn('reg_bound_code', F.lit(reg_bound_code).cast(T.IntegerType()))
-
-        return reg_bound_behavior
-
     # ---------------------------------------- #
 
     def get_pre_rule(self) -> List[dpr.Working_func]:
@@ -371,7 +368,5 @@ class DP_Rule_Constructor:
                                      args=(self.rule_end_dt.strftime('%Y-%m-%d'),))
         self.thisrule.add_rule_layer(self.assemble_min_margin_func())
         self.thisrule.add_rule_layer(self.assemble_min_comp_func())
-        self.thisrule.add_rule_layer(dpr.DP_func(self.add_reg_bound_behavior()),
-                                     args=(self.reg_bound_name, self.reg_bound_code,))
         self.thisrule.add_rule_layer(self.get_rule_func())
         return self.thisrule

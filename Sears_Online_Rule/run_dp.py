@@ -26,8 +26,7 @@ def run_all(target_prefix, run_id=None, date_time=None):
     Sears_DP.add_rule(uplift_table.construct_rule(time_now))
     for each_rule in dp_rule_lst:
         Sears_DP.add_rule(sys.modules[each_rule].Construct_DP_Rule().construct_rule())
-    Sears_DP.add_rule(price_decimal_rounding_up.construct_rule(0.96))
-    Sears_DP.add_rule(final_price_selection.construct_rule(0.96))
+    Sears_DP.add_rule(final_price_selection.construct_rule())
     Sears_DP.add_rule(dp_rule_collision.construct_rule())
     Sears_DP.add_rule(default_sales_priority_push.construct_rule())
     Sears_DP.add_rule(FTP_formatting.construct_rule(time_now))  # <------- Price Push

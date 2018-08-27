@@ -4,7 +4,6 @@ __all__ = [
     'dp_rule_collision',
     'final_price_selection',
     'FTP_formatting',
-    'price_decimal_rounding_up',
     'uplift_table',
     'rules_FTP',
     'full_rule_summary'

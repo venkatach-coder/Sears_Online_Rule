@@ -1,6 +1,7 @@
 from Sears_Online_Rule import harlem125_interface as harlem
 from Sears_Online_Rule.rule_templates import pre_rule, post_rule, core_rule, uplift_rule
-
+from functools import partial
+from Sears_Online_Rule.harlem125_interface import Working_func_ext as Working_func
 
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
@@ -64,8 +65,13 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         ]
 
     def get_post_rule(self):
+        common_rule_lst = [
+                           post_rule.round_to_96,
+                           post_rule.reg_bound_d_flag]
+
         return [
-            post_rule.Reg_Bound_check_Null_when_reg_not_Exists,
+            Working_func(partial(post_rule.post_rule_chain,
+                                 func_lst=[post_rule.DP_RECM_price] + common_rule_lst))
         ]
 
     def get_deal_flag_rule(self):
@@ -77,8 +83,3 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def get_priority_rule(self):
         return []
 
-    def get_day_range_rule(self):
-        return []
-
-    def get_priority_rule(self):
-        return []

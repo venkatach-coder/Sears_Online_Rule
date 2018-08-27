@@ -1,11 +1,14 @@
 from Sears_Online_Rule import harlem125_interface as harlem
 from Sears_Online_Rule.rule_templates import pre_rule, post_rule, core_rule, uplift_rule
+from functools import partial
+from Sears_Online_Rule.harlem125_interface import Working_func_ext as Working_func
 
 
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=5000, 
                          scope="div_no = 20 and lower(brand) like '%kenmore%' ",
+                         is_active= False,
                          rule_name='Div20 HA Amazon Kenmore')
 
     def get_merge_func(self):
@@ -53,9 +56,13 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         ]
 
     def get_post_rule(self):
+        common_rule_lst = [post_rule.round_to_96,
+                           post_rule.reg_bound_d_flag]
         return [
-            post_rule.reg_bound
-        ]
+            Working_func(partial(post_rule.post_rule_chain,
+                                 func_lst=[post_rule.VD_Increase_PMI_to_min_margin] + common_rule_lst
+                                 ))
+       ]
 
     def get_deal_flag_rule(self):
         return []

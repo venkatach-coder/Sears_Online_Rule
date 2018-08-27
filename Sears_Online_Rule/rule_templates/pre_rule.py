@@ -97,6 +97,16 @@ def _no_kenmore(row):
 
 no_kenmore = Working_func(_no_kenmore, 'No Kenmore')
 
+
+def _kenmore(row):
+    product_brand = row['Product_Brand'] if row['Product_Brand'] is not None else ''
+    brand = row['brand'] if row['brand'] is not None else ''
+    if 'kenmore' not in brand.lower() and 'kenmore' not in product_brand.lower():
+        return False, 'not Kenmore'
+
+
+kenmore = Working_func(_kenmore, 'Kenmore')
+
 def _ee_check(row):
     if row['ee_price'] is None:
         return False, 'No EE price'

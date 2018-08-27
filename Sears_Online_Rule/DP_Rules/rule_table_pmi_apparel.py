@@ -1,14 +1,14 @@
 from Sears_Online_Rule import harlem125_interface as harlem
 from Sears_Online_Rule.rule_templates import pre_rule, post_rule, core_rule, uplift_rule
-from harlem125.dp_rules import Working_func
 from functools import partial
+from Sears_Online_Rule.harlem125_interface import Working_func_ext as Working_func
 
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=500,
                          scope='div_no in (2,4, 7, 16, 17, 18, 25, 29, 31, 33,  38, 40, 41, 43, 45,  74, 75,  77, 88)',
                          is_active = False,
-                         rule_name='apparel rule')
+                         rule_name='pmi apparel rule')
 
     def get_merge_func(self):
         def merge_func(df_dict, scope):
@@ -55,8 +55,13 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         ]
 
     def get_post_rule(self):
+        common_rule_lst = [
+                           post_rule.round_to_96,
+                           post_rule.reg_bound_d_flag]
+
         return [
-            post_rule.reg_bound
+            Working_func(partial(post_rule.post_rule_chain,
+                                 func_lst=[post_rule.DP_RECM_price] + common_rule_lst))
         ]
 
     def get_deal_flag_rule(self):
