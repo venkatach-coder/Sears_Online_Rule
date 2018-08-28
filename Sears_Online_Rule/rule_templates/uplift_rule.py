@@ -30,18 +30,18 @@ def _PMI_uplift_with_max(row, uplift, max_val):  # Will not touch anything 99,99
         return row['core_rule_value'], 'PMI'
     else:
         return round(min((uplift * row['core_rule_value']), row['core_rule_value'] + max_val), 2), \
-               'PMI|uplift:{:.2f}' + '' if math.isinf(max_val) \
+               'PMI|uplift:{:.1f}%'.format((uplift - 1.0) * 100.0) + '' if math.isinf(max_val) \
                    else ' max {:.2f}'.format(uplift - 1, round(max_val, 2))
 
 
 def _uplift_by_percentage_max(row, uplift, max_val):
     return round(min((uplift * row['core_rule_value']), row['core_rule_value'] + max_val), 2), \
-               'PMI|uplift:{:.2f}' + '' if math.isinf(max_val) \
+               'PMI|uplift:{:.1f}%'.format((uplift - 1.0) * 100.0) + '' if math.isinf(max_val) \
                    else ' max {:.2f}'.format(uplift - 1, round(max_val, 2))
 
 def _uplift_those_with_subsidy(row):
-    if row['cost_with_subsidy']==row['cost']:
-        return row['core_rule_value']*1.04, 'uplift 1.04 for items with subsidy'
+    if math.fabs(row['cost_with_subsidy'] - row['cost']) < 0.00999:
+        return row['core_rule_value']*1.04, 'uplift 4% for items with no subsidy'
 
 
 uplift_those_with_subsidy = Working_func(_uplift_those_with_subsidy, 'for those no subsidy uplift 0.04')
