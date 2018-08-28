@@ -16,7 +16,7 @@ def _uplift_by_uplift_table(row):
             rule_name_lst.append('Min: ${:.2f}'.format(lift_min))
         if not math.isinf(lift_max):
             rule_name_lst.append('Max: ${:.2f}'.format(lift_max))
-        return price, 'Uplift ' + ' '.join(rule_name_lst)
+        return price, 'uplift ' + ' '.join(rule_name_lst)
 
 
 uplift_by_uplift_table = Working_func(_uplift_by_uplift_table, 'Refer to Uplift Table')
@@ -30,13 +30,13 @@ def _PMI_uplift_with_max(row, uplift, max_val):  # Will not touch anything 99,99
         return row['core_rule_value'], 'PMI'
     else:
         return round(min((uplift * row['core_rule_value']), row['core_rule_value'] + max_val), 2), \
-               'PMI|uplift:{:.1f}%'.format((uplift - 1.0) * 100.0) + '' if math.isinf(max_val) \
+               'PMI uplift:{:.1f}%'.format((uplift - 1.0) * 100.0) + '' if math.isinf(max_val) \
                    else ' max {:.2f}'.format(uplift - 1, round(max_val, 2))
 
 
 def _uplift_by_percentage_max(row, uplift, max_val):
     return round(min((uplift * row['core_rule_value']), row['core_rule_value'] + max_val), 2), \
-               'PMI|uplift:{:.1f}%'.format((uplift - 1.0) * 100.0) + '' if math.isinf(max_val) \
+               'PMI uplift:{:.1f}%'.format((uplift - 1.0) * 100.0) + '' if math.isinf(max_val) \
                    else ' max {:.2f}'.format(uplift - 1, round(max_val, 2))
 
 def _uplift_those_with_subsidy(row):
