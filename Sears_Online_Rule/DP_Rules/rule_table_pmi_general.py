@@ -8,7 +8,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=500,
                          is_active=False,
-                         scope='div_no in (8,24,14,96,6,9,71,52,34,49,95,22,26,46)',
+                         scope='div_no in (6,8,24,14,96,9,71,52,) or (div_no = 71 and ln_no in (22,28,29,63,66,67))',
                          rule_name='general PMI UPLIFT')
 # div_lst = [6, # SPG
 #            8,24,14,96, #HOME
@@ -62,12 +62,12 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
     def get_uplift_rule(self):
         return [
-            uplift_rule.uplift_by_uplift_table
+            uplift_rule.uplift_by_uplift_table,
+            uplift_rule.uplift_4_max_5_no_more_than_1000_for_not_99_no_free_shipping
         ]
 
     def get_post_rule(self):
         common_rule_lst = [
-                           post_rule.round_to_96,
                            post_rule.reg_bound_d_flag]
 
         return [

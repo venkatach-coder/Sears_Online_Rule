@@ -11,9 +11,9 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         }}
         super().__init__(rule_level=2000,
                          additional_source=additional_tbl,
-                         scope='div_no = 8 and ln_no in (1,21,41)',
+                         scope='div_no = 8 and ln_no in (1,21,41,  16,19,20,21,23,24,27,30,99)',
                          # reg_bound_behavior =   ,# drop, delete, round_down
-                         rule_name='div8 ln_1,21,41 HOME Regular DP Rule')
+                         rule_name='div8 ln_1,21,41,16,19,20,21,23,24,27,30,99 HOME Regular DP Rule')
 
     def get_merge_func(self):
         def merge_func(df_dict, scope):
@@ -63,12 +63,12 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
     def get_uplift_rule(self):
         return [
-            uplift_rule.uplift_by_uplift_table
+            uplift_rule.uplift_by_uplift_table,
+            uplift_rule.uplift_4_max_5_no_more_than_1000_for_not_99_no_free_shipping
         ]
 
     def get_post_rule(self):
         common_rule_lst = [post_rule.uplift_to_MAP_when_below,
-                           post_rule.round_to_96,
                            post_rule.reg_bound_d_flag]
 
         return [

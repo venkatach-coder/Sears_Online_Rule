@@ -64,7 +64,6 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
     def get_post_rule(self):
         common_rule_lst = [post_rule.uplift_to_MAP_when_below,
-                           post_rule.round_to_96,
                            post_rule.reg_bound_d_flag]
 
         return [

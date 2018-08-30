@@ -45,3 +45,37 @@ def _uplift_those_with_subsidy(row):
 
 
 uplift_those_with_subsidy = Working_func(_uplift_those_with_subsidy, 'for those no subsidy uplift 0.04')
+
+
+def _uplift_4_max_5_no_more_than_1000_for_not_99_no_free_shipping(row):
+
+    if row['core_rule_value']>1000:
+        recom_prc = row['core_rule_value']
+    elif math.floor( round(min((1.04*row['core_rule_value']), row['core_rule_value'] + 5),2) / 100.0) > math.floor(round(row['core_rule_value'],2) / 100.0) :
+        recom_prc = row['core_rule_value']
+    elif round(row['core_rule_value'], 2) < 34.99 and round(min((1.04*row['core_rule_value']), row['core_rule_value'] + 5),2) > 34.99:
+        recom_prc = row['core_rule_value']
+    else:
+        recom_prc = round(min((1.04*row['core_rule_value']), row['core_rule_value'] + 5),2)
+    return recom_prc, 'uplift 0.04 max 5 for items no more than 1000 for not ending with *99.99 for not reaching free shipping'
+
+
+uplift_4_max_5_no_more_than_1000_for_not_99_no_free_shipping=Working_func(_uplift_4_max_5_no_more_than_1000_for_not_99_no_free_shipping,
+                                                                          'uplift 0.04 max 5 for items no more than 1000 for not ending with *99.99 for not reaching free shipping')
+
+
+def _uplift_3_no_more_than_1000_for_not_99_no_free_shipping(row):
+
+    if row['core_rule_value']>1000:
+        recom_prc = row['core_rule_value']
+    elif math.floor(round((1.03*row['core_rule_value']),2) / 100.0) > math.floor(round(row['core_rule_value'],2) / 100.0) :
+        recom_prc = row['core_rule_value']
+    elif round(row['core_rule_value'], 2) < 34.99 and round((1.03*row['core_rule_value']),2) > 34.99:
+        recom_prc = row['core_rule_value']
+    else:
+        recom_prc = round((1.03*row['core_rule_value']), 2)
+    return recom_prc, 'uplift 0.03 for items no more than 1000 for not ending with *99.99 for not reaching free shipping'
+
+
+uplift_3_no_more_than_1000_for_not_99_no_free_shipping=Working_func(_uplift_3_no_more_than_1000_for_not_99_no_free_shipping,
+                                                                          'uplift 0.03 for items no more than 1000 for not ending with *99.99 for not reaching free shipping')
