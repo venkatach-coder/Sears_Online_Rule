@@ -11,9 +11,9 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         }}
         super().__init__(rule_level=2000,
                          additional_source=additional_tbl,
-                         scope='div_no = 8 and ln_no in (1,21,41,  16,19,20,21,23,24,27,30,99)',
+                         scope='div_no = 8 and ln_no in (1,21,41,  16,19,20,21,23,24,27,30,99, 55)',
                          # reg_bound_behavior =   ,# drop, delete, round_down
-                         rule_name='div8 ln_1,21,41,16,19,20,21,23,24,27,30,99 HOME Regular DP Rule')
+                         rule_name='div8 ln_1,21,41,16,19,20,21,23,24,27,30,99, 55 HOME Regular DP Rule')
 
     def get_merge_func(self):
         def merge_func(df_dict, scope):
