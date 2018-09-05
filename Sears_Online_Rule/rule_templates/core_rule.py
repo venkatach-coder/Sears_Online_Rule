@@ -135,7 +135,7 @@ def _Match_to_Min_comp_MM_HA_instore(row):
 Match_to_Min_comp_MM_HA_instore = Working_func(_Match_to_Min_comp_MM_HA_instore, 'Branded, HA Online Min Comp')
 
 def _Match_to_ee(row):
-    return row['ee_price'], 'explore_exploit price'
+    return row['ee_price'], 'High WOC'
 
 Match_to_ee=Working_func(_Match_to_ee,'explore_exploit price')
 

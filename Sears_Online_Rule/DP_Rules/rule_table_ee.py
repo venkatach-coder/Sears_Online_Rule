@@ -45,7 +45,9 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
                              'table_name': 'shared_source.UCB_Sears_{}'.format(time_now.strftime('%Y%m%d')),
                              'key': ['div_no', 'itm_no']}
                          },
-                         scope=explore_exploit, is_active=True, rule_name='explore_exploit')
+                         is_active=False,
+                         scope=explore_exploit, rule_name='explore_exploit',
+                         )
 
     def get_merge_func(self):
         def merge_func(df_dict, scope):
