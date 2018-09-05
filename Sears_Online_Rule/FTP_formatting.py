@@ -49,7 +49,7 @@ def select_price(ftp: DataFrame, find_end_date_udf, time_now):
     ftp = ftp.withColumn("Apply_Deal_Flag",
                          F.when(F.col('deal_flag_value') == 'Y', F.lit(2)).otherwise(F.lit(1)).cast(T.IntegerType()))
 
-    ftp = ftp.select('Format', 'Div_item',
+    ftp = ftp.select('Format', 'Store', 'Div_item',
                      F.round(F.col('ftp_price'), 2).alias('price'),
                      'Start_Date', 'End_date', 'Member_Flag', 'Record_Type', 'Region', 'Online_Only_Flag',
                      'DP_Block_Flag', 'Apply_Deal_Flag', 'delete_flag', 'priority')
