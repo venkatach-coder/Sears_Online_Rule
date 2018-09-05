@@ -49,13 +49,13 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
     def get_uplift_rule(self):
 
-        return [
-            uplift_rule.uplift_3_no_more_than_1000_for_not_99_no_free_shipping
-        ]
-        # func_handle = partial(uplift_rule._uplift_by_percentage_max, uplift=1.06, max_val = float('inf'))
         # return [
-        #     Working_func(func_handle, '1.06 apparel')
+        #     uplift_rule.uplift_3_no_more_than_1000_for_not_99_no_free_shipping
         # ]
+        func_handle = partial(uplift_rule._uplift_by_percentage_max, uplift=0.98, max_val = float('inf'))
+        return [
+            Working_func(func_handle, '0.98 apparel')
+        ]
 
     def get_post_rule(self):
         common_rule_lst = [

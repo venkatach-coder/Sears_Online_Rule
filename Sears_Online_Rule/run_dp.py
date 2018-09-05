@@ -38,7 +38,7 @@ def run_all(target_prefix, run_id=None, date_time=None):
     # Source table loading....
     Sears_DP.load_source_table(
         {
-            'static_table': {'table_name': 'dp_spark_source_tbl.static_table',
+            'static_table': {'table_name': 'dp_spark_source_tbl.static_table_sears',
                              'key': ['div_no', 'itm_no']},
             'all_comp_all': {'table_name': 'dp_spark_source_tbl.all_comp_all',
                              'key': ['div_no', 'itm_no', 'comp_name']},
