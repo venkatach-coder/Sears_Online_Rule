@@ -48,7 +48,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
                              'table_name': 'shared_source.UCB_Sears_{}'.format(time_now.strftime('%Y%m%d')),
                              'key': ['div_no', 'itm_no']}
                          },
-                         is_active=False,
+                         is_active=True,
                          scope=explore_exploit, rule_name='explore_exploit',
                          )
 
