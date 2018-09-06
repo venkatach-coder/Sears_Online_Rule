@@ -2,6 +2,9 @@ from Sears_Online_Rule import harlem125_interface as harlem
 from Sears_Online_Rule.rule_templates import pre_rule, post_rule, core_rule, uplift_rule
 import datetime as dt
 import pytz
+from Sears_Online_Rule.harlem125_interface import Working_func_ext as Working_func
+
+
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         div_lst = [
@@ -75,6 +78,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
     def get_pre_rule(self):
         return [
+            pre_rule.dp_block,
             pre_rule.ee_check
         ]
 
@@ -90,7 +94,18 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         return []
 
     def get_deal_flag_rule(self):
-        return []
+        def _ee_deal_flag_rule(row):
+            if row['post_rule_value'] is not None:
+                if (row['post_rule_value'] - row['cost_with_subsidy'])/row['post_rule_value'] < 0.1:
+                    return 'Y', 'EE Deal Flag 2'
+                else:
+                    return 'N', 'EE Deal Flag 1'
+
+        ee_deal_flag_rule = Working_func(_ee_deal_flag_rule, 'ee deal flag rule')
+
+        return [
+            ee_deal_flag_rule
+        ]
 
     def get_day_range_rule(self):
         return []
