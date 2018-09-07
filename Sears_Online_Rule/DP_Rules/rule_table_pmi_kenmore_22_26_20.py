@@ -8,7 +8,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=500,
                          scope='div_no in (22, 26, 20)',
-                         is_active = True,
+                         is_active = False,
                          rule_name='pmi kenmore 22 26 20 rule')
 
     def get_merge_func(self):
