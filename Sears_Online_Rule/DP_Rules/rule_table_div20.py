@@ -8,7 +8,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=5000, 
                          scope="div_no = 20 and lower(brand) like '%kenmore%' ",
-                         is_active= False,
+                         is_active= True,
                          rule_name='Div20 HA Amazon Kenmore')
 
     def get_merge_func(self):
@@ -51,8 +51,9 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
 
     def get_uplift_rule(self):
+        func_handle = partial(uplift_rule._uplift_by_percentage_max, uplift=1.03, max_val=float('inf'))
         return [
-            uplift_rule.uplift_by_uplift_table
+            Working_func(func_handle, '1.03 kenmore')
         ]
 
     def get_post_rule(self):
@@ -60,8 +61,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
                            post_rule.reg_bound_d_flag]
         return [
             Working_func(partial(post_rule.post_rule_chain,
-                                 func_lst=[post_rule.VD_Increase_PMI_to_min_margin] + common_rule_lst
-                                 ))
+                                 func_lst=[post_rule.DP_RECM_price] + common_rule_lst))
        ]
 
     def get_deal_flag_rule(self):
