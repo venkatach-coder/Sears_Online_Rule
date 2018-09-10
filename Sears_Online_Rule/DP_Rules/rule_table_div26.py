@@ -68,8 +68,8 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
     def get_uplift_rule(self):
         return [
-            uplift_rule.uplift_those_with_subsidy,
-            uplift_rule.uplift_by_uplift_table
+            # uplift_rule.uplift_those_with_subsidy,
+            # uplift_rule.uplift_by_uplift_table
         ]
 
     def get_post_rule(self):
