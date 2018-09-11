@@ -45,7 +45,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         time_now = dt.datetime.now(pytz.timezone('America/Chicago')).replace(tzinfo=None)
         super().__init__(rule_level=6000,
                          additional_source={'explore_exploit': {
-                             'table_name': 'shared_source.UCB_Sears_{}'.format(time_now.strftime('%Y%m%d')),
+                             'table_name': 'dp_spark_source_tbl.wx_ee_{}'.format(time_now.strftime('%Y%m%d')),
                              'key': ['div_no', 'itm_no']}
                          },
                          is_active=True,
