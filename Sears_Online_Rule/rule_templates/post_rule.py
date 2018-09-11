@@ -133,5 +133,11 @@ def _price_round_to_96(row):
 
 round_to_96 = Working_func(_price_round_to_96, 'Round to .96')
 
+def _cost_check(row):
+    if row['uplift_rule_value'] >= row['cost_with_subsidy']:
+        return row['uplift_rule_value'], ''
+    elif row['uplift_rule_value'] < row['cost_with_subsidy']:
+        return None, 'Drop price because of cost check'
 
+cost_check = Working_func(_cost_check, 'if less than cost then drop')
 
