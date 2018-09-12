@@ -58,7 +58,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
                 .join(df_dict['all_comp_all'].select('div_no', 'itm_no', 'price', 'comp_name'),
                       on=['div_no', 'itm_no'], how='left') \
                 .join(df_dict['uplift_table'], on=['div_no', 'itm_no'], how='left') \
-                .join(df_dict['explore_exploit'].selectExpr('div_no', 'itm_no', 'price as ee_price'),
+                .join(df_dict['explore_exploit'].selectExpr('div_no', 'itm_no', 'price as ee_price', 'group_name'),
                       on=['div_no', 'itm_no'], how='left')
             return df1
 

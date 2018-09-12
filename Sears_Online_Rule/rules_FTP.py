@@ -10,9 +10,9 @@ def rule_name_udf(core_name, uplift_name, post_name):
     concat_lst = []
     if core_name is not None:
         concat_lst.append(core_name)
-    if uplift_name is not None and uplift_name.strip() != 'No Uplift':
+    if uplift_name is not None and uplift_name.strip() != 'No Uplift' and uplift_name != '':
         concat_lst.append(uplift_name)
-    if post_name is not None and post_name.strip() != 'No post_rule':
+    if post_name is not None and post_name.strip() != 'No post_rule' and post_name != '':
         concat_lst.append(post_name)
     return '|'.join(concat_lst)
 
