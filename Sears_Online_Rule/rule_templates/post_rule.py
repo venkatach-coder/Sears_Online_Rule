@@ -141,3 +141,22 @@ def _cost_check(row):
 
 cost_check = Working_func(_cost_check, 'if less than cost then drop')
 
+
+def _map_check(row):
+    if row['MAP_price'] is not None and row['uplift_rule_value'] < float(row['MAP_price']):
+        return None, 'Drop price because of less than MAP'
+    else:
+        return row['uplift_rule_value'], ''
+
+map_check = Working_func(_map_check, 'Drop price because of less than MAP')
+
+
+def _check_mkpl(row):
+    if row['min_comp_MM_NM'] is not None and "mkpl" in row['min_comp_MM_NM']:
+        return row['min_comp_MM'], 'back to mkpl'
+    else:
+        return row['uplift_rule_value'], ''
+
+check_mkpl = Working_func(_check_mkpl, 'if min_comp_MM is mkpl then send mkpl instead')
+
+

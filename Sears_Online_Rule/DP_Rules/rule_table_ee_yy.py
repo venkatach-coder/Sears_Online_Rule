@@ -3,7 +3,7 @@ from Sears_Online_Rule.rule_templates import pre_rule, post_rule, core_rule, upl
 import datetime as dt
 import pytz
 from Sears_Online_Rule.harlem125_interface import Working_func_ext as Working_func
-
+from functools import partial
 
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
@@ -81,7 +81,8 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def get_pre_rule(self):
         return [
             pre_rule.dp_block,
-            pre_rule.ee_check
+            pre_rule.ee_check,
+            pre_rule.PMI_ban
         ]
 
     def get_core_rule(self):
@@ -93,9 +94,15 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         return []
 
     def get_post_rule(self):
+        common_rule_lst = [
+                        post_rule.cost_check,
+                        post_rule.map_check]
+
         return [
-            post_rule.cost_check
+            Working_func(partial(post_rule.post_rule_chain,
+                                 func_lst=[post_rule.DP_RECM_price] + common_rule_lst))
         ]
+
 
     def get_deal_flag_rule(self):
         def _ee_deal_flag_rule(row):

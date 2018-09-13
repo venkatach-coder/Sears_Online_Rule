@@ -114,6 +114,15 @@ def _ee_check(row):
 
 ee_check=Working_func(_ee_check, 'No EE price')
 
+
+def _PMI_ban(row):
+    if row['PMI_exists'] is True:
+        return False, 'PMI ban for ee'
+
+
+PMI_ban = Working_func(_PMI_ban, 'do not send ee for those with PMI ')
+
+
 def _apparel_brand_check(row):
     product_brand = row['Product_Brand'] if row['Product_Brand'] is not None else ''
     brand = row['brand'] if row['brand'] is not None else ''
