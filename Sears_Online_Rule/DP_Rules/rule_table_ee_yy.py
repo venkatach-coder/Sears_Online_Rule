@@ -8,6 +8,7 @@ from Sears_Online_Rule.harlem125_interface import Working_func_ext as Working_fu
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         div_lst = [
+            [96, ''],
             [88, ''],
             [83, ''],
             [77, '''and not (lower(brand) like '%american princess%')'''],
@@ -33,8 +34,9 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
             [20, ''],
             [18, ''],
             [16, ''],
+            [14, ''],
             [9, ''],
-            [8, '''and ln_no not in (55)'''],
+            [8, ''],
             [7, ''],
             [6, ''],
             [4, ''],

@@ -159,6 +159,17 @@ class DP_Rule_Constructor:
                  rule_start_dt=None, rule_end_dt=None, is_active=None,
 
                  desc='', *args, **kwargs):
+
+        self.sears_online_rule_schema = [
+            ('pre_rule', 'boolean'),
+            ('core_rule', 'double'),
+            ('uplift_rule', 'double'),
+            ('post_rule', 'double'),
+            ('deal_flag_rule', 'string'),
+            ('day_range_rule', 'integer'),
+            ('priority', 'integer')
+        ]  # type: List[Tuple[str,str]]
+
         target_tbl_name = 'rule_table'
         if_exists = 'append'
         self.scope = scope
@@ -194,7 +205,7 @@ class DP_Rule_Constructor:
                     if critical:
                         raise
 
-        self.thisrule = dpr.DP_Rule(
+        self.thisrule = dpr.Harlem_Rule(
             target_tbl_name=target_tbl_name,
             additional_source=additional_source,
             select_schema=(
@@ -212,20 +223,20 @@ class DP_Rule_Constructor:
                 'max_comp',
                 'median_comp',
                 'uplift',
-                'dp_rule.pre_rule_value as pre_rule_value',
-                'dp_rule.pre_rule_name as pre_rule_name',
-                'dp_rule.core_rule_value as core_rule_value',
-                'dp_rule.core_rule_name as core_rule_name',
-                'dp_rule.uplift_rule_value as uplift_rule_value',
-                'dp_rule.uplift_rule_name as uplift_rule_name',
-                'dp_rule.post_rule_value as post_rule_value',
-                'dp_rule.post_rule_name as post_rule_name',
-                'dp_rule.deal_flag_value as deal_flag_value',
-                'dp_rule.deal_flag_rule_name as deal_flag_rule_name',
-                'dp_rule.day_range as day_range',
-                'dp_rule.day_range_rule_name as day_range_rule_name',
-                'dp_rule.priority as priority',
-                'dp_rule.priority_rule_name as priority_rule_name',
+                'Harlem_Rule.pre_rule_value as pre_rule_value',
+                'Harlem_Rule.pre_rule_name as pre_rule_name',
+                'Harlem_Rule.core_rule_value as core_rule_value',
+                'Harlem_Rule.core_rule_name as core_rule_name',
+                'Harlem_Rule.uplift_rule_value as uplift_rule_value',
+                'Harlem_Rule.uplift_rule_name as uplift_rule_name',
+                'Harlem_Rule.post_rule_value as post_rule_value',
+                'Harlem_Rule.post_rule_name as post_rule_name',
+                'Harlem_Rule.deal_flag_rule_value as deal_flag_value',
+                'Harlem_Rule.deal_flag_rule_name as deal_flag_rule_name',
+                'Harlem_Rule.day_range_rule_value as day_range',
+                'Harlem_Rule.day_range_rule_name as day_range_rule_name',
+                'Harlem_Rule.priority_value as priority',
+                'Harlem_Rule.priority_name as priority_rule_name',
                 'rule_level',
                 'run_id'),
             is_active=rule_active,
@@ -336,33 +347,30 @@ class DP_Rule_Constructor:
         raise Exception("NotImplementedException")
 
     def get_rule_func(self) -> dpr.DP_func:
-        pre_rule_lst = self.get_pre_rule()
-        pre_rule_lst.append(dpr.Working_func(self.default_pre_rule, 'Pass pre_rule'))
+        total_func = [self.get_pre_rule(), self.get_core_rule(),
+                      self.get_uplift_rule(), self.get_post_rule(),
+                      self.get_deal_flag_rule(), self.get_day_range_rule(), self.get_priority_rule()]
 
-        core_rule_lst = self.get_core_rule()
-        core_rule_lst.append(dpr.Working_func(self.default_core_rule, 'No core_rule'))
+        total_func[0].append(dpr.Working_func(self.default_pre_rule, 'Pass pre_rule'))
 
-        uplift_rule_lst = self.get_uplift_rule()
-        uplift_rule_lst.append(dpr.Working_func(self.default_uplift_rule, 'No uplift_rule'))
+        total_func[1].append(dpr.Working_func(self.default_core_rule, 'No core_rule'))
 
-        post_rule_lst = self.get_post_rule()
-        post_rule_lst.append(dpr.Working_func(self.default_post_rule, 'No post_rule'))
+        total_func[2].append(dpr.Working_func(self.default_uplift_rule, 'No uplift_rule'))
 
-        deal_flag_rule_lst = self.get_deal_flag_rule()
-        deal_flag_rule_lst.append(dpr.Working_func(self.defalut_deal_flag_rule, 'Deal_flag N'))
+        total_func[3].append(dpr.Working_func(self.default_post_rule, 'No post_rule'))
 
-        day_range_rule_lst = self.get_day_range_rule()
-        day_range_rule_lst.append(dpr.Working_func(partial(self.default_price_day,
+        total_func[4].append(dpr.Working_func(self.defalut_deal_flag_rule, 'Deal_flag N'))
+
+        total_func[5].append(dpr.Working_func(partial(self.default_price_day,
                                                            batch_date_str=self.time_now.strftime('%Y-%m-%d')),
                                                    'Default 2-day pricing, 1-day Delete flag'))
+        total_func[6].append(dpr.Working_func(self.default_priority, 'Default priority: 0 (minimum)'))
+        total_rule_lst = []
+        for idx, each_tuple in enumerate(self.sears_online_rule_schema):
+            total_rule_lst.append((each_tuple[0], each_tuple[1], total_func[idx]))
+        return self.thisrule.rule_wrapper(total_rule_lst)
 
-        priority_rule_lst = self.get_priority_rule()
-        priority_rule_lst.append(dpr.Working_func(self.default_priority, 'Default priority: 0 (minimum)'))
-
-        return self.thisrule.rule_wrapper(pre_rule_lst, core_rule_lst, uplift_rule_lst, post_rule_lst,
-                                          deal_flag_rule_lst, day_range_rule_lst, priority_rule_lst)
-
-    def construct_rule(self) -> dpr.DP_Rule:
+    def construct_rule(self) -> dpr.Harlem_Rule:
         self.thisrule.add_rule_layer(dpr.DP_func(self.get_merge_func(), input_type='Dict'), args=(self.scope,))
         self.thisrule.add_rule_layer(dpr.DP_func(self.add_rule_end_date()),
                                      args=(self.rule_end_dt.strftime('%Y-%m-%d'),))
