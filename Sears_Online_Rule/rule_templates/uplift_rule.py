@@ -63,6 +63,22 @@ def _uplift_4_max_5_no_more_than_1000_for_not_99_no_free_shipping(row):
 uplift_4_max_5_no_more_than_1000_for_not_99_no_free_shipping=Working_func(_uplift_4_max_5_no_more_than_1000_for_not_99_no_free_shipping,
                                                                           'uplift 0.04 max 5 for items no more than 1000 for not ending with *99.99 for not reaching free shipping')
 
+def _uplift_5_max_5_no_more_than_1000_for_not_99_no_free_shipping(row):
+
+    if row['core_rule_value']>1000:
+        recom_prc = row['core_rule_value']
+    elif math.floor( round(min((1.05*row['core_rule_value']), row['core_rule_value'] + 5),2) / 100.0) > math.floor(round(row['core_rule_value'],2) / 100.0) :
+        recom_prc = row['core_rule_value']
+    elif round(row['core_rule_value'], 2) < 34.99 and round(min((1.05*row['core_rule_value']), row['core_rule_value'] + 5),2) > 34.99:
+        recom_prc = row['core_rule_value']
+    else:
+        recom_prc = round(min((1.05*row['core_rule_value']), row['core_rule_value'] + 5),2)
+    return recom_prc, 'uplift 0.05 max 5 for items no more than 1000 for not ending with *99.99 for not reaching free shipping'
+
+
+uplift_5_max_5_no_more_than_1000_for_not_99_no_free_shipping=Working_func(_uplift_5_max_5_no_more_than_1000_for_not_99_no_free_shipping,
+                                                                          'uplift 0.05 max 5 for items no more than 1000 for not ending with *99.99 for not reaching free shipping')
+
 
 def _uplift_3_no_more_than_1000_for_not_99_no_free_shipping(row):
 
@@ -79,6 +95,7 @@ def _uplift_3_no_more_than_1000_for_not_99_no_free_shipping(row):
 
 uplift_3_no_more_than_1000_for_not_99_no_free_shipping=Working_func(_uplift_3_no_more_than_1000_for_not_99_no_free_shipping,
                                                                           'uplift 0.03 for items no more than 1000 for not ending with *99.99 for not reaching free shipping')
+
 
 def _uplift_5_round_integer(row):
     return round(row['core_rule_value'] * 1.05), 'APPAREL 5% UPLIFT'

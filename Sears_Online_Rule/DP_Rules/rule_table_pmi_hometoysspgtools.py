@@ -8,8 +8,8 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=500,
                          is_active=True,
-                         scope='div_no in (6,8,24,14,96,9,71,52) or (div_no = 71 and ln_no in (22,28,29,63,66,67))',
-                         rule_name='general PMI UPLIFT')
+                         scope='div_no in (6,8,24,14,96,9,52)',
+                         rule_name='home_toys_tools_spg PMI UPLIFT')
 # div_lst = [6, # SPG
 #            8,24,14,96, #HOME
 #            9, #TOOLS
@@ -63,7 +63,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def get_uplift_rule(self):
         return [
             uplift_rule.uplift_by_uplift_table,
-            uplift_rule.uplift_4_max_5_no_more_than_1000_for_not_99_no_free_shipping
+            uplift_rule.uplift_5_max_5_no_more_than_1000_for_not_99_no_free_shipping
         ]
 
     def get_post_rule(self):

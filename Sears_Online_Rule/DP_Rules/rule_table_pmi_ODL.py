@@ -1,15 +1,27 @@
-from typing import Dict
 from Sears_Online_Rule import harlem125_interface as harlem
 from Sears_Online_Rule.rule_templates import pre_rule, post_rule, core_rule, uplift_rule
+
 from functools import partial
 from Sears_Online_Rule.harlem125_interface import Working_func_ext as Working_func
 
-
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
-        super().__init__(rule_level=1000,
-                         scope='div_no = 6',
-                         rule_name='div6 SG Regular DP Rule')
+        super().__init__(rule_level=500,
+                         is_active=True,
+                         scope='div_no = 71 and ln_no in (22,28,29,63,66,67)',
+                         rule_name='ODL PMI UPLIFT')
+# div_lst = [6, # SPG
+#            8,24,14,96, #HOME
+#            9, #TOOLS
+#            71, # ODL
+#            52, # TOYS
+#            34, # tools
+#            49, # apparel
+#            95, # automotive
+#            22,26,46 # HA
+#            #FOOTWEAR INCLUDED
+#            #APPAREL INCLUDED
+#            ]
 
     def get_merge_func(self):
         def merge_func(df_dict, scope):
@@ -23,54 +35,42 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
     def get_min_margin_func(self):
         def min_margin_rule(row):
-            return round(row['cost_with_subsidy'] / 0.85, 2), '0.15'
+            return None, None
 
         return min_margin_rule
 
     def get_min_comp_func(self):
         def min_comp_rule(row):
-            if row['comp_name'].strip() in (
-                    'JC Penney', 'Dick s Sporting Goods', 'ProForm',
-                    'NordicTrack', 'Amazon', 'Walmart', 'Target', 'Jet'):
-                return True, None
-            elif row['comp_name'].strip().startswith('mkpl_'):
-                return True, None
-            return False, None
-
+            return None, None
         return min_comp_rule
 
     def get_pre_rule(self):
         return [
             pre_rule.ad_plan_check,
             pre_rule.dp_block,
-            # pre_rule.clearance_check,
             pre_rule.cost_check,
-            pre_rule.min_margin_check,
+            pre_rule.pmi_check,
             pre_rule.reg_check
         ]
 
+
     def get_core_rule(self):
         return [
-            core_rule.Match_to_Min_comp_MM,
-            core_rule.Match_to_Min_margin_when_Min_comp_Exists,
             core_rule.Set_to_PMI_when_PMI_exists
         ]
+
 
     def get_uplift_rule(self):
         return [
             uplift_rule.uplift_by_uplift_table,
-            uplift_rule.uplift_5_max_5_no_more_than_1000_for_not_99_no_free_shipping
+            uplift_rule.uplift_4_max_5_no_more_than_1000_for_not_99_no_free_shipping
         ]
 
     def get_post_rule(self):
-        common_rule_lst = [post_rule.reg_bound_d_flag]
-        return [
-            Working_func(partial(post_rule.post_rule_chain,
-                                 func_lst=[post_rule.VD_Increase_PMI_to_min_margin] + common_rule_lst
-                                 )),
-            Working_func(partial(post_rule.post_rule_chain,
-                                 func_lst=[post_rule.Min_PMI_DP_D_flag] + common_rule_lst)),
+        common_rule_lst = [
+                           post_rule.reg_bound_d_flag]
 
+        return [
             Working_func(partial(post_rule.post_rule_chain,
                                  func_lst=[post_rule.DP_RECM_price] + common_rule_lst))
         ]

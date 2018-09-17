@@ -5,7 +5,7 @@ from Sears_Online_Rule.harlem125_interface import Working_func_ext as Working_fu
 
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
-        super().__init__(rule_level=1000, scope='div_no = 71', rule_name='div71 ODL DP Rule' )
+        super().__init__(rule_level=1000, scope='div_no = 71', rule_name='div71 LG DP Rule' )
 
     def get_merge_func(self):
         def merge_func(df_dict, scope):

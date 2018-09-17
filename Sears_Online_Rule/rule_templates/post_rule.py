@@ -152,11 +152,19 @@ map_check = Working_func(_map_check, 'Drop price because of less than MAP')
 
 
 def _check_mkpl(row):
-    if row['min_comp_MM_NM'] is not None and "mkpl" in row['min_comp_MM_NM']:
-        return row['min_comp_MM'], 'back to mkpl'
+    if row['mkpl_price'] is not None:
+        if row['uplift_rule_value'] > row['mkpl_price']:
+            return row['mkpl_price'], 'back to mkpl'
+        return row['uplift_rule_value'], ''
     else:
         return row['uplift_rule_value'], ''
 
-check_mkpl = Working_func(_check_mkpl, 'if min_comp_MM is mkpl then send mkpl instead')
+check_mkpl = Working_func(_check_mkpl, 'if less than mkpl then mkpl')
 
+
+def _min_margin_lb(row):
+    if row['uplift_rule_value'] < row['min_margin']:
+        return row['min_margin'], 'min_margin bound'
+    return row['uplift_rule_value'], ''
+min_margin_lb = Working_func(_min_margin_lb, 'min_margin check')
 

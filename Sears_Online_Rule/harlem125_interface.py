@@ -12,14 +12,16 @@ import time, datetime as dt
 import pytz
 import math
 
+
 class Working_func_ext(dpr.Working_func):
-    def __init__(self, pyfunc, desc = None):
+    def __init__(self, pyfunc, desc=None):
         if desc is None:
             if type(pyfunc) == partial:
                 desc = ' ----> '.join([x.desc for x in pyfunc.keywords['func_lst']])
             else:
                 raise ValueError('Working_func desc cannot be empty')
         super().__init__(pyfunc, desc)
+
 
 class min_margin_template:
     @staticmethod
@@ -69,16 +71,19 @@ class min_comp_template:
                 return None
             return retval
 
+        def group_concat(comp_name_lst):
+            if comp_name_lst is None:
+                return None
+            else:
+                return ','.join(comp_name_lst)
 
         udf_median = F.udf(median, T.DoubleType())
-
+        udf_group_concat = F.udf(group_concat, T.StringType())
         price_window = (Window
                         .partitionBy('div_no', 'itm_no')
                         .orderBy('price'))
 
         base_raw = df.select('*',
-                             F.col('price').alias('min_price'),
-                             F.col('comp_name').alias('min_price_comp'),
                              F.row_number().over(price_window) \
                              .alias('rn')) \
             .filter('rn == 1') \
@@ -98,32 +103,38 @@ class min_comp_template:
             .select('div_no', 'itm_no',
                     F.col('price').alias('min_comp'),
                     F.col('comp_name').alias('min_comp_NM'),
-                    F.row_number().over(price_window) \
+                    F.rank().over(price_window) \
                     .alias('rn')) \
             .filter('rn == 1') \
-            .drop('rn')
+            .drop('rn') \
+            .groupBy(['div_no', 'itm_no']) \
+            .agg(F.first(F.col('min_comp')).alias('min_comp'),
+                 udf_group_concat(F.collect_list(F.col('min_comp_NM'))).alias('min_comp_NM'))
 
         min_comp_mm = min_comp_all_raw \
             .filter('price >= min_margin') \
             .select('div_no', 'itm_no',
                     F.col('price').alias('min_comp_MM'),
                     F.col('comp_name').alias('min_comp_MM_NM'),
-                    F.row_number().over(price_window) \
+                    F.rank().over(price_window) \
                     .alias('rn')) \
             .filter('rn == 1') \
-            .drop('rn')
+            .drop('rn') \
+            .groupBy(['div_no', 'itm_no']) \
+            .agg(F.first(F.col('min_comp_MM')).alias('min_comp_MM'),
+                 udf_group_concat(F.collect_list(F.col('min_comp_MM_NM'))).alias('min_comp_MM_NM'))
+
         median_df = df.groupby(['div_no', 'itm_no']) \
             .agg(udf_median(F.collect_list(F.col('price'))).alias('median_comp'))
-        avg_df = min_comp_all_raw.groupby(['div_no', 'itm_no']) \
-            .agg(F.avg(F.col('price')).alias('avg_comp'))
-        max_df = min_comp_all_raw.groupby(['div_no', 'itm_no']) \
-            .agg(F.max(F.col('price')).alias('max_comp'))
+        avg_max_df = min_comp_all_raw.groupby(['div_no', 'itm_no']) \
+            .agg(F.avg(F.col('price')).alias('avg_comp'), F.max(F.col('price')).alias('max_comp'))
+        # max_df = min_comp_all_raw.groupby(['div_no', 'itm_no']) \
+        #     .agg(F.max(F.col('price')).alias('max_comp'))
 
         return base_raw \
             .join(min_comp_all, on=['div_no', 'itm_no'], how='left') \
             .join(min_comp_mm, on=['div_no', 'itm_no'], how='left') \
-            .join(avg_df, on=['div_no', 'itm_no'], how='left') \
-            .join(max_df, on=['div_no', 'itm_no'], how='left') \
+            .join(avg_max_df, on=['div_no', 'itm_no'], how='left') \
             .join(median_df, on=['div_no', 'itm_no'], how='left')
 
     @staticmethod
@@ -161,6 +172,7 @@ class DP_Rule_Constructor:
                  desc='', *args, **kwargs):
 
         self.sears_online_rule_schema = [
+            # TODO: DEFINE rule name and schema here
             ('pre_rule', 'boolean'),
             ('core_rule', 'double'),
             ('uplift_rule', 'double'),
@@ -209,10 +221,11 @@ class DP_Rule_Constructor:
             target_tbl_name=target_tbl_name,
             additional_source=additional_source,
             select_schema=(
+                # TODO: DEFINE schema for rule_table here
                 'div_no',
                 'itm_no',
-                'reg',                          # redundant
-                'cost_with_subsidy',            # redundant
+                'reg',  # redundant
+                'cost_with_subsidy',  # redundant
                 'min_margin',
                 'min_margin_rule_name',
                 'min_comp_MM',
@@ -249,6 +262,7 @@ class DP_Rule_Constructor:
             **kwargs
         )
 
+    # TODO: DEFINE default rules here
     @staticmethod
     def default_pre_rule(row):
         return True, 'pass'
@@ -283,7 +297,7 @@ class DP_Rule_Constructor:
         if daydiff < day_range[0]:
             day_range = daydiff, 'bound by incoming dp rule ending'
         if row['uplift_end_dt'] is not None:
-            daydiff = (dt.datetime.strptime(row['uplift_end_dt'], '%Y-%m-%d') - batch_dt).days            
+            daydiff = (dt.datetime.strptime(row['uplift_end_dt'], '%Y-%m-%d') - batch_dt).days
             if daydiff < day_range[0]:
                 day_range = daydiff, 'bound by incoming uplift ending'
         return day_range
@@ -362,8 +376,8 @@ class DP_Rule_Constructor:
         total_func[4].append(dpr.Working_func(self.defalut_deal_flag_rule, 'Deal_flag N'))
 
         total_func[5].append(dpr.Working_func(partial(self.default_price_day,
-                                                           batch_date_str=self.time_now.strftime('%Y-%m-%d')),
-                                                   'Default 2-day pricing, 1-day Delete flag'))
+                                                      batch_date_str=self.time_now.strftime('%Y-%m-%d')),
+                                              'Default 2-day pricing, 1-day Delete flag'))
         total_func[6].append(dpr.Working_func(self.default_priority, 'Default priority: 0 (minimum)'))
         total_rule_lst = []
         for idx, each_tuple in enumerate(self.sears_online_rule_schema):

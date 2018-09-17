@@ -7,7 +7,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=2000,
                          scope='div_no = 71 and ln_no in (22, 28, 29, 63, 66, 67)',
-                         rule_name='div71 LG')
+                         rule_name='div71 ODL')
 
     def get_merge_func(self):
         def merge_func(df_dict, scope):
