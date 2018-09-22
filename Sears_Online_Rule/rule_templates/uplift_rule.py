@@ -101,3 +101,9 @@ def _uplift_5_round_integer(row):
     return round(row['core_rule_value'] * 1.05), 'APPAREL 5% UPLIFT'
 
 uplift_5_round_integer = Working_func(_uplift_5_round_integer, 'APPAREL 5% UPLIFT')
+
+
+def _uplift_10_round_integer(row):
+    return round(row['core_rule_value'] * 1.10), 'APPAREL 10% UPLIFT'
+
+uplift_10_round_integer = Working_func(_uplift_10_round_integer, 'APPAREL 10% UPLIFT')

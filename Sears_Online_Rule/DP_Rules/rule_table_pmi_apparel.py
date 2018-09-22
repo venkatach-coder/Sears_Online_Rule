@@ -50,7 +50,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def get_uplift_rule(self):
 
         return [
-            uplift_rule.uplift_5_round_integer
+            uplift_rule.uplift_10_round_integer
         ]
         # func_handle = partial(uplift_rule._uplift_by_percentage_max, uplift=1, max_val = float('inf'))
         # return [
