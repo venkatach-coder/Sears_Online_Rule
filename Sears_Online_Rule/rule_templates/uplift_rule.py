@@ -36,7 +36,7 @@ def _PMI_uplift_with_max(row, uplift, max_val):  # Will not touch anything 99,99
 
 def _uplift_by_percentage_max(row, uplift, max_val):
     return round(min((uplift * row['core_rule_value']), row['core_rule_value'] + max_val), 2), \
-               'PMI uplift:{:.1f}%'.format((uplift - 1.0) * 100.0) + '' if math.isinf(max_val) \
+               'uplift:{:.1f}%'.format((uplift - 1.0) * 100.0) + '' if math.isinf(max_val) \
                    else ' max {:.2f}'.format(round(max_val, 2))
 
 def _uplift_those_with_subsidy(row):
