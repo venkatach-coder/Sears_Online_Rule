@@ -11,25 +11,27 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
             [96, ''],
             [88, ''],
             [83, ''],
-            [77, '''and not (lower(brand) like '%american princess%')'''],
+            [77, ''],
             [76, ''],
             [75, ''],
             [71, ''],
-            [67, '''and ln_no not in (88)'''],
+            [67, ''],
             [57, ''],
             [54, ''],
             [49, ''],
             [45, ''],
-            [43, '''and not (lower(brand) like '%levi%' or lower(brand) like '%docker%')'''],
+            [43, ''],
             [42, ''],
-            [41, '''and not (lower(brand) like '%levi%' or lower(brand) like '%docker%')'''],
+            [41, ''],
             [40, ''],
             [38, ''],
             [37, ''],
             [36, ''],
             [34, ''],
+            [33, ''],
+            [31, ''],
             [30, ''],
-            [29, '''and not (lower(brand) like '%american princess%')'''],
+            [29, ''],
             [24, ''],
             [20, ''],
             [18, ''],
@@ -82,7 +84,8 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         return [
             pre_rule.dp_block,
             pre_rule.ee_check,
-            pre_rule.PMI_ban
+            pre_rule.PMI_ban,
+            pre_rule.reg_check
         ]
 
     def get_core_rule(self):

@@ -8,33 +8,37 @@ from Sears_Online_Rule.harlem125_interface import Working_func_ext as Working_fu
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         div_lst = [
+            [96, ''],
             [88, ''],
             [83, ''],
-            [77, '''and not (lower(brand) like '%american princess%')'''],
+            [77, ''],
             [76, ''],
             [75, ''],
             [71, ''],
-            [67, '''and ln_no not in (88)'''],
+            [67, ''],
             [57, ''],
             [54, ''],
             [49, ''],
             [45, ''],
-            [43, '''and not (lower(brand) like '%levi%' or lower(brand) like '%docker%')'''],
+            [43, ''],
             [42, ''],
-            [41, '''and not (lower(brand) like '%levi%' or lower(brand) like '%docker%')'''],
+            [41, ''],
             [40, ''],
             [38, ''],
             [37, ''],
             [36, ''],
             [34, ''],
+            [33, ''],
+            [31, ''],
             [30, ''],
-            [29, '''and not (lower(brand) like '%american princess%')'''],
+            [29, ''],
             [24, ''],
             [20, ''],
             [18, ''],
             [16, ''],
+            [14, ''],
             [9, ''],
-            [8, '''and ln_no not in (55)'''],
+            [8, ''],
             [7, ''],
             [6, ''],
             [4, ''],
@@ -43,7 +47,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         ]
         explore_exploit = " or ".join(["(div_no = " + str(x[0]) + " " + str(x[1]) + ")" for x in div_lst])
         time_now = dt.datetime.now(pytz.timezone('America/Chicago')).replace(tzinfo=None)
-        super().__init__(rule_level=6000,
+        super().__init__(rule_level=401,
                          additional_source={'explore_exploit': {
                              'table_name': 'dp_spark_source_tbl.wx_ee_{}'.format(time_now.strftime('%Y%m%d')),
                              'key': ['div_no', 'itm_no']}
@@ -79,7 +83,9 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def get_pre_rule(self):
         return [
             pre_rule.dp_block,
-            pre_rule.ee_check
+            pre_rule.ee_check,
+            pre_rule.PMI_ban,
+            pre_rule.reg_check
         ]
 
     def get_core_rule(self):
