@@ -63,7 +63,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
                       on=['div_no', 'itm_no'], how='left') \
                 .join(df_dict['uplift_table'], on=['div_no', 'itm_no'], how='left') \
                 .join(df_dict['explore_exploit'].selectExpr('div_no', 'itm_no', 'price as ee_price', 'group_name'),
-                      on=['div_no', 'itm_no'], how='left')
+                      on=['div_no', 'itm_no'], how='inner')
             return df1
 
         return merge_func
