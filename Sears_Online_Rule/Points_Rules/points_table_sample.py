@@ -1,6 +1,7 @@
 from Sears_Online_Rule import harlem125_points_interface as harlem
 from Sears_Online_Rule.Points_Rules.points_templates import BUProgram
-
+import random
+from Sears_Online_Rule.harlem125_points_interface import Working_func_ext
 
 class Construct_DP_Rule(harlem.DP_Points_Rule_Constructor):
     def __init__(self):
@@ -20,7 +21,11 @@ class Construct_DP_Rule(harlem.DP_Points_Rule_Constructor):
         ]
 
     def get_core_rule(self):
+        def points_randomizer(row):
+            return int(random.randint(1, 50)), 'Points randomizer, points test'
+
         return [
+            Working_func_ext(points_randomizer, 'Points randomizer, points test')
         ]
 
     def get_post_rule(self):
@@ -28,7 +33,11 @@ class Construct_DP_Rule(harlem.DP_Points_Rule_Constructor):
         ]
 
     def get_points_expire_rule(self):
-        return []
+        def points_expire_randomizer(row):
+            return int(random.randint(30, 60)), 'Points expire randomizer, points test'
+        return [
+            Working_func_ext(points_expire_randomizer, 'Points expire randomizer, points test')
+        ]
 
     def get_points_end_date_rule(self):
         return []
