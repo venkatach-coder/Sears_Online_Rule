@@ -6,5 +6,8 @@ __all__ = [
     'FTP_formatting',
     'uplift_table',
     'rules_FTP',
-    'full_rule_summary'
+    'full_rule_summary',
+    'full_rule_summary_collision',
+    'dp_points_rule_collision',
+    'points_FTP_formatting'
 ]

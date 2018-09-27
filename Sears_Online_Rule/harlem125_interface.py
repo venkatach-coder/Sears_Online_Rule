@@ -216,7 +216,8 @@ class DP_Rule_Constructor:
                     inactive_reason = str(e)
                     if critical:
                         raise
-
+        # TODO: DEFINE rule_level prefix, may cause column name duplication when multiple interfaces exists
+        self.rule_level_prefix = ''
         self.thisrule = dpr.Harlem_Rule(
             target_tbl_name=target_tbl_name,
             additional_source=additional_source,
@@ -250,11 +251,12 @@ class DP_Rule_Constructor:
                 'Harlem_Rule.day_range_rule_name as day_range_rule_name',
                 'Harlem_Rule.priority_value as priority',
                 'Harlem_Rule.priority_name as priority_rule_name',
-                'rule_level',
+                '{}rule_level'.format(self.rule_level_prefix),
                 'run_id'),
             is_active=rule_active,
             inactive_rsn=inactive_reason,
             rule_level=rule_level,
+            rule_level_prefix=self.rule_level_prefix,
             rule_name=rule_name,
             if_exists=if_exists,
             desc=desc,

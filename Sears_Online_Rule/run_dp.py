@@ -1,5 +1,6 @@
 from harlem125 import harlem125
 from Sears_Online_Rule.DP_Rules import *
+from Sears_Online_Rule.Points_Rules import *
 from Sears_Online_Rule import *
 import sys
 import datetime as dt
@@ -7,7 +8,8 @@ import pytz
 
 
 def run_all(target_prefix, run_id=None, date_time=None):
-    dp_rule_lst = [x for x in sys.modules.keys() if x.startswith('Sears_Online_Rule.DP_Rules.')]
+    dp_rule_lst = [x for x in sys.modules.keys() if x.startswith('Sears_Online_Rule.DP_Rules.rule_table_')]
+    dp_points_rule_lst = [x for x in sys.modules.keys() if x.startswith('Sears_Online_Rule.Points_Rules.points_table_')]
     print('------------------------------------------------')
     print(' [*] imported rules:')
     for eachmodule in dp_rule_lst:
@@ -31,6 +33,11 @@ def run_all(target_prefix, run_id=None, date_time=None):
     Sears_DP.add_rule(default_sales_priority_push.construct_rule())
     Sears_DP.add_rule(FTP_formatting.construct_rule(time_now))  # <------- Price Push
     Sears_DP.add_rule(full_rule_summary.construct_rule())
+    Sears_DP.add_rule(full_rule_summary_collision.construct_rule())
+    for each_rule in dp_points_rule_lst:
+        Sears_DP.add_rule(sys.modules[each_rule].Construct_DP_Rule().construct_rule())
+    Sears_DP.add_rule(dp_points_rule_collision.construct_rule())
+    Sears_DP.add_rule(points_FTP_formatting.construct_rule(time_now))
     # Reporting Table Generating
     # Rule_Table    
     Sears_DP.add_rule(rules_FTP.construct_rule())
@@ -44,6 +51,8 @@ def run_all(target_prefix, run_id=None, date_time=None):
                              'key': ['div_no', 'itm_no', 'comp_name']},
             'uplift_input': {'table_name': 'dp_spark_source_tbl.uplift_input',
                              'key': ['ID']},
+            'VBS_hierarchy':{'table_name': 'dp_spark_source_tbl.Sears_VBS_Name_Div',
+                             'key': ['div_no']},
         }
     )
     Sears_DP.run_all_rules()
@@ -69,5 +78,13 @@ def run_all(target_prefix, run_id=None, date_time=None):
             'rules_FTP': {
                 'destination': 'dp_spark.{}_sears_online_rules_FTP_{}_{:05d}'.format(target_prefix, datetoday, run_id),
                 'if_exists': 'replace'},
+            'points_table':{
+                'destination': 'dp_spark.{}_sears_points_table_{}_{:05d}'.format(target_prefix, datetoday, run_id),
+                'if_exists': 'replace'
+            },
+            'points_collision_FTP': {
+                'destination': 'dp_spark.{}_sears_points_table_FTP_{}_{:05d}'.format(target_prefix, datetoday, run_id),
+                'if_exists': 'replace'
+            }
         }
     )
