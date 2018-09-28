@@ -8,3 +8,4 @@ steps:
         'USER_2=sears-harlem125',
         'REPO_2=Sears_Online_Rule',
         'BRANCH_2=master']
+timeout: 3600s
