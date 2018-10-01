@@ -6,7 +6,10 @@ from Sears_Online_Rule.harlem125_interface import Working_func_ext as Working_fu
 
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
-        super().__init__( rule_level=1000, scope='div_no = 52', rule_name='div52')
+        super().__init__( rule_level=3000, scope='(div_no = 50 and ln_no = 20 and sub_ln_no in (10, 20, 40, 60, 70))'
+                                                 'or (div_no = 71 and ln_no in (2, 31, 37, 50, 51, 52, 53, 54, 55,'
+                                                 '56, 59, 61, 62, 63, 64, 68, 70, 97) '
+                                                 ')', rule_name='seasonal', is_active=True)
 
     def get_merge_func(self):
         def merge_func(df_dict, scope):
@@ -30,7 +33,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def get_min_comp_func(self):
         def min_comp_rule(row):
             if row['comp_name'].strip() in (
-                    'JC Penney', 'Amazon', 'ToysRUs', 'Walmart', 'Target', 'Jet'):
+                    'Home Depot', 'JC Penney', 'Amazon', 'ToysRUs', 'Walmart', 'Target', 'Jet'):
                 return True, None
             elif row['comp_name'].strip().startswith('mkpl_'):
                 return True, None
@@ -49,27 +52,14 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
 
     def get_core_rule(self):
-
-        def _div52_PMI_rule(row):
-            if row['PMI'] is not None:
-                if 1 - row['cost_with_subsidy']/row['PMI'] >= 0.25:
-                    return row['PMI'] * 0.99, '0.99 PMI'
-                else:
-                    return row['PMI'], 'PMI'
-
-        div52_PMI_rule = Working_func(_div52_PMI_rule, 'Div52 PMI rule')
-
         return [
             core_rule.Match_to_Min_comp_MM,
-            core_rule.Match_to_Min_margin_when_Min_comp_Exists,
-            div52_PMI_rule
+            core_rule.Match_to_Min_margin_when_Min_comp_Exists
         ]
 
 
     def get_uplift_rule(self):
         return [
-            uplift_rule.uplift_by_uplift_table,
-            uplift_rule.uplift_5_max_5_no_more_than_1000_for_not_99_no_free_shipping
         ]
 
     def get_post_rule(self):
