@@ -34,7 +34,7 @@ class Construct_DP_Rule(harlem.DP_Points_Rule_Constructor):
 
     def get_points_expire_rule(self):
         def points_expire_randomizer(row):
-            return int(random.randint(30, 60)), 'Points expire randomizer, points test'
+            return int(random.randint(1, 10)) * 10, 'Points expire randomizer, points test'
         return [
             Working_func_ext(points_expire_randomizer, 'Points expire randomizer, points test')
         ]
@@ -47,7 +47,7 @@ class Construct_DP_Rule(harlem.DP_Points_Rule_Constructor):
 
     def get_BUProgram_rule(self):
         return [
-            BUProgram.buprogram_by_div_ln
+            BUProgram.buprogram_Multi_BU
         ]
 
     def get_ExpenseAllocation_rule(self):

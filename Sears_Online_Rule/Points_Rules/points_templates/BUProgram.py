@@ -97,4 +97,7 @@ def _buprogram_by_div_ln(row, bu_expense):
 buprogram_by_div_ln = Working_func(partial(_buprogram_by_div_ln, bu_expense = bu_lst), 'BU PROGRAM FINDER')
 
 
+def _buprogram_Multi_BU(row):
+    return 'BU - Multi-BU', 'BU - Multi-BU'
 
+buprogram_Multi_BU = Working_func(_buprogram_Multi_BU, 'BU - Multi-BU Rule')
