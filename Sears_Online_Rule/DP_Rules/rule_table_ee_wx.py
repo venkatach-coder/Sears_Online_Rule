@@ -47,7 +47,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         ]
         explore_exploit = " or ".join(["(div_no = " + str(x[0]) + " " + str(x[1]) + ")" for x in div_lst])
         time_now = dt.datetime.now(pytz.timezone('America/Chicago')).replace(tzinfo=None)
-        super().__init__(rule_level=401,
+        super().__init__(rule_level=4000,
                          additional_source={'explore_exploit': {
                              'table_name': 'dp_spark_source_tbl.wx_ee_{}'.format(time_now.strftime('%Y%m%d')),
                              'key': ['div_no', 'itm_no']}
@@ -84,7 +84,6 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         return [
             pre_rule.dp_block,
             pre_rule.ee_check,
-            pre_rule.PMI_ban,
             pre_rule.reg_check
         ]
 
