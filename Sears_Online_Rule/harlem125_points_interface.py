@@ -156,7 +156,7 @@ class DP_Points_Rule_Constructor:
 
     @staticmethod
     def default_MEMBER_STATUS(row):
-        return 'BASE', 'Default Base'
+        return 'BOTH', 'Default Base'
 
     # ---------------------------------------- #
 

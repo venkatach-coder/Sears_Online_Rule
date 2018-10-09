@@ -22,7 +22,7 @@ class Construct_DP_Rule(harlem.DP_Points_Rule_Constructor):
 
     def get_core_rule(self):
         def points_randomizer(row):
-            return int(random.randint(1, 50)), 'Points randomizer, points test'
+            return int(random.randint(1, 10) * 10), 'Points randomizer, points test'
 
         return [
             Working_func_ext(points_randomizer, 'Points randomizer, points test')
@@ -33,10 +33,12 @@ class Construct_DP_Rule(harlem.DP_Points_Rule_Constructor):
         ]
 
     def get_points_expire_rule(self):
-        def points_expire_randomizer(row):
-            return int(random.randint(1, 10)) * 10, 'Points expire randomizer, points test'
+        def points_expire_generator(row):
+            available_lenth = [7, 14, 30, 60]
+            lenth = available_lenth[int(random.randint(0, 3))]
+            return lenth, 'Points expire in '+str(lenth) + ' days'
         return [
-            Working_func_ext(points_expire_randomizer, 'Points expire randomizer, points test')
+            Working_func_ext(points_expire_generator, 'Points expire generator, points test')
         ]
 
     def get_points_end_date_rule(self):
