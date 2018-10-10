@@ -20,7 +20,11 @@ def merge_func(work_df: Dict[str, DataFrame]):
 
 def select_price(ftp: DataFrame, find_end_date_udf, time_now):
     # time_now = dt.datetime.now(pytz.timezone('America/Chicago')).replace(tzinfo=None)
-    current_date = time_now.strftime('%Y-%m-%d')
+    run_id = time_now.hour * 3600 + time_now.minute * 60 + time_now.second
+    if run_id < 82000:
+        current_date = time_now.strftime('%Y-%m-%d')
+    elif run_id >= 82000:
+        current_date = (time_now + dt.timedelta(days=1)).strftime('%Y-%m-%d')
 
     ftp = ftp.withColumn('Format', F.lit('Sears.com'))
     ftp = ftp.withColumn('Store', F.lit("9300"))
