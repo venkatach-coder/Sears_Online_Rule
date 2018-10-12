@@ -64,7 +64,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def get_uplift_rule(self):
         return [
             uplift_rule.uplift_by_uplift_table,
-            uplift_rule.uplift_5_max_5_no_more_than_1000_for_not_99_no_free_shipping
+            uplift_rule.uplift_10_max_5_no_free_shipping
         ]
 
     def get_post_rule(self):
@@ -77,8 +77,8 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
             # Working_func(partial(post_rule.post_rule_chain,
             #                      func_lst=[post_rule.VD_Increase_PMI_to_min_margin] + common_rule_lst
             #                      )),
-            Working_func(partial(post_rule.post_rule_chain,
-                                 func_lst=[post_rule.Min_PMI_DP_D_flag] + common_rule_lst)),
+            # Working_func(partial(post_rule.post_rule_chain,
+            #                      func_lst=[post_rule.Min_PMI_DP_D_flag] + common_rule_lst)),
 
             Working_func(partial(post_rule.post_rule_chain,
                                  func_lst=[post_rule.DP_RECM_price] + common_rule_lst))

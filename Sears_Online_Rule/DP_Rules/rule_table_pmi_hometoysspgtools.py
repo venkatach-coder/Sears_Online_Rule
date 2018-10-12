@@ -7,7 +7,7 @@ from Sears_Online_Rule.harlem125_interface import Working_func_ext as Working_fu
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=500,
-                         is_active=True,
+                         is_active=False,
                          scope='div_no in (6,8,24,14,96,9,52)',
                          rule_name='home_toys_tools_spg PMI UPLIFT')
 # div_lst = [6, # SPG

@@ -107,3 +107,15 @@ def _uplift_10_round_integer(row):
     return round(row['core_rule_value'] * 1.10), 'APPAREL 10% UPLIFT'
 
 uplift_10_round_integer = Working_func(_uplift_10_round_integer, 'APPAREL 10% UPLIFT')
+
+
+def _uplift_10_max_5_no_free_shipping(row):
+    if round(row['core_rule_value'], 2) < 34.99 and round(min((1.10 * row['core_rule_value']), row['core_rule_value'] + 5), 2) > 34.99:
+        recom_prc = 34.99
+    else:
+        recom_prc = round(min((1.10 * row['core_rule_value']), row['core_rule_value'] + 5.0), 2)
+    return recom_prc, 'uplift 0.10 max 5 for items no free shipping'
+
+
+uplift_10_max_5_no_free_shipping = Working_func(_uplift_10_max_5_no_free_shipping,
+    'uplift 0.10 max 5 for items no free shipping')

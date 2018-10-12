@@ -7,7 +7,7 @@ from Sears_Online_Rule.harlem125_interface import Working_func_ext as Working_fu
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=500,
-                         is_active=True,
+                         is_active=False,
                          scope='div_no = 71 and ln_no in (22,28,29,63,66,67)',
                          rule_name='ODL PMI UPLIFT')
 # div_lst = [6, # SPG
