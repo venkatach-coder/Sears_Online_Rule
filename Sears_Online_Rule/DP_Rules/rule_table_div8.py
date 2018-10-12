@@ -79,9 +79,9 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
                            post_rule.reg_bound_d_flag]
 
         return [
-            Working_func(partial(post_rule.post_rule_chain,
-                                 func_lst=[post_rule.VD_Increase_PMI_to_min_margin] + common_rule_lst
-                                 )),
+            # Working_func(partial(post_rule.post_rule_chain,
+            #                      func_lst=[post_rule.VD_Increase_PMI_to_min_margin] + common_rule_lst
+            #                      )),
             Working_func(partial(post_rule.post_rule_chain,
                                  func_lst=[post_rule.Min_PMI_DP_D_flag] + common_rule_lst)),
 
