@@ -97,16 +97,8 @@ uplift_3_no_more_than_1000_for_not_99_no_free_shipping=Working_func(_uplift_3_no
                                                                           'uplift 0.03 for items no more than 1000 for not ending with *99.99 for not reaching free shipping')
 
 
-def _uplift_5_round_integer(row):
-    return round(row['core_rule_value'] * 1.05), 'APPAREL 5% UPLIFT'
-
-uplift_5_round_integer = Working_func(_uplift_5_round_integer, 'APPAREL 5% UPLIFT')
-
-
-def _uplift_10_round_integer(row):
-    return round(row['core_rule_value'] * 1.10), 'APPAREL 10% UPLIFT'
-
-uplift_10_round_integer = Working_func(_uplift_10_round_integer, 'APPAREL 10% UPLIFT')
+def _uplift_and_round_integer(row, uplift):
+    return round(row['core_rule_value'] * uplift), 'APPAREL {:.0%} UPLIFT'.format(uplift - 1)
 
 
 def _uplift_10_max_5_no_free_shipping(row):
