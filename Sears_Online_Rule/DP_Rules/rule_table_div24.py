@@ -64,11 +64,12 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def get_uplift_rule(self):
         return [
             uplift_rule.uplift_by_uplift_table,
-            uplift_rule.uplift_10_max_5_no_free_shipping
+            uplift_rule.uplift_10_max_6_min_1_no_free_shipping
         ]
 
     def get_post_rule(self):
-        common_rule_lst = [post_rule.check_mkpl,
+        common_rule_lst = [post_rule.round_to_00,
+                           post_rule.check_mkpl,
                            post_rule.min_margin_lb,
                            post_rule.uplift_to_MAP_when_below,
                            post_rule.reg_bound_d_flag]
