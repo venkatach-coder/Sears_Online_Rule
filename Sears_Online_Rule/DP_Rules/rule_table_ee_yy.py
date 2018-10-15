@@ -7,45 +7,6 @@ from functools import partial
 
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
-        div_lst = [
-            [96, ''],
-            [88, ''],
-            [83, ''],
-            [77, ''],
-            [76, ''],
-            [75, ''],
-            [71, ''],
-            [67, ''],
-            [57, ''],
-            [54, ''],
-            [49, ''],
-            [45, ''],
-            [43, ''],
-            [42, ''],
-            [41, ''],
-            [40, ''],
-            [38, ''],
-            [37, ''],
-            [36, ''],
-            [34, ''],
-            [33, ''],
-            [31, ''],
-            [30, ''],
-            [29, ''],
-            [24, ''],
-            [20, ''],
-            [18, ''],
-            [16, ''],
-            [14, ''],
-            [9, ''],
-            [8, ''],
-            [7, ''],
-            [6, ''],
-            [4, ''],
-            [3, ''],
-            [2, ''],
-        ]
-        explore_exploit_yy = " or ".join(["(div_no = " + str(x[0]) + " " + str(x[1]) + ")" for x in div_lst])
         time_now = dt.datetime.now(pytz.timezone('America/Chicago')).replace(tzinfo=None)
         super().__init__(rule_level=400,
                          additional_source={'explore_exploit_yy': {
@@ -53,12 +14,12 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
                              'key': ['div_no', 'itm_no']}
                          },
                          is_active=True,
-                         scope=explore_exploit_yy, rule_name='explore_exploit_yy',
+                         scope='*', rule_name='explore_exploit_yy',
                          )
 
     def get_merge_func(self):
         def merge_func(df_dict, scope):
-            df1 = df_dict['static_table_run_id'].filter(scope) \
+            df1 = df_dict['static_table_run_id'] \
                 .join(df_dict['all_comp_all'].select('div_no', 'itm_no', 'price', 'comp_name'),
                       on=['div_no', 'itm_no'], how='left') \
                 .join(df_dict['uplift_table'], on=['div_no', 'itm_no'], how='left') \
