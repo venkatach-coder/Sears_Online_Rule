@@ -124,3 +124,16 @@ def _uplift_10_max_6_min_1_no_free_shipping(row):
 
 uplift_10_max_6_min_1_no_free_shipping = Working_func(_uplift_10_max_6_min_1_no_free_shipping,
     'uplift 0.10 max 6 min 1 for items no free shipping')
+
+
+def _uplift_10_max_5_min_05_no_free_shipping(row):
+    if round(row['core_rule_value'], 2) < 34.99 and round(min((1.10 * row['core_rule_value']), row['core_rule_value'] + 5.0), 2) > 34.99:
+        recom_prc = 34.99
+    else:
+        recom_prc = round(min((1.10 * row['core_rule_value']), row['core_rule_value'] + 5.0), 2)
+        recom_prc = round(max(recom_prc, row['core_rule_value'] + 0.50), 2)
+    return recom_prc, 'uplift 0.10 max 5 min 0.5 for items no free shipping'
+
+
+uplift_10_max_5_min_05_no_free_shipping = Working_func(_uplift_10_max_5_min_05_no_free_shipping,
+    'uplift 0.10 max 5 min 0.50 for items no free shipping')
