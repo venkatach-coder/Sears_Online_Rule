@@ -7,7 +7,7 @@ from Sears_Online_Rule.harlem125_interface import Working_func_ext as Working_fu
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=5000, 
-                         scope="div_no = 20 and lower(brand) like '%kenmore%' ",
+                         scope="div_no = 20 and lower(brand) like '%kenmore%' and ln_no not in (8, 32, 34, 40)",
                          is_active= True,
                          rule_name='Div20 HA Amazon Kenmore')
 
