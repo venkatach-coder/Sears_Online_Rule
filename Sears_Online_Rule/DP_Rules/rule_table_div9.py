@@ -6,7 +6,7 @@ from Sears_Online_Rule.harlem125_interface import Working_func_ext as Working_fu
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=1000,
-                         scope='div_no = 9',
+                         scope='div_no = 9 and ln_no not in (24)',
                          rule_name='div_9 TOOLS Regular DP Rule')
 
     def get_merge_func(self):
