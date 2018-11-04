@@ -49,7 +49,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
 
     def get_uplift_rule(self):
-        return [uplift_rule.uplift_10_min_1_no_free_shipping]
+        return [Working_func(partial(uplift_rule._uplift_by_percentage_max_no_free_shipping, uplift=1.06),'6% uplift'),]
 
     def get_post_rule(self):
         common_rule_lst = [
