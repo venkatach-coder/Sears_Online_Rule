@@ -40,9 +40,9 @@ def _uplift_by_percentage_max(row, uplift, min_val=0.0, max_val=float('inf')):
     upliftted_prc = min(max(upliftted, core_rule + min_val), core_rule + max_val)
 
     return round(upliftted_prc, 2), \
-               'uplift:{:.1f}%'.format((uplift - 1.0) * 100.0) + \
-               '' if abs(min_val) < 1e-2 else ' min {:.2f}'.format(round(min_val, 2)) + \
-               '' if math.isinf(max_val) else ' max {:.2f}'.format(round(max_val, 2))
+            ('uplift:{:.1f}%'.format((uplift - 1.0) * 100.0)) + \
+            ('' if abs(min_val) < 1e-2 else ', min:${:.2f}'.format(round(min_val, 2))) + \
+            ('' if math.isinf(max_val) else ', max:${:.2f}'.format(round(max_val, 2)))
 
 def _uplift_by_percentage_max_no_free_shipping(row, uplift, min_val=0.0, max_val=float('inf')):
     upliftted_val, rule_name =_uplift_by_percentage_max(row, uplift, min_val, max_val)
