@@ -34,10 +34,21 @@ def _PMI_uplift_with_max(row, uplift, max_val):  # Will not touch anything 99,99
                    else ' max {:.2f}'.format(round(max_val, 2))
 
 
-def _uplift_by_percentage_max(row, uplift, max_val):
-    return round(min((uplift * row['core_rule_value']), row['core_rule_value'] + max_val), 2), \
-               'uplift:{:.1f}%'.format((uplift - 1.0) * 100.0) + '' if math.isinf(max_val) \
-                   else ' max {:.2f}'.format(round(max_val, 2))
+def _uplift_by_percentage_max(row, uplift, min_val=0.0, max_val=float('inf')):
+    core_rule = row['core_rule_value']
+    upliftted = uplift * core_rule
+    upliftted_prc = min(max(upliftted, core_rule + min_val), core_rule + max_val)
+
+    return round(upliftted_prc, 2), \
+               'uplift:{:.1f}%'.format((uplift - 1.0) * 100.0) + \
+               '' if abs(min_val) < 1e-2 else ' min {:.2f}'.format(round(min_val, 2)) + \
+               '' if math.isinf(max_val) else ' max {:.2f}'.format(round(max_val, 2))
+
+def _uplift_by_percentage_max_no_free_shipping(row, uplift, min_val=0.0, max_val=float('inf')):
+    upliftted_val, rule_name =_uplift_by_percentage_max(row, uplift, min_val, max_val)
+    if row['core_rule_value'] < 34.99 and upliftted_val > 34.99:
+        upliftted_val = 34.99
+    return upliftted_val, '{} no free shipping'.format(rule_name)
 
 def _uplift_those_with_subsidy(row):
     if math.fabs(row['cost_with_subsidy'] - row['cost']) < 0.00999:
@@ -137,3 +148,14 @@ def _uplift_10_max_5_min_05_no_free_shipping(row):
 
 uplift_10_max_5_min_05_no_free_shipping = Working_func(_uplift_10_max_5_min_05_no_free_shipping,
     'uplift 0.10 max 5 min 0.50 for items no free shipping')
+
+def _uplift_10_min_1_no_free_shipping(row):
+    if round(row['core_rule_value'], 2) < 34.99 and round((1.10 * row['core_rule_value']), 2) > 34.99:
+        recom_prc = 34.99
+    else:
+        recom_prc = round((1.10 * row['core_rule_value']), 2)
+        recom_prc = round(max(recom_prc, row['core_rule_value'] + 1.0), 2)
+    return recom_prc, 'uplift 0.10 min 1 for items no free shipping'
+
+uplift_10_min_1_no_free_shipping = Working_func(_uplift_10_min_1_no_free_shipping,
+    'uplift 0.10 min 1 for items no free shipping')
