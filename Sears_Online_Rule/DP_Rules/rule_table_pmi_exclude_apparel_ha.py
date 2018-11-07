@@ -8,7 +8,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=501,
                          scope='div_no in (6,8,9,14,24,34,49,52,71,95,96)',
-                         is_active = True, rule_name='pmi 10% uplift max 5') #scope not needed
+                         is_active = True, rule_name='pmi 10% uplift max 6') #scope not needed
 
     def get_merge_func(self):
         def merge_func(df_dict, scope):
@@ -50,7 +50,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def get_uplift_rule(self):
         return [
             uplift_rule.uplift_by_uplift_table,
-            Working_func(partial(uplift_rule._uplift_by_percentage_max_no_free_shipping, uplift=1.06),'6% uplift'),
+            Working_func(partial(uplift_rule._uplift_by_percentage_max_no_free_shipping, uplift=1.1,min_val=1.0, max_val=6.0),'10% uplift min $1 max $6'),
         ]
 
     def get_post_rule(self):
