@@ -137,7 +137,7 @@ class DP_Points_Rule_Constructor:
 
     @staticmethod
     def default_points_end_date_rule(row, batch_date_str):
-        return row['day_range'], 'Match to DP price End_date'
+        return int(1), '1-day points issue'
 
     @staticmethod
     def default_action_rule(row):
@@ -217,7 +217,7 @@ class DP_Points_Rule_Constructor:
 
         total_func[4].append(dpr.Working_func(partial(self.default_points_end_date_rule,
                                                       batch_date_str=self.time_now.strftime('%Y-%m-%d')),
-                                              'Default 2-day pricing, 1-day Delete flag'))
+                                              'Default 1-day points'))
         total_func[5].append(dpr.Working_func(self.default_action_rule, 'Default Action: A'))
 
         total_func[6].append(dpr.Working_func(self.default_BUProgram_rule, 'Default BU Program: Blank'))
