@@ -173,3 +173,10 @@ def _min_margin_lb(row):
     return row['uplift_rule_value'], ''
 min_margin_lb = Working_func(_min_margin_lb, 'min_margin check')
 
+def _pmi_bound_when_subsidy_exists(row):
+    if row['override_cost'] is not None and row['PMI'] is not None:
+        if row['uplift_rule_value'] > row['PMI']:
+            return row['PMI'], 'PMI bound when subsidy exists'
+    return row['uplift_rule_value'], ''
+
+pmi_bound_when_subsidy_exists = Working_func(_pmi_bound_when_subsidy_exists, 'PMI subsidy bound')

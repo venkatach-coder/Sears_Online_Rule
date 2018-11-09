@@ -77,6 +77,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         common_rule_lst = [
             post_rule.round_up_to_Map_when_close_to_map,
             post_rule.round_to_96,
+            post_rule.pmi_bound_when_subsidy_exists,
             Working_func(partial(post_rule.reg_bound_PMI_func, fall_back_function=post_rule.reg_bound_d_flag),
                          desc='Revert back to PMI when dp_price is higher than reg, '
                               'send delete flag when PMI not exists')
