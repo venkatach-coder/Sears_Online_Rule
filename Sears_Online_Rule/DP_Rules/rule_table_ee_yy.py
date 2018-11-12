@@ -13,7 +13,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
                              'table_name': 'dp_spark_source_tbl.yy_ee_{}'.format(time_now.strftime('%Y%m%d')),
                              'key': ['div_no', 'itm_no']}
                          },
-                         is_active=True,
+                         is_active=False,
                          scope='*', rule_name='explore_exploit_yy',
                          )
 
