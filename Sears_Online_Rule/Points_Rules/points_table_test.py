@@ -6,7 +6,7 @@ from Sears_Online_Rule.harlem125_points_interface import Working_func_ext
 class Construct_DP_Rule(harlem.DP_Points_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=1000,
-                         scope='div_no = 8 and sales_90 < 0.01 and isdispelig is not null',
+                         scope='div_no = 8 and sales_90 < 0.01 and isdispelig is not null and reg < 25',
                          rule_name='points test')
 
     def get_merge_func(self):
