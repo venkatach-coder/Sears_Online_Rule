@@ -50,7 +50,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
     def get_uplift_rule(self):
         return [
-            Working_func(partial(uplift_rule._uplift_by_percentage_max_no_free_shipping, uplift=1.1, min_val=0.5, max_val = 5),
+            Working_func(partial(uplift_rule._uplift_by_percentage_max_no_free_shipping, uplift=1.05, min_val=0.5, max_val = 5),
                          '10% apparel uplift, min $0.5, max $5')
         ]
         # func_handle = partial(uplift_rule._uplift_by_percentage_max, uplift=1, max_val = float('inf'))

@@ -46,8 +46,8 @@ def _uplift_by_percentage_max(row, uplift, min_val=0.0, max_val=float('inf')):
 
 def _uplift_by_percentage_max_no_free_shipping(row, uplift, min_val=0.0, max_val=float('inf')):
     upliftted_val, rule_name =_uplift_by_percentage_max(row, uplift, min_val, max_val)
-    if row['core_rule_value'] < 34.99 and upliftted_val > 34.99:
-        upliftted_val = 34.99
+    if row['core_rule_value'] < 58.99 and upliftted_val > 58.99:
+        upliftted_val = row['core_rule_value']
     return upliftted_val, '{} no free shipping'.format(rule_name)
 
 def _uplift_those_with_subsidy(row):
