@@ -140,6 +140,11 @@ def _Match_to_ee(row):
 Match_to_ee=Working_func(_Match_to_ee, 'explore_exploit price')
 
 
+def _GT80_hardlines_rule(row):
+    return row['gt_price'], 'GT80 Hardlines Rule'
+GT80_hardlines_rule=Working_func(_GT80_hardlines_rule, 'GT80 Hardlines Rule')
+
+
 def _PMI_uplift_2_max_5(row):
     import math
     pmi = row['PMI']
