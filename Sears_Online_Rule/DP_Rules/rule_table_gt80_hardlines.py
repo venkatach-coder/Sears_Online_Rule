@@ -43,6 +43,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
     def get_pre_rule(self):
         return [
+            pre_rule.dp_block,
         ]
 
     def get_core_rule(self):
