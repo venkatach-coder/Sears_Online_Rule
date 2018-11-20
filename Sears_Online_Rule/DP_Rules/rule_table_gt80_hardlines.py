@@ -55,7 +55,9 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         return []
 
     def get_post_rule(self):
-        return []
+        return [
+            post_rule.round_to_80
+        ]
 
     def get_deal_flag_rule(self):
         def _gt80_deal_flag_rule(row):

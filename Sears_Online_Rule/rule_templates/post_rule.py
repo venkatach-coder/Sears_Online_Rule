@@ -132,6 +132,11 @@ def _price_round_to_96(row):
 
 round_to_96 = Working_func(_price_round_to_96, 'Round to .96')
 
+def _price_round_to_80(row):
+    return math.floor(round(row['uplift_rule_value'], 2) + 0.191) + 0.80
+
+round_to_80 = Working_func(_price_round_to_80, 'Round to .80')
+
 
 def _price_round_to_00(row):
     return math.ceil(round(row['uplift_rule_value'], 2))
