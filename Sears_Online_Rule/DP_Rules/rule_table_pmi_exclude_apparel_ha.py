@@ -8,7 +8,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=501,
                          scope='div_no in (6,8,9,14,24,34,49,52,71,95,96)',
-                         is_active = True, rule_name='pmi 10% uplift max 6') #scope not needed
+                         is_active = False, rule_name='pmi 10% uplift max 6') #scope not needed
 
     def get_merge_func(self):
         def merge_func(df_dict, scope):
