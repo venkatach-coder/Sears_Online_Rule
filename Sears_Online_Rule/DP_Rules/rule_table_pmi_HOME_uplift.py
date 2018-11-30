@@ -6,9 +6,9 @@ from Sears_Online_Rule.harlem125_interface import Working_func_ext as Working_fu
 
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
-        super().__init__(rule_level=500, scope='(div_no in (36,54,76)) or (div_no = 67 and ln_no != 88)',
-                         is_active=True,
-                         rule_name='footwear pmi rule')
+        super().__init__(rule_level=505,
+                         scope='div_no in (8,14,24,96)',
+                         is_active = True, rule_name='HOME pmi 1.05% uplift') #scope not needed
 
     def get_merge_func(self):
         def merge_func(df_dict, scope):
@@ -35,7 +35,6 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         return [
             pre_rule.ad_plan_check,
             pre_rule.dp_block,
-            pre_rule.clearance_check,
             pre_rule.cost_check,
             pre_rule.pmi_check,
             pre_rule.reg_check
@@ -56,7 +55,6 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
     def get_post_rule(self):
         common_rule_lst = [
-                           post_rule.round_to_00,
                            post_rule.reg_bound_d_flag]
 
         return [
