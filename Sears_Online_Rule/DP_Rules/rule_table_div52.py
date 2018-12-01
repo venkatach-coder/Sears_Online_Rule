@@ -72,10 +72,12 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         ]
 
     def get_post_rule(self):
-        common_rule_lst = [post_rule.check_mkpl,
-                           post_rule.min_margin_lb,
-                           post_rule.uplift_to_MAP_when_below,
-                           post_rule.reg_bound_d_flag]
+        common_rule_lst = [
+            post_rule.round_to_96,
+            post_rule.check_mkpl,
+            post_rule.min_margin_lb,
+            post_rule.uplift_to_MAP_when_below,
+            post_rule.reg_bound_d_flag]
         return [
             Working_func(partial(post_rule.post_rule_chain,
                                  func_lst=[post_rule.DP_RECM_price] + common_rule_lst))

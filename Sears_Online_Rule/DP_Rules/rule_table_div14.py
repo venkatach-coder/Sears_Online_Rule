@@ -69,7 +69,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         ]
 
     def get_post_rule(self):
-        common_rule_lst = [post_rule.round_to_00,
+        common_rule_lst = [post_rule.round_to_96,
                            post_rule.check_mkpl,
                            post_rule.min_margin_lb,
                            post_rule.uplift_to_MAP_when_below,
