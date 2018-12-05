@@ -145,6 +145,11 @@ def _GT80_hardlines_rule(row):
 GT80_hardlines_rule=Working_func(_GT80_hardlines_rule, 'GT80 Hardlines Rule')
 
 
+def _apparel_rtw_rule(row):
+    return row['rtw_price'], 'apparel_rtw rule'
+apparel_rtw_rule=Working_func(_apparel_rtw_rule, 'apparel_rtw rule')
+
+
 def _PMI_uplift_2_max_5(row):
     import math
     pmi = row['PMI']
