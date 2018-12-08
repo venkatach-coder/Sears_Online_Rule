@@ -62,9 +62,14 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
 
     def get_uplift_rule(self):
-        func_handle = partial(uplift_rule._uplift_by_percentage_max_no_free_shipping, uplift=1.05, max_val=float('inf'))
+        def VD_uplift(row):
+            if row['ffm_channel'] is not None and row['ffm_channel'].strip() == 'VD':
+                return uplift_rule._uplift_by_percentage_max(row, 1.14)[0], 'VD 14% UPLIFT'
+
+        func_handle = partial(uplift_rule._uplift_by_percentage_max_no_free_shipping, uplift=1.12, max_val=float('inf'))
         return [
-            Working_func(func_handle, '1.05 Uplift')
+            Working_func(VD_uplift, 'VD 14% UPLIFT'),
+            Working_func(func_handle, '1.12 Uplift')
         ]
 
     def get_post_rule(self):

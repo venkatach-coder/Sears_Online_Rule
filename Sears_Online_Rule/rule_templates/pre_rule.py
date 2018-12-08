@@ -107,6 +107,11 @@ def _kenmore(row):
 
 kenmore = Working_func(_kenmore, 'Kenmore')
 
+def _VD_check(row):
+    if row['ffm_channel'] is not None and row['ffm_channel'].strip() != 'VD':
+        return False, 'NOT VD ITEM'
+VD_check = Working_func(_VD_check, 'VD ITEMS ONLY')
+
 def _ee_check(row):
     if row['ee_price'] is None:
         return False, 'No EE price'
