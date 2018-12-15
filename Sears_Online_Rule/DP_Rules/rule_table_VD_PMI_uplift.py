@@ -9,7 +9,8 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=601,
                          scope='(div_no = 8 and ln_no in (1,21,41, 16,19,20,21,23,24,27,30,99, 55)) or div_no = 14 or div_no = 24 or div_no = 96 or div_no = 44',
-                         rule_end_dt=dt.datetime(2018,12,14),
+                         rule_start_dt=dt.datetime(2018,12,15),
+                         rule_end_dt=dt.datetime(2018,12,25),
                          # reg_bound_behavior =   ,# drop, delete, round_down
                          rule_name='VD UPLIFT')
 
@@ -57,12 +58,12 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         def VD_uplift(row):
             if row['ffm_channel'] == 'VD':
                 if row['div_no'] == 44:
-                    return uplift_rule._uplift_by_percentage_max(row, 1.10)[0], 'VD 10% UPLIFT'
+                    return uplift_rule._uplift_by_percentage_max(row, 1.20)[0], 'VD 20% UPLIFT'
                 else:
-                    return uplift_rule._uplift_by_percentage_max(row, 1.14)[0], 'VD 14% UPLIFT'
+                    return uplift_rule._uplift_by_percentage_max(row, 1.22)[0], 'VD 22% UPLIFT'
 
         return [
-            Working_func(VD_uplift, 'VD 15% UPLIFT'),
+            Working_func(VD_uplift, 'VD UPLIFT'),
         ]
 
     def get_post_rule(self):
