@@ -47,6 +47,8 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
             pre_rule.dp_block,
             pre_rule.cost_check,
             pre_rule.reg_check,
+            pre_rule.div_8_no_VD,
+            pre_rule.no_TW
         ]
 
     def get_core_rule(self):
@@ -60,7 +62,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
                 if row['div_no'] == 44:
                     return uplift_rule._uplift_by_percentage_max(row, 1.20)[0], 'VD 20% UPLIFT'
                 else:
-                    return uplift_rule._uplift_by_percentage_max(row, 1.22)[0], 'VD 22% UPLIFT'
+                    return uplift_rule._uplift_by_percentage_max(row, 1.27)[0], 'VD 27% UPLIFT'
 
         return [
             Working_func(VD_uplift, 'VD UPLIFT'),

@@ -37,7 +37,9 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
             pre_rule.dp_block,
             pre_rule.cost_check,
             pre_rule.pmi_check,
-            pre_rule.reg_check
+            pre_rule.reg_check,
+            pre_rule.div_8_no_VD,
+            pre_rule.no_TW
         ]
 
 
