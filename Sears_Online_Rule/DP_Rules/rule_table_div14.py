@@ -47,31 +47,25 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
     def get_pre_rule(self):
         return [
-            pre_rule.min_comp_check,
             pre_rule.ad_plan_check,
             pre_rule.dp_block,
             pre_rule.cost_check,
             pre_rule.min_margin_check,
             pre_rule.reg_check,
-            pre_rule.no_craftsman,
-            pre_rule.no_TW
+            pre_rule.no_craftsman
         ]
 
     def get_core_rule(self):
-        return [
+        return [            
             core_rule.Match_to_Min_comp_MM,
-            core_rule.Match_to_Min_margin_when_Min_comp_Exists
+            core_rule.Match_to_Min_margin_when_Min_comp_Exists,
+            core_rule.Set_to_PMI_when_PMI_exists,
         ]
 
     def get_uplift_rule(self):
-        def VD_uplift(row):
-            if row['ffm_channel'] is not None and row['ffm_channel'].strip() == 'VD':
-                return uplift_rule._uplift_by_percentage_max(row, 1.27)[0], 'VD 27% UPLIFT'
-
-        func_handle = partial(uplift_rule._uplift_by_percentage_max_no_free_shipping, uplift=1.12, max_val=float('inf'))
+        func_handle = partial(uplift_rule._uplift_by_percentage_max_no_free_shipping, uplift=1.06, max_val=float('inf'))
         return [
-            Working_func(VD_uplift, 'VD 27% UPLIFT'),
-            Working_func(func_handle, '1.12 Uplift')
+            Working_func(func_handle, '1.06 Uplift')
         ]
 
     def get_post_rule(self):

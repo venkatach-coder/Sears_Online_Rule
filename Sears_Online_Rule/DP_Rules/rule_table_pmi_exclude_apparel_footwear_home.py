@@ -7,8 +7,8 @@ from Sears_Online_Rule.harlem125_interface import Working_func_ext as Working_fu
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=501,
-                         scope='div_no in (6,8,9,14,24,34,49,52,71,95,96)',
-                         is_active = True, rule_name='pmi 5%') #scope not needed
+                         scope='div_no in (6,9,34,71)',
+                         is_active = True, rule_name='pmi 12%') #scope not needed
 
     def get_merge_func(self):
         def merge_func(df_dict, scope):
@@ -37,9 +37,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
             pre_rule.dp_block,
             pre_rule.cost_check,
             pre_rule.pmi_check,
-            pre_rule.reg_check,
-            pre_rule.div_8_no_VD,
-            pre_rule.no_TW
+            pre_rule.reg_check
         ]
 
 

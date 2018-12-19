@@ -26,6 +26,15 @@ def _Set_to_PMI_when_PMI_exists(row):
 Set_to_PMI_when_PMI_exists = Working_func(_Set_to_PMI_when_PMI_exists,
                                           'Set Price to PMI')
 
+
+def _VD_DELETE_PMI(row):
+    if row['div_no'] in (8,96) and row['min_comp'] is None and row['PMI'] is not None and row['reg'] is not None:
+        return row['reg'], 'VD, NO COMP, PMI EXISTS, DELETE PRICE'
+
+
+VD_DELETE_PMI = Working_func(_VD_DELETE_PMI, 'VD, NO COMP, PMI exists, send DELETE')
+
+
 def _Median_min_comp_MM_min_margin_rule(row):
     if row['min_comp'] is not None:
         if row['min_comp_MM'] is not None:
@@ -35,6 +44,7 @@ def _Median_min_comp_MM_min_margin_rule(row):
                 return row['min_comp_MM'], 'Match at Min_comp_MM'
         else:
             return row['min_margin'], 'Match at Min_margin'
+
 
 Median_min_comp_MM_min_margin_rule = Working_func(
     _Median_min_comp_MM_min_margin_rule,
@@ -48,10 +58,11 @@ def _Mailable_rule(row):
         if ret_tpl is None:
             return None
         price, rule_name = ret_tpl
-        if price < row['cost_with_subsidy']+row['avg_shipcost']:
-            price = row['cost_with_subsidy']+row['avg_shipcost']
+        if price < row['cost_with_subsidy'] + row['avg_shipcost']:
+            price = row['cost_with_subsidy'] + row['avg_shipcost']
             rule_name = 'Price at cost + avg_shipcost'
         return price, rule_name
+
 
 Mailable_rule = Working_func(
     _Mailable_rule,
@@ -59,18 +70,19 @@ Mailable_rule = Working_func(
 )
 
 
-
 def _PMI_high_low_margin(row):
     if row['PMI'] is not None:
-        if 1-row['cost_with_subsidy']/row['PMI'] >= 0.3:
+        if 1 - row['cost_with_subsidy'] / row['PMI'] >= 0.3:
             return row['PMI'] * 0.99, 'Unmatched, high PMI'
         else:
             return row['PMI'] * 1.02, 'Unmatched, low PMI'
+
 
 PMI_high_low_margin = Working_func(
     _PMI_high_low_margin,
     '0.99 PMI when pmi_margin > 0.3 else 1.02 PMI'
 )
+
 
 def _HA_389_399_rounding_Match_to_Min_comp_MM(row):
     try:
@@ -81,6 +93,7 @@ def _HA_389_399_rounding_Match_to_Min_comp_MM(row):
         price = 399.0
         rule += ' Round to 399'
     return price, rule
+
 
 HA_389_399_rounding_Match_to_Min_comp_MM = Working_func(
     _HA_389_399_rounding_Match_to_Min_comp_MM,
@@ -98,6 +111,7 @@ def _HA_389_399_rounding_Set_to_Min_margin_when_Min_comp_Exists(row):
         rule += ' Round to 399'
     return price, rule
 
+
 HA_389_399_rounding_Set_to_Min_margin_when_Min_comp_Exists = Working_func(
     _HA_389_399_rounding_Set_to_Min_margin_when_Min_comp_Exists,
     'Set_to_Min_margin_when_Min_comp_Exists, 389-399 Rounding'
@@ -107,6 +121,7 @@ HA_389_399_rounding_Set_to_Min_margin_when_Min_comp_Exists = Working_func(
 def _Price_at_MAP(row):
     if row['MAP_price'] is not None:
         return row['MAP_price'], 'Price at MAP'
+
 
 Price_at_MAP = Working_func(
     _Price_at_MAP,
@@ -123,7 +138,6 @@ def _max_min_comp_mm_map(row):
         return max(row['min_comp_MM'], map), 'Price at min_comp_MM MAP bounded'
 
 
-
 max_min_comp_mm_map = Working_func(_max_min_comp_mm_map, 'price at max of map and min_comp_mm when min_comp_mm exist')
 
 
@@ -134,42 +148,47 @@ def _Match_to_Min_comp_MM_HA_instore(row):
 
 Match_to_Min_comp_MM_HA_instore = Working_func(_Match_to_Min_comp_MM_HA_instore, 'Branded, HA Online Min Comp')
 
+
 def _Match_to_ee(row):
     return row['ee_price'], row['group_name']
 
-Match_to_ee=Working_func(_Match_to_ee, 'explore_exploit price')
+
+Match_to_ee = Working_func(_Match_to_ee, 'explore_exploit price')
 
 
 def _GT80_hardlines_rule(row):
     return row['gt_price'], 'GT80 Hardlines Rule'
-GT80_hardlines_rule=Working_func(_GT80_hardlines_rule, 'GT80 Hardlines Rule')
+
+
+GT80_hardlines_rule = Working_func(_GT80_hardlines_rule, 'GT80 Hardlines Rule')
 
 
 def _apparel_rtw_rule(row):
     return row['rtw_price'], 'apparel_rtw rule'
-apparel_rtw_rule=Working_func(_apparel_rtw_rule, 'apparel_rtw rule')
+
+
+apparel_rtw_rule = Working_func(_apparel_rtw_rule, 'apparel_rtw rule')
 
 
 def _PMI_uplift_2_max_5(row):
     import math
     pmi = row['PMI']
-    if math.floor( round(min((1.02*pmi), pmi + 5),2) / 100.0) > math.floor(round(pmi,2) / 100.0):
+    if math.floor(round(min((1.02 * pmi), pmi + 5), 2) / 100.0) > math.floor(round(pmi, 2) / 100.0):
         return pmi, 'PMI|uplift:0.02 max 5'
     else:
-        return round(min((1.02*pmi), pmi + 5),2), 'PMI|uplift:0.02 max 5'
+        return round(min((1.02 * pmi), pmi + 5), 2), 'PMI|uplift:0.02 max 5'
 
 
+PMI_uplift_2_max_5 = Working_func(_PMI_uplift_2_max_5, 'PMI|uplift:0.02 max 5')
 
-PMI_uplift_2_max_5 = Working_func(_PMI_uplift_2_max_5,  'PMI|uplift:0.02 max 5')
 
 def _PMI_uplift_1_max_5(row):
     import math
     pmi = row['PMI']
-    if math.floor( round(min((1.01*pmi), pmi + 5),2) / 100.0) > math.floor(round(pmi,2) / 100.0):
+    if math.floor(round(min((1.01 * pmi), pmi + 5), 2) / 100.0) > math.floor(round(pmi, 2) / 100.0):
         return pmi, 'PMI|uplift:0.01 max 5'
     else:
-        return round(min((1.01*pmi), pmi + 5),2), 'PMI|uplift:0.01 max 5'
+        return round(min((1.01 * pmi), pmi + 5), 2), 'PMI|uplift:0.01 max 5'
 
 
-
-PMI_uplift_1_max_5 = Working_func(_PMI_uplift_1_max_5,  'PMI|uplift:0.01 max 5')
+PMI_uplift_1_max_5 = Working_func(_PMI_uplift_1_max_5, 'PMI|uplift:0.01 max 5')
