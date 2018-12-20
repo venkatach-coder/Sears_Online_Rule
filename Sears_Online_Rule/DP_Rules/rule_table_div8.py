@@ -15,7 +15,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
                          additional_source=additional_tbl,
                          scope='div_no = 8 and ln_no in (1,21,41,  16,19,20,21,23,24,27,30,99, 55)',
                          # reg_bound_behavior =   ,# drop, delete, round_down
-                         is_active=False,
+                         is_active=True,
                          rule_name='div8 ln_1,21,41,16,19,20,21,23,24,27,30,99, 55 HOME Regular DP Rule')
 
     def get_merge_func(self):

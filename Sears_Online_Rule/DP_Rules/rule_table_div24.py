@@ -9,7 +9,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=1000,
                          scope='div_no = 24',
-                         is_active=False,
+                         is_active=True,
                          rule_name='div24 HOME')
 
     def get_merge_func(self):
