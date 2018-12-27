@@ -65,7 +65,6 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
             #core_rule.VD_DELETE_PMI,
             core_rule.Mailable_rule,
             core_rule.Median_min_comp_MM_min_margin_rule,
-            core_rule.Set_to_PMI_when_PMI_exists,
         ]
 
     def get_uplift_rule(self):

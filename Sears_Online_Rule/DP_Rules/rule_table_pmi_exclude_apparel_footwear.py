@@ -7,8 +7,8 @@ from Sears_Online_Rule.harlem125_interface import Working_func_ext as Working_fu
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=501,
-                         scope='div_no in (6,9,34,71)',
-                         is_active = True, rule_name='pmi 12%') #scope not needed
+                         scope='div_no in (6,9,34,71, 8,14,24,96)',
+                         is_active = True, rule_name='pmi for SPG, TOOLS, ODL/LG, HOME')
 
     def get_merge_func(self):
         def merge_func(df_dict, scope):
@@ -50,12 +50,12 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def get_uplift_rule(self):
         func_handle = partial(uplift_rule._uplift_by_percentage_max_no_free_shipping, uplift=1.00, max_val=float('inf'))
         return [
-            Working_func(func_handle, 'No Uplift')
+            # Working_func(func_handle, 'No Uplift')
         ]
 
     def get_post_rule(self):
         common_rule_lst = [
-                           post_rule.round_to_96,
+                           #post_rule.round_to_96,
                            post_rule.reg_bound_d_flag]
 
         return [
