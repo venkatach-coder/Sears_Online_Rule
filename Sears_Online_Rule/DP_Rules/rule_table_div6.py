@@ -3,7 +3,7 @@ from Sears_Online_Rule import harlem125_interface as harlem
 from Sears_Online_Rule.rule_templates import pre_rule, post_rule, core_rule, uplift_rule
 from functools import partial
 from Sears_Online_Rule.harlem125_interface import Working_func_ext as Working_func
-
+import pyspark.sql.functions as F
 
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
@@ -16,7 +16,12 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
             df1 = df_dict['static_table_run_id'].filter(scope) \
                 .join(df_dict['all_comp_all'].select('div_no', 'itm_no', 'price', 'comp_name'),
                       on=['div_no', 'itm_no'], how='left') \
-                .join(df_dict['uplift_table'], on=['div_no', 'itm_no'], how='left')
+                .join(df_dict['uplift_table'], on=['div_no', 'itm_no'], how='left') \
+                .join(df_dict['all_comp_all'].select('div_no', 'itm_no', 'price', 'comp_name') \
+                      .filter('trim(comp_name) like "mkpl_%"') \
+                      .groupBy(['div_no', 'itm_no']) \
+                      .agg(F.min(F.col('price')).alias('mkpl_price')),
+                      on=['div_no', 'itm_no'], how='left')
             return df1
 
         return merge_func
@@ -64,6 +69,8 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def get_post_rule(self):
         common_rule_lst = [
             post_rule.round_to_96,
+            post_rule.check_mkpl,
+            post_rule.min_margin_lb,
             post_rule.reg_bound_d_flag]
         return [
             # Working_func(partial(post_rule.post_rule_chain,
