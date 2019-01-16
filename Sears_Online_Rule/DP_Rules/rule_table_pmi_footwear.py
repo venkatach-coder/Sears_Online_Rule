@@ -7,7 +7,7 @@ from Sears_Online_Rule.harlem125_interface import Working_func_ext as Working_fu
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=500, scope='(div_no in (36,54,76)) or (div_no = 67 and ln_no != 88)',
-                         is_active=False,
+                         is_active=True,
                          rule_name='footwear pmi rule')
 
     def get_merge_func(self):
@@ -49,9 +49,9 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
 
     def get_uplift_rule(self):
-        func_handle = partial(uplift_rule._uplift_by_percentage_max_no_free_shipping, uplift=1.00, max_val=float('inf'))
+        func_handle = partial(uplift_rule._uplift_by_percentage_max_no_free_shipping, uplift=1.07, max_val=float('inf'))
         return [
-            # Working_func(func_handle, 'No Uplift')
+            Working_func(func_handle, '7% Uplift')
         ]
 
     def get_post_rule(self):
