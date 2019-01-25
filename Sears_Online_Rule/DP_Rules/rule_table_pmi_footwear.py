@@ -44,6 +44,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
     def get_core_rule(self):
         return [
+            core_rule.VD_DELETE_PMI,
             core_rule.Set_to_PMI_when_PMI_exists
         ]
 

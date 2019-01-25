@@ -28,11 +28,16 @@ Set_to_PMI_when_PMI_exists = Working_func(_Set_to_PMI_when_PMI_exists,
 
 
 def _VD_DELETE_PMI(row):
-    if row['div_no'] in (8,96) and row['min_comp'] is None and row['PMI'] is not None and row['reg'] is not None:
+    if row['ffm_channel'] == 'VD' and row['min_comp_MM'] is None and row['PMI'] is not None and row['reg'] is not None:
         return row['reg'], 'VD, NO COMP, PMI EXISTS, DELETE PRICE'
 
-
 VD_DELETE_PMI = Working_func(_VD_DELETE_PMI, 'VD, NO COMP, PMI exists, send DELETE')
+
+def _VD_Min_comp_MM(row):
+    if row['ffm_channel'] == 'VD' and row['min_comp_MM'] is not None:
+        return row['min_comp_MM'], 'VD, No PMI, Match to min_comp_MM'
+
+VD_Min_comp_MM = Working_func(_VD_Min_comp_MM, 'VD, No PMI, Match to min_comp_MM')
 
 
 def _Median_min_comp_MM_min_margin_rule(row):
