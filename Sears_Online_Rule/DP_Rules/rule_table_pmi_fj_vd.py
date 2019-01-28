@@ -8,7 +8,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=502,
                          scope='div_no == 44',
-                         is_active = True, rule_name='Fine Jewelry VD PMI DELETE')
+                         is_active = True, rule_name='Fine Jewelry PMI')
 
     def get_merge_func(self):
         def merge_func(df_dict, scope):
@@ -43,7 +43,8 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
     def get_core_rule(self):
         return [
-            core_rule.VD_DELETE_PMI,
+            #core_rule.VD_DELETE_PMI,
+            core_rule.Set_to_PMI_when_PMI_exists
         ]
 
 
