@@ -197,3 +197,11 @@ def _PMI_uplift_1_max_5(row):
 
 
 PMI_uplift_1_max_5 = Working_func(_PMI_uplift_1_max_5, 'PMI|uplift:0.01 max 5')
+
+
+def _send_delete_15dollar(row):
+    reg = row['reg'] if row['reg'] is not None else float('inf')
+    if float(row['current_price']) <= 15.0:
+        return reg
+
+send_delete_15dollar = Working_func(_send_delete_15dollar, 'send delete for less than 15')
