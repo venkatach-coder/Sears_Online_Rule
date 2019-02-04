@@ -42,7 +42,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
     def get_core_rule(self):
         return [
-            core_rule.send_delete_15dollar
+            core_rule.send_delete_18dollar
         ]
 
     def get_uplift_rule(self):
