@@ -51,9 +51,3 @@ def _uplift_by_percentage_max_no_free_shipping(row, uplift, min_val=0.0, max_val
     return upliftted_val, '{} no free shipping'.format(rule_name)
 
 
-def _uplift_by_percentage_threshhold(row, thresh, uplift, min_val=0.0, max_val=float('inf')):
-    if row['core_rule_value'] <= thresh:
-        upliftted_val, rule_name = _uplift_by_percentage_max(row, uplift, min_val, max_val)
-        return upliftted_val, '{} for below {}'.format(rule_name, thresh)
-    else:
-        return None, None

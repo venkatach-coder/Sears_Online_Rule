@@ -26,11 +26,6 @@ def _Set_to_PMI_when_PMI_exists(row):
 Set_to_PMI_when_PMI_exists = Working_func(_Set_to_PMI_when_PMI_exists,
                                           'Set Price to PMI')
 
-def _Thresh_Set_to_PMI_when_PMI_exists(row, thresh):
-    if row['PMI'] is not None and row['PMI'] <= thresh:
-        val,name = _Set_to_PMI_when_PMI_exists(row)
-        return val, 'Override PMI when PMI <= {}'.format(thresh)
-
 
 def _VD_DELETE_PMI(row):
     if row['ffm_channel'] == 'VD' and row['min_comp_MM'] is None and row['PMI'] is not None and row['reg'] is not None:
@@ -202,11 +197,3 @@ def _PMI_uplift_1_max_5(row):
 
 
 PMI_uplift_1_max_5 = Working_func(_PMI_uplift_1_max_5, 'PMI|uplift:0.01 max 5')
-
-
-def _send_delete_18dollar(row):
-    reg = row['reg'] if row['reg'] is not None else float('inf')
-    if reg <= 17.99:
-        return reg
-
-send_delete_18dollar = Working_func(_send_delete_18dollar, 'send delete for less than 17.99')
