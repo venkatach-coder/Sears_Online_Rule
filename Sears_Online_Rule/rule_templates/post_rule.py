@@ -128,12 +128,12 @@ def reg_bound_PMI_func(row, fall_back_function: Working_func):
 
 
 def _price_round_to_96(row):
-    return math.floor(round(row['uplift_rule_value'], 2) + 0.031) + 0.96
+    return math.floor(round(row['uplift_rule_value'], 2)) + 0.96
 
 round_to_96 = Working_func(_price_round_to_96, 'Round to .96')
 
 def _price_round_to_80(row):
-    return math.floor(round(row['uplift_rule_value'], 2) + 0.191) + 0.80
+    return math.floor(round(row['uplift_rule_value'], 2)) + 0.80
 
 round_to_80 = Working_func(_price_round_to_80, 'Round to .80')
 
