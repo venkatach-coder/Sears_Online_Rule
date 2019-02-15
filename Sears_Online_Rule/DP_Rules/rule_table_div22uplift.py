@@ -70,7 +70,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
     def get_uplift_rule(self):
         return [
-            Working_func(partial(uplift_rule._uplift_by_percentage_max, uplift = 1.045), desc = 'HA 4.5% uplift')
+            Working_func(partial(uplift_rule._uplift_by_percentage_max, uplift = 1.06), desc = 'HA 6% uplift')
         ]
 
     def get_post_rule(self):
