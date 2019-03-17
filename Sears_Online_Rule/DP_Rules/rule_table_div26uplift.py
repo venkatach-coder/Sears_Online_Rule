@@ -7,10 +7,10 @@ import datetime as dt
 
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
-        super().__init__(rule_level=2001,
+        super().__init__(rule_level=1001,
                          scope='div_no = 26 and ln_no in (1,2,4)',
-                         rule_name='div26 HA DP Rule',
-                         rule_end_dt=dt.datetime(2019, 2, 16)
+                         rule_name='div26 HA FF Uplift Rule',
+                         rule_end_dt= dt.datetime(2019,3,19)
                          )
 
     def get_merge_func(self):
@@ -53,17 +53,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         return min_comp_rule
 
     def get_pre_rule(self):
-
-        def div26uplift_exclusion(row):
-            if row['itm_no'] in (31433,
-        61433,71433,31552,61552,71552,31553,61553,71553,31632,61632,71632,31633,61633,71633,41682,81582,91582,41683,
-        81583,91583,41782,81782,91782,41783,81783,91783,41072,81962,91962,41073,81963,91963,41982,81982,91982,41983,
-                                 81983,91983 ):
-                return False, 'Div_26 uplift exclusion'
-
-
         return [
-            pre_rule.Working_func(div26uplift_exclusion, desc='Div_26 uplift exclusion'),
             pre_rule.ad_plan_check,
             pre_rule.dp_block,
             pre_rule.clearance_check,
@@ -76,8 +66,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def get_core_rule(self):
         return [
             core_rule.HA_389_399_rounding_Match_to_Min_comp_MM,
-            core_rule.HA_389_399_rounding_Set_to_Min_margin_when_Min_comp_Exists,
-            #core_rule.Set_to_PMI_when_PMI_exists,
+            core_rule.HA_389_399_rounding_Set_to_Min_margin_when_Min_comp_Exists
         ]
 
     def get_uplift_rule(self):

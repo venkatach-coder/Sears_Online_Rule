@@ -8,10 +8,10 @@ import datetime as dt
 
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
-        super().__init__(rule_level=2001,
+        super().__init__(rule_level=1001,
                          scope='div_no = 22 and ln_no in (41,15,25,22,9,20,21,28, 16,35,58)',
-                         rule_name='Div_22 HA Regular DP Rule',
-                         rule_end_dt= dt.datetime(2019,2,16)
+                         rule_name='Div_22 FF uplifts',
+                         rule_end_dt= dt.datetime(2019,3,19)
                          )
 
     def get_merge_func(self):
@@ -64,8 +64,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def get_core_rule(self):
         return [
             core_rule.HA_389_399_rounding_Match_to_Min_comp_MM,
-            core_rule.HA_389_399_rounding_Set_to_Min_margin_when_Min_comp_Exists,
-            #core_rule.Set_to_PMI_when_PMI_exists,
+            core_rule.HA_389_399_rounding_Set_to_Min_margin_when_Min_comp_Exists
         ]
 
     def get_uplift_rule(self):
