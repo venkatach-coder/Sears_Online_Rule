@@ -185,3 +185,10 @@ def _pmi_bound_when_subsidy_exists(row):
     return row['uplift_rule_value'], ''
 
 pmi_bound_when_subsidy_exists = Working_func(_pmi_bound_when_subsidy_exists, 'PMI subsidy bound')
+
+def _map_lower_bound(row):
+    if row['MAP_price'] is not None and row['uplift_rule_value'] < float(row['MAP_price']):
+        return row['MAP_price'], 'Priced at MAP'
+    return row['uplift_rule_value'], ''
+
+map_lower_bound = Working_func(_map_lower_bound, 'Make sure post price is not lower than MAP')

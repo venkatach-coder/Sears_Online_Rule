@@ -76,6 +76,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
             post_rule.check_mkpl,
             post_rule.min_margin_lb,
             post_rule.uplift_to_MAP_when_below,
+            post_rule.map_lower_bound,
             post_rule.reg_bound_d_flag]
         return [
             Working_func(partial(post_rule.post_rule_chain,

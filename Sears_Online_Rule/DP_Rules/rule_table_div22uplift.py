@@ -11,6 +11,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         super().__init__(rule_level=1001,
                          scope='div_no = 22 and ln_no in (41,15,25,22,9,20,21,28, 16,35,58)',
                          rule_name='Div_22 FF uplifts',
+                         is_active=False,
                          rule_end_dt= dt.datetime(2019,3,19)
                          )
 
@@ -78,6 +79,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
             post_rule.round_up_to_Map_when_close_to_map,
             post_rule.round_to_96,
             post_rule.pmi_bound_when_subsidy_exists,
+            post_rule.map_lower_bound,
             Working_func(partial(post_rule.reg_bound_PMI_func, fall_back_function=post_rule.reg_bound_d_flag),
                          desc='Revert back to PMI when dp_price is higher than reg, '
                               'send delete flag when PMI not exists')

@@ -8,7 +8,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=2002,
                          scope='div_no = 82',
-                         is_active=True,
+                         is_active=False,
                          rule_name='pmi mattress uplift rule',
                          rule_end_dt=dt.datetime(2019, 2, 16)
                          )
