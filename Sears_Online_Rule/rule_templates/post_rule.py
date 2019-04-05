@@ -192,3 +192,16 @@ def _map_lower_bound(row):
     return row['uplift_rule_value'], ''
 
 map_lower_bound = Working_func(_map_lower_bound, 'Make sure post price is not lower than MAP')
+
+def _map_lower_bound_pmi_check(row):
+    if row['MAP_price'] is not None and row['uplift_rule_value'] < float(row['MAP_price']):
+        if row['PMI'] is not None and row['PMI'] <= row['MAP_price']:
+            return row['PMI'], 'PMI < MAP, set to PMI'
+        else:
+            return row['MAP_price'], 'SET TO MAP'
+    return row['uplift_rule_value'], ''
+map_lower_bound_pmi_check = Working_func(_map_lower_bound_pmi_check, 'MAP PMI check')
+
+
+
+
