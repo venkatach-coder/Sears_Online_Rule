@@ -36,8 +36,14 @@ VD_DELETE_PMI = Working_func(_VD_DELETE_PMI, 'VD, NO COMP, PMI exists, send DELE
 def _VD_Min_comp_MM(row):
     if row['ffm_channel'] == 'VD' and row['min_comp_MM'] is not None:
         return row['min_comp_MM'], 'VD, No PMI, Match to min_comp_MM'
-
 VD_Min_comp_MM = Working_func(_VD_Min_comp_MM, 'VD, No PMI, Match to min_comp_MM')
+
+
+def _VD_delete(row):
+    if row['ffm_channel'] == 'VD':
+        return row['reg'], 'VD, Push Delete'
+VD_delete = Working_func(_VD_delete, 'VD, push delete')
+
 
 
 def _Median_min_comp_MM_min_margin_rule(row):

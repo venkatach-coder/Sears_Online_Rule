@@ -56,10 +56,9 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
     def get_core_rule(self):
         return [
-            core_rule.VD_DELETE_PMI,
-            core_rule.VD_Min_comp_MM,
             core_rule.Match_to_Min_comp_MM,
             core_rule.Match_to_Min_margin_when_Min_comp_Exists,
+            core_rule.VD_delete
         ]
 
 
