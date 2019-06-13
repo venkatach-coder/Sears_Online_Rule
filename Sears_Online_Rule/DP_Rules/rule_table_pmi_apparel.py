@@ -8,7 +8,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=500,
                          scope='div_no in (2,4, 7, 16, 17, 18, 25, 29, 31, 33,  38, 40, 41, 43, 45,  74, 75,  77, 88)',
-                         is_active=True,
+                         is_active=False,
                          rule_name='pmi apparel rule')
 
     def get_merge_func(self):
