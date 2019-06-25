@@ -9,7 +9,7 @@ import datetime as dt
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=3000,
-                         scope='div_no = 46 and ln_no in (1,2,4,51,5)', rule_name='div46',
+                         scope='div_no = 46 and ln_no in (1,2,4,51,5)', rule_name='div46 6% uplift',
                          rule_start_dt=dt.datetime(2019, 6, 23),
                          rule_end_dt=dt.datetime(2019, 7, 6)
                          )
@@ -68,9 +68,9 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         ]
 
     def get_uplift_rule(self):
-        func_handle = partial(uplift_rule._uplift_by_percentage_max, uplift=1.035)
+        func_handle = partial(uplift_rule._uplift_by_percentage_max, uplift=1.06)
         return [
-            Working_func(func_handle, '1.035 Brand_HA')
+            Working_func(func_handle, '1.06 Brand_HA')
         ]
 
     def get_post_rule(self):
