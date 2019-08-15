@@ -58,16 +58,14 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
     def get_core_rule(self):
         return [
-            core_rule.VD_DELETE_PMI,
-            core_rule.VD_Min_comp_MM,
             core_rule.Match_to_Min_comp_MM,
             core_rule.Match_to_Min_margin_when_Min_comp_Exists,
+            core_rule.VD_MAP_if_higher_than_MM,
+            core_rule.VD_home_PMI_rule
         ]
 
     def get_uplift_rule(self):
-        return [
-            # Working_func(partial(uplift_rule._uplift_by_percentage_max, uplift=1.11), '6% uplift'),
-        ]
+        return []
 
     def get_post_rule(self):
         common_rule_lst = [post_rule.round_to_96,

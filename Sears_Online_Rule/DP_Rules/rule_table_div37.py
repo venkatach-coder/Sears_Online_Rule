@@ -8,9 +8,9 @@ from Sears_Online_Rule.harlem125_interface import Working_func_ext as Working_fu
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=1000,
-                         scope='div_no = 24',
+                         scope='div_no = 37',
                          is_active=True,
-                         rule_name='div24 HOME')
+                         rule_name='div37 HOME')
 
     def get_merge_func(self):
         def merge_func(df_dict, scope):
@@ -50,14 +50,14 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
             pre_rule.dp_block,
             pre_rule.cost_check,
             pre_rule.min_margin_check,
-            pre_rule.reg_check
+            pre_rule.reg_check,
+            pre_rule.VD_check
         ]
 
 
     def get_core_rule(self):
         return [
             core_rule.Match_to_Min_comp_MM,
-            core_rule.Match_to_Min_margin_when_Min_comp_Exists,
             core_rule.VD_MAP_if_higher_than_MM,
             core_rule.VD_home_PMI_rule
         ]

@@ -203,3 +203,20 @@ def _PMI_uplift_1_max_5(row):
 
 
 PMI_uplift_1_max_5 = Working_func(_PMI_uplift_1_max_5, 'PMI|uplift:0.01 max 5')
+
+def _VD_MAP_if_higher_than_MM(row):
+    if row['MAP_price'] is not None and row['ffm_channel'] == 'VD':
+        if row['MAP_price'] > row['min_margin']:
+            return row['MAP_price'], 'VD MAP higher than min_margin, push MAP'
+
+VD_MAP_if_higher_than_MM = Working_func(_VD_MAP_if_higher_than_MM, 'VD MAP higher than min_margin, push MAP')
+
+
+def _VD_home_PMI_rule(row):
+    if row['PMI'] is not None and row['ffm_channel'] == 'VD':
+        return (max(row['PMI'], row['cost_with_subsidy']/0.65, row['cost_with_subsidy'] + 15),
+                'VD home PMI rule, max of PMI, cost+15, cost/0.65'
+                )
+VD_home_PMI_rule = Working_func(_VD_home_PMI_rule, 'VD home PMI rule, max of PMI, cost+15, cost/0.65')
+
+
