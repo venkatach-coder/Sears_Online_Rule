@@ -205,5 +205,14 @@ def _map_lower_bound_pmi_check(row):
 map_lower_bound_pmi_check = Working_func(_map_lower_bound_pmi_check, 'MAP PMI check')
 
 
+def _pmi_bound(row):
+    if row['PMI'] is None:
+        return row['uplift_rule_value'], ''
+    else:
+        if row['uplift_rule_value'] > row['PMI']:
+            return row['PMI'], 'PMI bound'
+        else:
+            return row['uplift_rule_value'], ''
 
+pmi_bound = Working_func(_pmi_bound, 'PMI Bound')
 
