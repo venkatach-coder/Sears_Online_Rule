@@ -42,7 +42,8 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
             pre_rule.min_margin_check,
             pre_rule.reg_check,
             pre_rule.clearance_check,
-            pre_rule.no_craftsman
+            pre_rule.no_craftsman,
+            pre_rule.div71_season_block
         ]
 
 

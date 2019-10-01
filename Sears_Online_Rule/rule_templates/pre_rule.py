@@ -164,3 +164,9 @@ def _apparel_brand_check(row):
 
 
 apparel_brand_check = Working_func(_apparel_brand_check, 'apparel pmi pricing no touch brand')
+
+
+def _div71_season_block(row):
+   if row['div_no'] == 71 and row['ln_no'] in (2, 31, 37, 50, 51, 52, 53, 54, 55, 56, 58, 59, 61, 64, 68):
+       return False, 'div 71 seasonal block'
+div71_season_block = Working_func(_div71_season_block, 'div 71 seasonal block')

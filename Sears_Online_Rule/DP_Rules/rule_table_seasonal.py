@@ -9,7 +9,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
         super().__init__( rule_level=3000, scope='(div_no = 50 and ln_no = 20 and sub_ln_no in (10, 20, 40, 60, 70))'
                                                  'or (div_no = 71 and ln_no in (2, 31, 37, 50, 51, 52, 53, 54, 55,'
                                                  '56, 59, 61, 62, 63, 64, 68, 70, 97) '
-                                                 ')', rule_name='seasonal', is_active=True)
+                                                 ')', rule_name='seasonal', is_active=False)
 
     def get_merge_func(self):
         def merge_func(df_dict, scope):
