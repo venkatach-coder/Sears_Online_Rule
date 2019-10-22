@@ -10,6 +10,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=3000,
                          scope='div_no in (22, 26, 46)',
+                         is_active=False,
                          rule_name='HA Kenmore DP Rule',
                          )
 
