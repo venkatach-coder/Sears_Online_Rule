@@ -92,6 +92,7 @@ def _no_TW(row):
 
 no_TW = Working_func(_no_TW, 'no TW')
 
+
 def _no_craftsman(row):
     product_brand = row['Product_Brand'] if row['Product_Brand'] is not None else ''
     brand = row['brand'] if row['brand'] is not None else ''
@@ -167,6 +168,35 @@ apparel_brand_check = Working_func(_apparel_brand_check, 'apparel pmi pricing no
 
 
 def _div71_season_block(row):
-   if row['div_no'] == 71 and row['ln_no'] in (2, 31, 37, 50, 51, 52, 53, 54, 55, 56, 58, 59, 61, 64, 68):
-       return False, 'div 71 seasonal block'
+    if row['div_no'] == 71 and row['ln_no'] in (2, 31, 37, 50, 51, 52, 53, 54, 55, 56, 58, 59, 61, 64, 68):
+        return False, 'div 71 seasonal block'
+
+
 div71_season_block = Working_func(_div71_season_block, 'div 71 seasonal block')
+
+
+def _kenmore_ha_rule(row):
+    div_itm = [
+        (22, 13223),
+        (22, 13229),
+        (22, 13222),
+        (22, 13092),
+        (22, 13093),
+        (22, 14743),
+        (22, 13099),
+        (26, 61433),
+        (26, 68132),
+        (26, 71553),
+        (26, 66132),
+        (26, 27132),
+        (26, 78132),
+        (26, 71433),
+        (26, 28133),
+        (26, 29133),
+        (26, 29132),
+    ]
+    if (row['div_no'], row['itm_no']) not in div_itm:
+        return False, 'Selected Kenmore Items only'
+
+kenmore_ha_rule = Working_func(_kenmore_ha_rule, 'Selected Kenmore Items')
+
