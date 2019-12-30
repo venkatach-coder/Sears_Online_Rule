@@ -6,7 +6,7 @@ from Sears_Online_Rule.harlem125_interface import Working_func_ext as Working_fu
 class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def __init__(self):
         super().__init__(rule_level=7000,
-                         scope='(div_no in (7,16,17,31,18,38,4,88,2) and ln_no = 97) or (div_no = 31 and ln_no in (8,13)) or (div_no = 16 and ln_no in (28,38)) or (div_no in (71,50,51,53,54,55,56))',
+                         scope='(div_no in (7,16,17,31,18,38,4,88,2) and ln_no = 97) or (div_no = 31 and ln_no in (8,13)) or (div_no = 16 and ln_no in (28,38))',
                          rule_name='VD DELETE RULE')
 
     def get_merge_func(self):
