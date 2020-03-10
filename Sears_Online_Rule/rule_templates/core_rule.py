@@ -27,6 +27,12 @@ Set_to_PMI_when_PMI_exists = Working_func(_Set_to_PMI_when_PMI_exists,
                                           'Set Price to PMI')
 
 
+def _DELETE_price(row):
+    if row['reg'] is not None:
+        return row['reg'], 'Price DELETE'
+
+DELETE_price = Working_func(_DELETE_price, 'Price DELETE')
+
 def _VD_DELETE_PMI(row):
     if row['ffm_channel'] == 'VD' and row['min_comp_MM'] is None and row['PMI'] is not None and row['reg'] is not None:
         return row['reg'], 'VD, NO COMP, PMI EXISTS, DELETE PRICE'
