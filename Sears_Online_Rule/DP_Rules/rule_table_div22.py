@@ -34,7 +34,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
                 return round(row['cost_with_subsidy'] / 0.85, 2), '0.15'
             if ((re.match('samsung', brand.lower()) is not None) or (
                     re.match('samsung', product_brand.lower()) is not None)):
-                return round(row['cost_with_subsidy'] / 0.79, 2), '0.21'
+                return round(row['cost_with_subsidy'] / 0.85, 2), '0.15'
 
         return min_margin_rule
 
