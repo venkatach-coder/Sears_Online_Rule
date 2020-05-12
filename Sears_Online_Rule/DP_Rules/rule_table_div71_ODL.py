@@ -53,7 +53,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
         return [
             core_rule.Match_to_Min_comp_MM,
-            core_rule.Match_to_Min_margin_when_Min_comp_Exists
+
         ]
 
 
