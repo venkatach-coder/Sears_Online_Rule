@@ -61,7 +61,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
     def get_core_rule(self):
         return [
             core_rule.HA_389_399_rounding_Match_to_Min_comp_MM,
-            core_rule.HA_389_399_rounding_Set_to_Min_margin_when_Min_comp_Exists
+
         ]
 
     def get_uplift_rule(self):
