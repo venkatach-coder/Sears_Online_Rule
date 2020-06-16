@@ -25,16 +25,7 @@ class Construct_DP_Rule(harlem.DP_Rule_Constructor):
 
     def get_min_margin_func(self):
         def min_margin_rule(row):
-            brand = '' if row['brand'] is None else row['brand']
-            product_brand = '' if row['Product_Brand'] is None else row['Product_Brand']
-            if ((re.match('amana|kitchenaid|maytag|whirlpool', brand.lower()) is not None) or \
-                    (re.match('amana|kitchenaid|maytag|whirlpool', product_brand.lower()) is not None)):
-                return None, 'Whirlpool Exclusion'
-            if (re.match('samsung', brand.lower()) is None) and (re.match('samsung', product_brand.lower()) is None):
-                return round(row['cost_with_subsidy'] / 0.85, 2), '0.15'
-            if ((re.match('samsung', brand.lower()) is not None) or (
-                    re.match('samsung', product_brand.lower()) is not None)):
-                return round(row['cost_with_subsidy'] / 0.85, 2), '0.15'
+            return round(row['cost_with_subsidy'] / 0.75, 2), '0.25'
 
         return min_margin_rule
 
